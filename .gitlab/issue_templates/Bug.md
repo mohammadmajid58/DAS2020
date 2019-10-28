@@ -2,6 +2,7 @@
 - [ ] I have pulled/am running the latest version of our software
 - [ ] I am using up to date packages
 - [ ] I have checked this issue hasn't already been submitted
+- [ ] I have added F/B to the title to specify (F)rontend or (B)ackend
 
 ### Describe What You Expected to Happen ###
   *
