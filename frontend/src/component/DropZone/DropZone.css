@@ -1,0 +1,11 @@
+.dragDropContainer {
+  text-align: center;
+  border: 1px black;
+  border-style: dashed;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.dragDropElement {
+  margin-top: 0.75em;
+}
