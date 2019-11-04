@@ -1,53 +1,12 @@
 import React from "react";
 import DropZone from "../DropZone/DropZone";
 import Papa, { ParseResult } from "papaparse";
-
-type StudentModuleMark = {
-  matricNo: string;
-  moduleGrade: string;
-};
+import Axios, { AxiosResponse } from "axios";
 
 type AllModuleMarks = {
-  moduleName: string;
-  moduleData: StudentModuleMark[];
-};
-
-const papaParseHandler = (results: ParseResult, inputFile: File) => {
-  var csvData = results.data;
-
-  //Removes any empty columns
-  csvData = csvData.map((dataRow: []) => {
-    return dataRow.filter((columnData: string) => {
-      return columnData.length > 0;
-    });
-  });
-
-  //Removes any empty rows
-  csvData = csvData.filter((dataRow: []) => {
-    return dataRow.length > 0;
-  });
-
-  //CSV Data first row has a single entry, the module name
-  //Thus we slice the remaining rows to get module data
-  const moduleName = csvData[0][0];
-  const studentGrades = csvData.slice(1);
-
-  //Construct array of StudentModuleMark objects
-  var moduleData = studentGrades.map((dataRow) => {
-    const [matricNo, grade] = dataRow;
-    return { matricNo: matricNo, moduleGrade: grade };
-  });
-
-  var apiGradeData: AllModuleMarks[] = [
-    { moduleName: moduleName, moduleData: moduleData }
-  ];
-
-  console.log(apiGradeData);
-};
-
-const papaConfig = {
-  //Oncomplete callback function
-  complete: papaParseHandler
+  course_code: string;
+  student: string;
+  alphanum: string;
 };
 
 const CSVDropZone: React.FC = () => {
@@ -61,8 +20,56 @@ const CSVDropZone: React.FC = () => {
       return;
     }
 
-    const formattedCSV = Papa.parse(file, papaConfig);
-    console.log(formattedCSV);
+    const papaParseHandler = (results: ParseResult, inputFile: File) => {
+      var csvData = results.data;
+
+      //Removes any empty columns
+      csvData = csvData.map((dataRow: []) => {
+        return dataRow.filter((columnData: string) => {
+          return columnData.length > 0;
+        });
+      });
+
+      //Removes any empty rows
+      csvData = csvData.filter((dataRow: []) => {
+        return dataRow.length > 0;
+      });
+
+      //Separate Module Name and array of grades
+      const moduleName = csvData[0][0];
+      const studentGrades = csvData.slice(1);
+
+      //Construct array of StudentModuleMark objects
+      const moduleData = studentGrades.map((dataRow) => {
+        const [matricNo, grade] = dataRow;
+        return { course_code: moduleName, student: matricNo, alphanum: grade };
+      });
+
+      //Convert data to JSON format?
+
+      console.log(moduleData);
+      const BASE_URL = "http://127.0.0.1:8000";
+
+      Axios.post(`${BASE_URL}/grades/`, moduleData)
+        .then((response: AxiosResponse) => {
+          console.log(response.status);
+
+          if (response.status === 200 || response.status === 201) {
+            console.log("success!");
+          } else {
+            console.log("error!");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    };
+
+    const papaConfig = {
+      complete: papaParseHandler
+    };
+
+    Papa.parse(file, papaConfig);
   };
   return <DropZone filesHandler={filesHandler} />;
 };
