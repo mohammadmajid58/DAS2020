@@ -1,0 +1,15 @@
+image: python:3.7
+
+before_script:
+  - python -V
+  - pip -V 
+  - pip install -r backend/requirements.txt
+
+stages:
+  - Backend Static Analysis
+
+flake8:
+  stage: Backend Static Analysis
+  script:
+  - flake8 --max-line-length=120 --per-file-ignores='backend/populate_database.py:E402' backend
+
