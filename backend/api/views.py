@@ -1,11 +1,27 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, status, generics
 
-from api.serializers import UserSerializer
+from rest_framework.response import Response
+
+from api.models import Grade
+from api.serializers import UserSerializer, GradeSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-
     # API endpoint that allows users to be viewed or edited
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+
+
+class GradeViewSet(generics.ListCreateAPIView):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = GradeSerializer(data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

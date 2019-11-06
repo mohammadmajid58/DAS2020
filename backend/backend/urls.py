@@ -10,4 +10,5 @@ router.register(r'users', views.UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('grades/', views.GradeViewSet.as_view(), name='grades')
 ]

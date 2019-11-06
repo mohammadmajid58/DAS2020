@@ -1,3 +1,9 @@
-from django.contrib import admin  # noqa: F401
+from django.contrib import admin
+from api.models import Grade
 
-# Register your models here.
+
+class GradeAdmin(admin.ModelAdmin):
+    list_display = ('student', 'course_code', 'alphanum')
+
+
+admin.site.register(Grade, GradeAdmin)
