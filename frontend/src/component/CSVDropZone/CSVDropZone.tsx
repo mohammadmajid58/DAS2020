@@ -4,7 +4,7 @@ import Papa, { ParseResult } from "papaparse";
 import Axios, { AxiosResponse } from "axios";
 
 type AllModuleMarks = {
-  course_code: string;
+  courseCode: string;
   student: string;
   alphanum: string;
 };
@@ -20,32 +20,32 @@ const CSVDropZone: React.FC = () => {
       return;
     }
 
-    const papaParseHandler = (results: ParseResult, inputFile: File) => {
+    const papaParseHandler = (results: ParseResult) => {
       var csvData = results.data;
 
-      //Removes any empty columns
+      // Removes any empty columns
       csvData = csvData.map((dataRow: []) => {
         return dataRow.filter((columnData: string) => {
           return columnData.length > 0;
         });
       });
 
-      //Removes any empty rows
+      // Removes any empty rows
       csvData = csvData.filter((dataRow: []) => {
         return dataRow.length > 0;
       });
 
-      //Separate Module Name and array of grades
+      // Separate Module Name and array of grades
       const moduleName = csvData[0][0];
       const studentGrades = csvData.slice(1);
 
-      //Construct array of StudentModuleMark objects
-      const moduleData = studentGrades.map((dataRow) => {
+      // Construct array of StudentModuleMark objects
+      const moduleData = studentGrades.map(dataRow => {
         const [matricNo, grade] = dataRow;
-        return { course_code: moduleName, student: matricNo, alphanum: grade };
+        return { courseCode: moduleName, student: matricNo, alphanum: grade };
       });
 
-      //Convert data to JSON format?
+      // Convert data to JSON format?
 
       console.log(moduleData);
       const BASE_URL = "http://127.0.0.1:8000";

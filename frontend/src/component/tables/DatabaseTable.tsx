@@ -46,6 +46,7 @@ class DatabaseTable extends Component<Props> {
     const allRows = tempRows.flat();
     this.rows = allRows;
   }
+
   render() {
     const tableOptions = {
       search: false
