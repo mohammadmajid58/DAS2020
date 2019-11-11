@@ -1,16 +1,8 @@
 ### Describe the Work Completed ###
   *
-  *
-  *
 
-### Which issues does this correspond to ###
-  *
-  *
-  *
 
 ### Describe parts which need scrutiny before Merging ###
-  *
-  *
   *
 
 ### Final Checklist [Check as Appropriate]: ###
