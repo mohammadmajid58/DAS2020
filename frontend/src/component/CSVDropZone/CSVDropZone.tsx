@@ -40,14 +40,15 @@ const CSVDropZone: React.FC = () => {
       const studentGrades = csvData.slice(1);
 
       // Construct array of StudentModuleMark objects
-      const moduleData = studentGrades.map(dataRow => {
+
+      const moduleData = studentGrades.map((dataRow) => {
         const [matricNo, grade] = dataRow;
         return { courseCode: moduleName, student: matricNo, alphanum: grade };
       });
 
       // Convert data to JSON format?
 
-      console.log(moduleData);
+      console.log("Parsed Data: " + moduleData);
       const BASE_URL = "http://127.0.0.1:8000";
 
       Axios.post(`${BASE_URL}/grades/`, moduleData)
