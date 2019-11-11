@@ -11,7 +11,7 @@ type Props = {
   returnData: (data: ModuleMark[]) => void;
 };
 
-//Since data might be across multiple API pages, asynchronously make multiple api calls to get all data
+// Since data might be across multiple API pages, asynchronously make multiple api calls to get all data
 async function getAllData() {
   const BASE_URL = "http://127.0.0.1:8000";
   var currentAddress = BASE_URL + "/grades/";

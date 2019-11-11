@@ -1,15 +1,21 @@
-image: python:3.7
-
-before_script:
-  - python -V
-  - pip -V 
-  - pip install -r backend/requirements.txt
-
 stages:
+  - Frontend Static Analysis
   - Backend Static Analysis
 
+eslint:
+  image: node
+  stage: Frontend Static Analysis
+  script:
+  - cd frontend
+  - npm install
+  - ./node_modules/.bin/eslint "**/*.tsx"
+
 flake8:
+  image: python:3.7
   stage: Backend Static Analysis
   script:
+  - python -V
+  - pip -V
+  - pip install -r backend/requirements.txt
   - flake8 --max-line-length=120 --per-file-ignores='backend/populate_database.py:E402' backend
 
