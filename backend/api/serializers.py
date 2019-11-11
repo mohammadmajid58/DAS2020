@@ -13,4 +13,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
-        fields = ['course_code', 'student', 'alphanum']
+        fields = ['courseCode', 'student', 'alphanum']

@@ -2,57 +2,34 @@ import React, { Component } from "react";
 
 import MaterialTable from "material-table";
 
-type StudentModuleMark = {
-  matricNo: string;
-  moduleGrade: string;
-};
-
-type AllModuleMarks = {
-  moduleName: string;
-  moduleData: StudentModuleMark[];
-};
-
 type Row = {
-  moduleName: string;
-  matricNo: string;
-  moduleGrade: string;
+  courseCode: string;
+  student: string;
+  alphanum: string;
 };
 
 type Props = {
-  data: AllModuleMarks[];
+  data: Row[];
 };
 
 const columns = [
-  { title: "Course Code", field: "moduleName" },
-  { title: "Matric No.", field: "matricNo" },
-  { title: "Grade", field: "moduleGrade" }
+  { title: "Course Code", field: "courseCode" },
+  { title: "Matric No.", field: "student" },
+  { title: "Grade", field: "alphanum" }
 ];
-
-function createData(moduleName: string, matricNo: string, moduleGrade: string) {
-  return { moduleName, matricNo, moduleGrade };
-}
 
 class DatabaseTable extends Component<Props> {
   rows: Row[] = [];
 
-  componentDidMount() {
-    const tempRows = this.props.data.map((module: AllModuleMarks) => {
-      const moduleName = module.moduleName;
-      return module.moduleData.map((student: StudentModuleMark) => {
-        return createData(moduleName, student.matricNo, student.moduleGrade);
-      });
-    });
-
-    const allRows = tempRows.flat();
-    this.rows = allRows;
-  }
-
   render() {
     const tableOptions = {
-      search: false
+      search: false,
+      pageSize: 10
     };
+    this.rows = this.props.data;
+    console.log(this.rows);
     return (
-      <div className="col-md-6 mx-md-auto">
+      <div className="mx-md-auto">
         <MaterialTable
           title="Module Grades"
           columns={columns}

@@ -3,7 +3,7 @@ from api.models import Grade
 
 
 class GradeAdmin(admin.ModelAdmin):
-    list_display = ('student', 'course_code', 'alphanum')
+    list_display = ('student', 'courseCode', 'alphanum')
 
 
 admin.site.register(Grade, GradeAdmin)
