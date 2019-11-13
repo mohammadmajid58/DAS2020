@@ -18,9 +18,8 @@ async function getAllData() {
   var tempModuleMarks: ModuleMark[] = [];
 
   while (currentAddress != null) {
-    await axios.get(`${currentAddress}`).then(r => {
+    await axios.get(`${currentAddress}`).then((r) => {
       tempModuleMarks.push(r.data.results);
-
       currentAddress = r.data.next;
     });
   }
@@ -32,9 +31,9 @@ class GetMarksButton extends React.Component<Props> {
   allModuleData: ModuleMark[] = [];
 
   returnDataHandler = () => {
-    getAllData().then(r => {});
+    getAllData().then((r) => {});
 
-    getAllData().then(r => {
+    getAllData().then((r) => {
       this.props.returnData(r);
     });
   };
@@ -46,8 +45,8 @@ class GetMarksButton extends React.Component<Props> {
       <div className="d-flex justify-content-center">
         <button
           type="button"
-          className="btn btn-light border border-dark"
           data-cy-getdata-button
+          className="btn btn-light border border-dark getModuleDataButton"
           onClick={this.returnDataHandler}
         >
           Get All Grades
