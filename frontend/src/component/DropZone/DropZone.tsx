@@ -21,10 +21,10 @@ const DropZone: React.FC<DropZoneProps> = props => {
   return (
     <div
       {...getRootProps()}
-      className="dragDropContainer col-sm-6 col-md-4 col-lg-3"
+      className="drop-zone-container col-sm-6 col-md-4 col-lg-3"
     >
-      <input {...getInputProps()} />
-      <div className="dragDropElement">
+      <input data-cy="drop-zone-input" {...getInputProps()} />
+      <div className="drop-zone-element">
         {isDragActive ? (
           <p>Drop the files here ...</p>
         ) : (
