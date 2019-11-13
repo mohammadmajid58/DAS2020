@@ -18,9 +18,9 @@ async function getAllData() {
   var tempModuleMarks: ModuleMark[] = [];
 
   while (currentAddress != null) {
-    await axios.get(`${currentAddress}`).then((r) => {
+    await axios.get(`${currentAddress}`).then(r => {
       tempModuleMarks.push(r.data.results);
-      console.log("In GetAllData: " + tempModuleMarks);
+
       currentAddress = r.data.next;
     });
   }
@@ -32,13 +32,9 @@ class GetMarksButton extends React.Component<Props> {
   allModuleData: ModuleMark[] = [];
 
   returnDataHandler = () => {
-    console.log("Button Clicked");
-    getAllData().then((r) => {
-      console.log(r);
-    });
+    getAllData().then(r => {});
 
-    getAllData().then((r) => {
-      console.log("After GetAllData: " + r);
+    getAllData().then(r => {
       this.props.returnData(r);
     });
   };
