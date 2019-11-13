@@ -27,7 +27,7 @@ class DatabaseTable extends Component<Props> {
       pageSize: 10
     };
     this.rows = this.props.data;
-    console.log(this.rows);
+
     return (
       <div className="mx-md-auto">
         <MaterialTable
