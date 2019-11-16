@@ -3,10 +3,12 @@ stages:
   - Backend Static Analysis
 
 eslint:
-  image: node
+  image: cypress/base:10
   stage: Frontend Static Analysis
   script:
+  - node --version
   - cd frontend
+  - npm ci
   - npm install
   - ./node_modules/.bin/eslint "**/*.tsx"
 
