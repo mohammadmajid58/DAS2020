@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from api.models import Grade
 from api.serializers import UserSerializer, GradeSerializer
+from django.db.utils import IntegrityError
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -21,7 +22,11 @@ class GradeViewSet(generics.ListCreateAPIView):
         data = request.data
         serializer = GradeSerializer(data=data, many=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response("Data already exists", status=status.HTTP_200_OK)
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
