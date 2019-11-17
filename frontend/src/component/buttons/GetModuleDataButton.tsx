@@ -47,6 +47,7 @@ class GetMarksButton extends React.Component<Props> {
         <button
           type="button"
           className="btn btn-light border border-dark"
+          data-cy-getdata-button
           onClick={this.returnDataHandler}
         >
           Get All Grades
