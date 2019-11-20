@@ -1,6 +1,7 @@
 stages:
-  - Frontend Static Analysis
   - Backend Static Analysis
+  - Frontend Static Analysis
+  
 
 eslint:
   image: cypress/base:10
