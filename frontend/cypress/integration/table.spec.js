@@ -256,7 +256,7 @@ describe("Database Table Loads", () => {
   it("Displays the Empty Table Correctly", () => {
     cy.get(".MuiTableBody-root")
       .find("tr")
-      .should("have.length", 1);
+      .should("have.length", 2);
     cy.get(".MuiTableBody-root")
       .find("td")
       .should("contain", "No records to display");
@@ -282,7 +282,7 @@ describe("Database Table Renders Data", () => {
 
     cy.get(".MuiTableBody-root")
       .find("tr")
-      .should("have.length", 1);
+      .should("have.length", 2);
     cy.get(".MuiTableBody-root")
       .find("td")
       .should("contain", "No records to display");
@@ -316,14 +316,13 @@ describe("Database Table Renders Data", () => {
     }).as("getModuleDataPage2");
 
     cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData", "@getModuleDataPage2"]);
+    cy.wait("@getModuleData");
+    cy.wait("@getModuleDataPage2");
     cy.get("span.MuiTypography-root").should("contain", "1-10 of 40");
   });
 });
 
 describe("Database Table Pagination Works", () => {
-  before(() => {});
-
   beforeEach(() => {
     cy.visit(VISIT_URL);
     cy.server();
@@ -340,11 +339,20 @@ describe("Database Table Pagination Works", () => {
       method: "GET",
       status: 200
     }).as("getModuleDataPage2");
+    cy.get(".getModuleDataButton").click();
+    cy.wait("@getModuleData")
+      .its("status")
+      .should("eq", 200);
+    cy.wait("@getModuleDataPage2")
+      .its("status")
+      .should("eq", 200);
+    cy.wait("@getModuleDataPage2")
+      .its("status")
+      .should("eq", 200);
   });
 
   it("Can Move to Next/Previous Page", () => {
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData", "@getModuleDataPage2"]);
+    cy.get("#root").find("span[title='Next Page']");
     cy.get("span[title='Next Page']").click();
     cy.get(".MuiTypography-root").should("contain", "11-20 of 40");
     cy.get("span[title='Previous Page']").click();
@@ -352,11 +360,109 @@ describe("Database Table Pagination Works", () => {
   });
 
   it("Can Move to First/Last Page", () => {
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData", "@getModuleDataPage2"]);
+    cy.get("#root").find("span[title='Next Page']");
     cy.get("span[title='Last Page']").click();
     cy.get("span.MuiTypography-root").should("contain", "31-40 of 40");
     cy.get("span[title='First Page']").click();
     cy.get("span.MuiTypography-root").should("contain", "1-10 of 40");
+  });
+});
+
+describe("Database Table Filtering Works", () => {
+  beforeEach(() => {
+    cy.visit(VISIT_URL);
+    cy.server();
+    cy.route({
+      url: `${SERVER_URL}/grades/`,
+      response: pageOne,
+      method: "GET",
+      status: 200
+    }).as("getModuleData");
+
+    cy.route({
+      url: `${SERVER_URL}/grades/?page=2`,
+      response: pageTwo,
+      method: "GET",
+      status: 200
+    }).as("getModuleDataPage2");
+    cy.get(".getModuleDataButton").click();
+    cy.wait("@getModuleData");
+    cy.wait("@getModuleDataPage2");
+    cy.wait("@getModuleDataPage2");
+  });
+
+  it("Has Correct Number of Discrete Options for Course Code and Grade", () => {
+    cy.get(".MuiFormControl-root")
+      .first()
+      .click();
+    cy.get("ul.MuiList-root")
+      .children()
+      .should("have.length", 2);
+
+    cy.get("div#menu-.MuiPopover-root").click("topRight");
+    cy.get(".MuiFormControl-root")
+      .last()
+      .click();
+    cy.get("ul.MuiList-root")
+      .children()
+      .should("have.length", 15);
+  });
+
+  it("Filters the Course Code", () => {
+    cy.get(".MuiFormControl-root")
+      .first()
+      .click();
+    cy.get("ul.MuiList-root")
+      .children()
+      .first()
+      .click();
+    cy.get("div#menu-.MuiPopover-root").click();
+
+    cy.get(".MuiFormControl-root")
+      .first()
+      .should("contain", "L45PROJ");
+    for (var index = 0; index < 10; index++) {
+      cy.get(`tr[index=${index}]`)
+        .children()
+        .first()
+        .should("contain", "L45PROJ");
+    }
+    cy.get("span.MuiTypography-root").should("contain", "1-10 of 20");
+  });
+
+  it("Filters the Grade", () => {
+    cy.get(".MuiFormControl-root")
+      .last()
+      .click();
+    cy.get("ul.MuiList-root")
+      .children()
+      .first()
+      .click();
+    cy.get("div#menu-.MuiPopover-root").click();
+
+    cy.get(".MuiFormControl-root")
+      .last()
+      .should("contain", "A1");
+    for (var index = 0; index < 3; index++) {
+      cy.get(`tr[index=${index}]`)
+        .children()
+        .last()
+        .should("contain", "A1");
+    }
+    cy.get("span.MuiTypography-root").should("contain", "1-3 of 3");
+  });
+
+  it("Filters the Matric Number", () => {
+    cy.get(".MuiInputBase-inputTypeSearch").type("1000009");
+    cy.get(".MuiInputBase-inputTypeSearch").should("contain.value", "1000009");
+    // Only to allow the table to rerender after the query filter
+    cy.wait(50);
+    for (var index = 0; index < 2; index++) {
+      cy.get(`tr[index=${index}]`)
+        .children()
+        .first()
+        .next()
+        .should("contain.text", "1000009");
+    }
   });
 });

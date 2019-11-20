@@ -12,10 +12,14 @@ type Props = {
   data: Row[];
 };
 
-const columns: Column<Object>[] = [
-  { title: "Course Code", field: "courseCode" },
+interface CustomColumn extends Column<Object> {
+  lookup?: { [key: string]: string };
+}
+
+const columns: CustomColumn[] = [
+  { title: "Course Code", field: "courseCode", lookup: {} },
   { title: "Matric No.", field: "student" },
-  { title: "Grade", field: "alphanum" }
+  { title: "Grade", field: "alphanum", lookup: {} }
 ];
 
 class DatabaseTable extends Component<Props> {
@@ -25,10 +29,42 @@ class DatabaseTable extends Component<Props> {
   render() {
     const tableOptions: Options = {
       search: false,
+      filtering: true,
       pageSize: 10
     };
 
     this.rows = this.props.data;
+
+    const courseCodeData = this.rows
+      .map((row) => {
+        return row.courseCode;
+      })
+      .filter((val, index, arr) => {
+        return arr.indexOf(val) === index;
+      })
+      .sort();
+
+    const gradeData = this.rows
+      .map((row) => {
+        return row.alphanum;
+      })
+      .filter((val, index, arr) => {
+        return arr.indexOf(val) === index;
+      })
+      .sort();
+
+    // Add Lookup keys for the discrete file
+    columns.forEach((col) => {
+      if (col.field === "courseCode") {
+        courseCodeData.forEach((courseCode: string) => {
+          col.lookup![courseCode] = courseCode;
+        });
+      } else if (col.field === "alphanum") {
+        gradeData.forEach((grade: string) => {
+          col.lookup![grade] = grade;
+        });
+      }
+    });
 
     return (
       <div className="mx-md-auto databaseTable">
