@@ -1,0 +1,15 @@
+.drop-zone-container {
+  text-align: center;
+  font-weight: bolder;
+  cursor: pointer;
+  margin: 0.25em;
+}
+
+.drop-zone-element {
+  padding: 2em;
+}
+
+.drop-zone-container .files-ready-to-be-uploaded {
+  margin-bottom: 1em !important;
+  font-weight: lighter;
+}

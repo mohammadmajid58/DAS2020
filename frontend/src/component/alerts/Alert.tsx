@@ -106,22 +106,20 @@ export default function Alert(props: AlertProps) {
   const message = props.message;
 
   return (
-    <div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left"
-        }}
-        open={open}
-        autoHideDuration={duration}
+    <Snackbar
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "left"
+      }}
+      open={open}
+      autoHideDuration={duration}
+      onClose={handleClose}
+    >
+      <MySnackbarContentWrapper
         onClose={handleClose}
-      >
-        <MySnackbarContentWrapper
-          onClose={handleClose}
-          variant={type}
-          message={message}
-        />
-      </Snackbar>
-    </div>
+        variant={type}
+        message={message}
+      />
+    </Snackbar>
   );
 }
