@@ -17,6 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class GradeViewSet(generics.ListCreateAPIView):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
+    pagination_class = None
 
     def post(self, request, *args, **kwargs):
         data = request.data
