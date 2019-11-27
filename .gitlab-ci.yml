@@ -2,6 +2,7 @@ stages:
   - Backend Static Analysis
   - Backend Unit Testing
   - Frontend Static Analysis
+  - Frontend Testing
 
 eslint:
   image: cypress/base:10
@@ -22,7 +23,6 @@ flake8:
   - pip install -r backend/requirements.txt
   - flake8 --max-line-length=120 --per-file-ignores='backend/populate_database.py:E402' backend
 
-
 backend-coverage:
   image: python:3.7
   stage: Backend Unit Testing
@@ -30,3 +30,14 @@ backend-coverage:
   - pip install -r backend/requirements.txt
   - coverage run --branch backend/manage.py test backend
   - coverage report --fail-under=70
+
+cypress:
+  image: cypress/base:10
+  stage: Frontend Testing
+  script:
+  - node --version
+  - cd frontend
+  - npm ci
+  - npm run start-with-coverage &
+  - npm test
+  - npx nyc report --reporter=text-summary --check-coverage=true
