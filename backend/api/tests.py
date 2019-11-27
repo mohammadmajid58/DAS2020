@@ -26,7 +26,7 @@ class ViewSetTestCase(APITestCase):
         response = self.client.get('/grades/')
         response = response.content.decode('utf-8')
         response_dict = json.loads(response)
-        self.assertEqual(response_dict["results"], [{"courseCode": "INORG", "student": "1234567", "alphanum": "B2"}])
+        self.assertEqual(response_dict, [{"courseCode": "INORG", "student": "1234567", "alphanum": "B2"}])
 
     def test_duplicate_entries_not_created(self):
         Grade.objects.get_or_create(courseCode="PHYS", student="1234387", alphanum="E2")
