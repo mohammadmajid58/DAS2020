@@ -18,14 +18,10 @@ class GetModuleMarkUnit extends Component {
   }
 
   getDataHandler = (moduleData: ModuleMark[]) => {
-    console.log("Returned Data: " + moduleData);
     this.setState({ data: moduleData });
   };
 
   render() {
-    console.log("Rendering ModuleMarkUnit");
-    console.log("State: " + this.state.data);
-
     return (
       <div className="col-md-6 mx-auto">
         <GetModuleMarkButton returnData={this.getDataHandler.bind(this)} />
