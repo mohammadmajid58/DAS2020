@@ -11,30 +11,14 @@ type Props = {
   returnData: (data: ModuleMark[]) => void;
 };
 
-// Since data might be across multiple API pages, asynchronously make multiple api calls to get all data
-async function getAllData() {
-  const BASE_URL = "http://127.0.0.1:8000";
-  var currentAddress = BASE_URL + "/grades/";
-  var tempModuleMarks: ModuleMark[] = [];
-
-  while (currentAddress != null) {
-    await axios.get(`${currentAddress}`).then((r) => {
-      tempModuleMarks.push(r.data.results);
-      currentAddress = r.data.next;
-    });
-  }
-
-  return tempModuleMarks.flat();
-}
-
 class GetMarksButton extends React.Component<Props> {
-  allModuleData: ModuleMark[] = [];
-
   returnDataHandler = () => {
-    getAllData().then((r) => {});
+    const REQUEST_URL = "http://127.0.0.1:8000/grades/";
+    var moduleMarks: ModuleMark[] = [];
 
-    getAllData().then((r) => {
-      this.props.returnData(r);
+    axios.get(`${REQUEST_URL}`).then((r) => {
+      moduleMarks.push(r.data);
+      this.props.returnData(moduleMarks.flat());
     });
   };
 
