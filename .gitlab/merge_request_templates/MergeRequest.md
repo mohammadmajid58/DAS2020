@@ -8,6 +8,7 @@
 ### Final Checklist [Check as Appropriate]: ###
 - [ ] Have I assigned someone to review the Merge Request
 - [ ] I haven't encountered any bugs in the code
+- [ ] I have written tests that will satisfy coverage requirements
 - [ ] **Reviewer:** Does the code look good
 - [ ] **Reviewer:** Are all files there that you would expect
 
