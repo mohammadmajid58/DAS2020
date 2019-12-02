@@ -38,7 +38,10 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
       return;
     }
 
-    for (var file of files) {
+    for (var i = 0; i < files.length; i++) {
+      const file: File = files[i];
+      const filename: string = file.name;
+
       const papaParseHandler = (results: ParseResult) => {
         var csvData = results.data;
 
@@ -55,35 +58,55 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
         });
 
         // Separate Module Name and array of grades
-        const moduleName = csvData[0][0];
         const studentGrades = csvData.slice(1);
 
-        // Construct array of StudentModuleMark objects
+        const regexp = new RegExp(
+          "^Grade roster ([A-Z]+_[0-9]+)_([0-9]+).csv$"
+        );
 
-        const moduleData = studentGrades.map(dataRow => {
-          const [matricNo, grade] = dataRow;
-          return { courseCode: moduleName, student: matricNo, alphanum: grade };
-        });
+        // We expect three matches, the string itself, course code and year group
+        const matches: any = filename.match(regexp);
+        if (matches === null || matches.length !== 3) {
+          alert(
+            "Error attempting to upload file with invalid file name. Received filename: " +
+              filename
+          );
+        } else {
+          const moduleName = matches[1];
+          // const yearGroup = matches[2];
 
-        const BASE_URL = "http://127.0.0.1:8000";
+          // Construct array of StudentModuleMark objects
+          const moduleData = studentGrades.map(dataRow => {
+            // eslint-disable-next-line no-unused-vars
+            const [matricNo, fullName, grade] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-        Axios.post(`${BASE_URL}/grades/`, moduleData)
-          .then((response: AxiosResponse) => {
-            if (response.status === 200 || response.status === 201) {
-              this.setState({
-                uploading: true,
-                numOfFilesUploaded: this.state.numOfFilesUploaded + 1
-              });
-            } else {
-              this.setState({
-                errorMessage: "Error occured"
-              });
-              console.log("error!");
-            }
-          })
-          .catch(function(error) {
-            console.log(error);
+            return {
+              courseCode: moduleName,
+              student: matricNo,
+              alphanum: grade
+            };
           });
+
+          const BASE_URL = "http://127.0.0.1:8000";
+
+          Axios.post(`${BASE_URL}/grades/`, moduleData)
+            .then((response: AxiosResponse) => {
+              if (response.status === 200 || response.status === 201) {
+                this.setState({
+                  uploading: true,
+                  numOfFilesUploaded: this.state.numOfFilesUploaded + 1
+                });
+              } else {
+                this.setState({
+                  errorMessage: "Error occured"
+                });
+                console.log("error!");
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
       };
       const papaConfig = {
         complete: papaParseHandler
