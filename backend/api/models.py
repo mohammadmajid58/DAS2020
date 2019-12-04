@@ -1,15 +1,6 @@
 from django.db import models
 
 
-class Grade(models.Model):
-    courseCode = models.CharField('Course Code', max_length=30)
-    matricNo = models.CharField('Student', max_length=7)
-    alphanum = models.CharField('Alphanumeric Grade', max_length=2)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['courseCode', 'matricNo'], name='composite_key')]
-
-
 class AcademicPlan(models.Model):
     planCode = models.CharField('Academic Plan Code', max_length=9, unique=True, primary_key=True)
     courseCode = models.CharField('Internal Course Code', max_length=15)
@@ -54,5 +45,17 @@ class Student(models.Model):
     matricNo = models.CharField('Student', max_length=7, unique=True, primary_key=True)
     givenNames = models.CharField('Given name(s)', max_length=40)
     surname = models.CharField('Last name', max_length=25)
-    academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE)
-    finalAward = models.CharField('Final award', max_length=2)
+    academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, null=True)
+    finalAward = models.CharField('Final award', max_length=2, blank=True, default="NC")
+
+    def __str__(self):
+        return self.surname + ", " + self.givenNames
+
+
+class Grade(models.Model):
+    courseCode = models.CharField('Course Code', max_length=30)
+    matricNo = models.CharField('Student', max_length=7)
+    alphanum = models.CharField('Alphanumeric Grade', max_length=2)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['courseCode', 'matricNo'], name='composite_key')]
