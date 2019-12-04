@@ -7,7 +7,7 @@ import Alert from "../../alerts/Alert";
 
 type AllModuleMarks = {
   courseCode: string;
-  student: string;
+  matricNo: string;
   alphanum: string;
 };
 
@@ -82,7 +82,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
 
             return {
               courseCode: moduleName,
-              student: matricNo,
+              matricNo: matricNo,
               alphanum: grade
             };
           });

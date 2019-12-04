@@ -5,151 +5,151 @@ const emptyData = [];
 const smallData = [
   {
     courseCode: "ORGCHEM",
-    student: "1000007",
+    matricNo: "1000007",
     alphanum: "A1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000008",
+    matricNo: "1000008",
     alphanum: "A2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000009",
+    matricNo: "1000009",
     alphanum: "B1"
   }
 ];
 const twoDegreeData = [
   {
     courseCode: "ORGCHEM",
-    student: "1000007",
+    matricNo: "1000007",
     alphanum: "A1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000008",
+    matricNo: "1000008",
     alphanum: "A2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000009",
+    matricNo: "1000009",
     alphanum: "B1"
   },
   {
     courseCode: "INORG",
-    student: "1000010",
+    matricNo: "1000010",
     alphanum: "A1"
   },
   {
     courseCode: "INORG",
-    student: "1000011",
+    matricNo: "1000011",
     alphanum: "A2"
   },
   {
     courseCode: "INORG",
-    student: "1000012",
+    matricNo: "1000012",
     alphanum: "B1"
   }
 ];
 const largeData = [
   {
     courseCode: "ORGCHEM",
-    student: "1000007",
+    matricNo: "1000007",
     alphanum: "A1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000008",
+    matricNo: "1000008",
     alphanum: "A2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000009",
+    matricNo: "1000009",
     alphanum: "B1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000010",
+    matricNo: "1000010",
     alphanum: "C3"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000011",
+    matricNo: "1000011",
     alphanum: "C1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000012",
+    matricNo: "1000012",
     alphanum: "D2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000013",
+    matricNo: "1000013",
     alphanum: "A1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000014",
+    matricNo: "1000014",
     alphanum: "D1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000016",
+    matricNo: "1000016",
     alphanum: "E1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000017",
+    matricNo: "1000017",
     alphanum: "C1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000018",
+    matricNo: "1000018",
     alphanum: "C2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000019",
+    matricNo: "1000019",
     alphanum: "D2"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000020",
+    matricNo: "1000020",
     alphanum: "B1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000021",
+    matricNo: "1000021",
     alphanum: "C3"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000022",
+    matricNo: "1000022",
     alphanum: "C1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000023",
+    matricNo: "1000023",
     alphanum: "A1"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000024",
+    matricNo: "1000024",
     alphanum: "B3"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000025",
+    matricNo: "1000025",
     alphanum: "D3"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000026",
+    matricNo: "1000026",
     alphanum: "C3"
   },
   {
     courseCode: "ORGCHEM",
-    student: "1000027",
+    matricNo: "1000027",
     alphanum: "D2"
   }
 ];
