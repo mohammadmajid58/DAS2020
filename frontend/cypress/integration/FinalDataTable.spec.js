@@ -1,5 +1,5 @@
 // const SERVER_URL = "http://127.0.0.1:8000";
-const VISIT_URL = "http://127.0.0.1:3000";
+const VISIT_URL = "http://localhost:3000/view-all-data";
 
 describe("Final Data Table Loads", () => {
   before(() => {

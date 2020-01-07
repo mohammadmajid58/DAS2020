@@ -1,5 +1,5 @@
 // Url of component on web app
-const visitUrl = "http://localhost:3000/";
+const visitUrl = "http://localhost:3000/upload-module-marks";
 
 const csvFileData = {
   fileContent: "CMCCHEM,\n1000013,A5,\n1000014,B1,\n1000015,B1,",
