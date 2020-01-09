@@ -164,7 +164,8 @@ describe("Database Table Loads", () => {
   });
 
   it("Displays the Empty Table Correctly", () => {
-    cy.get(".MuiTableBody-root")
+    cy.get(".databaseTable")
+      .find("tbody")
       .find("tr")
       .should("have.length", 2);
     cy.get(".MuiTableBody-root")
@@ -189,7 +190,8 @@ describe("Database Table Renders Data", () => {
     cy.get(".getModuleDataButton").click();
     cy.wait(["@getModuleData"]);
 
-    cy.get(".MuiTableBody-root")
+    cy.get(".databaseTable")
+      .find("tbody")
       .find("tr")
       .should("have.length", 2);
     cy.get(".MuiTableBody-root")
@@ -226,19 +228,35 @@ describe("Database Table Pagination Works", () => {
   });
 
   it("Can Move to Next/Previous Page", () => {
-    cy.get("#root").find("span[title='Next Page']");
-    cy.get("span[title='Next Page']").click();
-    cy.get(".MuiTypography-root").should("contain", "11-20 of 20");
-    cy.get("span[title='Previous Page']").click();
-    cy.get(".MuiTypography-root").should("contain", "1-10 of 20");
+    cy.get(".databaseTable")
+      .find("tfoot")
+      .find("span[title='Next Page']")
+      .click();
+    cy.get(".databaseTable")
+      .find(".MuiTypography-root")
+      .should("contain", "11-20 of 20");
+    cy.get(".databaseTable")
+      .find("span[title='Previous Page']")
+      .click();
+    cy.get(".databaseTable")
+      .find(".MuiTypography-root")
+      .should("contain", "1-10 of 20");
   });
 
   it("Can Move to First/Last Page", () => {
-    cy.get("#root").find("span[title='Next Page']");
-    cy.get("span[title='Last Page']").click();
-    cy.get("span.MuiTypography-root").should("contain", "11-20 of 20");
-    cy.get("span[title='First Page']").click();
-    cy.get("span.MuiTypography-root").should("contain", "1-10 of 20");
+    cy.get(".databaseTable")
+      .find("tfoot")
+      .find("span[title='Last Page']")
+      .click();
+    cy.get(".databaseTable")
+      .find("span.MuiTypography-root")
+      .should("contain", "11-20 of 20");
+    cy.get(".databaseTable")
+      .find("span[title='First Page']")
+      .click();
+    cy.get(".databaseTable")
+      .find("span.MuiTypography-root")
+      .should("contain", "1-10 of 20");
   });
 });
 
@@ -257,7 +275,8 @@ describe("Database Table Filtering Works", () => {
   });
 
   it("Has Correct Number of Discrete Options for Course Code and Grade", () => {
-    cy.get(".MuiFormControl-root")
+    cy.get(".databaseTable")
+      .find(".MuiFormControl-root")
       .first()
       .click();
     cy.get("ul.MuiList-root")
@@ -265,7 +284,8 @@ describe("Database Table Filtering Works", () => {
       .should("have.length", 2);
 
     cy.get("div#menu-.MuiPopover-root").click("topRight");
-    cy.get(".MuiFormControl-root")
+    cy.get(".databaseTable")
+      .find(".MuiFormControl-root")
       .last()
       .click();
     cy.get("ul.MuiList-root")
@@ -296,7 +316,8 @@ describe("Database Table Filtering Works", () => {
   });
 
   it("Filters the Grade", () => {
-    cy.get(".MuiFormControl-root")
+    cy.get(".databaseTable")
+      .find(".MuiFormControl-root")
       .last()
       .click();
     cy.get("ul.MuiList-root")
@@ -305,7 +326,8 @@ describe("Database Table Filtering Works", () => {
       .click();
     cy.get("div#menu-.MuiPopover-root").click();
 
-    cy.get(".MuiFormControl-root")
+    cy.get(".databaseTable")
+      .find(".MuiFormControl-root")
       .last()
       .should("contain", "A1");
     for (var index = 0; index < 2; index++) {
@@ -318,8 +340,12 @@ describe("Database Table Filtering Works", () => {
   });
 
   it("Filters the Matric Number", () => {
-    cy.get(".MuiInputBase-inputTypeSearch").type("1000009");
-    cy.get(".MuiInputBase-inputTypeSearch").should("contain.value", "1000009");
+    cy.get(".databaseTable")
+      .find(".MuiInputBase-inputTypeSearch")
+      .type("1000009");
+    cy.get(".databaseTable")
+      .find(".MuiInputBase-inputTypeSearch")
+      .should("contain.value", "1000009");
     // Only to allow the table to rerender after the query filter
     cy.wait(50);
     for (var index = 0; index < 1; index++) {

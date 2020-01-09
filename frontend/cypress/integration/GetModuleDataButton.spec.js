@@ -10,14 +10,14 @@ describe("Test Button", () => {
   });
 
   it("Single Click", () => {
-    cy.get(".btn").click();
+    cy.get("[data-cy-getdata-button]").click();
   });
 
   it("Double click the button", () => {
     cy.visit("http://localhost:3000/");
   });
   it("Double clicks", () => {
-    cy.get(".btn").click();
-    cy.get(".btn").click();
+    cy.get("[data-cy-getdata-button]").click();
+    cy.get("[data-cy-getdata-button]").click();
   });
 });
