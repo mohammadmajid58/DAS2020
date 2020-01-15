@@ -1,8 +1,9 @@
 import { createYield } from "typescript";
+const VISIT_URL = "http://localhost:3000/view-all-data";
 
 describe("Test Button", () => {
   it("Loads the page", () => {
-    cy.visit("http://localhost:3000/");
+    cy.visit(VISIT_URL);
   });
 
   it("Checks if button exists", () => {
@@ -14,7 +15,7 @@ describe("Test Button", () => {
   });
 
   it("Double click the button", () => {
-    cy.visit("http://localhost:3000/");
+    cy.visit(VISIT_URL);
   });
   it("Double clicks", () => {
     cy.get("[data-cy-getdata-button]").click();
