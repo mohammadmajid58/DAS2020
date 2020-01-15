@@ -4,6 +4,7 @@ const VISIT_URL = "http://localhost:3000/view-all-data";
 describe("Final Data Table Loads", () => {
   before(() => {
     cy.visit(VISIT_URL);
+    cy.get("[ data-cy-toggle-button]").click();
   });
 
   it("Has a Final Data Table", () => {
@@ -25,6 +26,7 @@ describe("Final Data Table Loads", () => {
 describe("Final Data Table Displays Data Correctly", () => {
   before(() => {
     cy.visit(VISIT_URL);
+    cy.get("[ data-cy-toggle-button]").click();
     cy.get(".getFinalDataButton").click();
   });
 
