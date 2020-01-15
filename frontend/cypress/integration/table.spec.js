@@ -182,7 +182,7 @@ describe("Database Table Renders Data", () => {
 
   it("Handles No Data", () => {
     cy.route({
-      url: `${SERVER_URL}/grades/`,
+      url: `${SERVER_URL}/api/grades/`,
       response: emptyData,
       method: "GET",
       status: 200
@@ -201,7 +201,7 @@ describe("Database Table Renders Data", () => {
 
   it("Handles A Data Request", () => {
     cy.route({
-      url: `${SERVER_URL}/grades/`,
+      url: `${SERVER_URL}/api/grades/`,
       response: smallData,
       method: "GET",
       status: 200
@@ -218,7 +218,7 @@ describe("Database Table Pagination Works", () => {
     cy.visit(VISIT_URL);
     cy.server();
     cy.route({
-      url: `${SERVER_URL}/grades/`,
+      url: `${SERVER_URL}/api/grades/`,
       response: largeData,
       method: "GET",
       status: 200
@@ -265,7 +265,7 @@ describe("Database Table Filtering Works", () => {
     cy.visit(VISIT_URL);
     cy.server();
     cy.route({
-      url: `${SERVER_URL}/grades/`,
+      url: `${SERVER_URL}/api/grades/`,
       response: twoDegreeData,
       method: "GET",
       status: 200

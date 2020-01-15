@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from rest_framework import viewsets, status, generics
 
 from rest_framework.response import Response
@@ -6,6 +7,10 @@ from rest_framework.response import Response
 from api.models import Grade, Student
 from api.serializers import UserSerializer, GradeSerializer, StudentSerializer
 from django.db.utils import IntegrityError
+
+
+def index(request):
+    return render(request, "build/index.html")
 
 
 class UserViewSet(viewsets.ModelViewSet):
