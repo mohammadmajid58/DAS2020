@@ -104,6 +104,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
               }
             })
             .catch(function(error) {
+              alert("Error occured");
               console.log(error);
             });
         }
