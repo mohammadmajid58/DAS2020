@@ -28,12 +28,18 @@ const uniqueData = (inData: string[]) => {
 };
 
 const columns: CustomColumn[] = [
-  { title: "EMPLID", field: "matricNo" },
+  { title: "EMPLID", field: "matricNo", export: false },
   { title: "Academic Plan", field: "academicPlan", lookup: {} },
   { title: "Given Names", field: "givenNames", lookup: {} },
   { title: "Surname", field: "surname", lookup: {} },
   { title: "Final Award", field: "finalAward", lookup: {} },
-  { title: "MC Award", field: "mcAward", lookup: {} }
+
+  {
+    title: "MC Award",
+    field: "mcAward",
+    lookup: {},
+    export: false
+  }
 ];
 
 export default class FinalDataTable extends Component<Props> {
@@ -44,7 +50,10 @@ export default class FinalDataTable extends Component<Props> {
     const tableOptions: Options = {
       search: false,
       filtering: true,
-      pageSize: 10
+      pageSize: 10,
+      exportButton: true,
+      exportAllData: true,
+      exportFileName: "Final Award"
     };
 
     this.rows = this.props.data;
