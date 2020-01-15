@@ -1,7 +1,12 @@
+from django.conf.urls import url
 from django.urls import include, path
 from django.contrib import admin
 
+from api.views import index
+
 urlpatterns = [
+    path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
-    path('', include('api.urls')),
+    path("", index, name="index"),
+    url(r'^(?:.*)/?$', index),
 ]

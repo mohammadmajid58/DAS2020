@@ -13,10 +13,10 @@ type Props = {
 
 class GetMarksButton extends React.Component<Props> {
   returnDataHandler = () => {
-    const REQUEST_URL = "http://127.0.0.1:8000/grades/";
+    const REQUEST_URL = "http://127.0.0.1:8000/api/grades/";
     var moduleMarks: ModuleMark[] = [];
 
-    axios.get(`${REQUEST_URL}`).then((r) => {
+    axios.get(`${REQUEST_URL}`).then(r => {
       moduleMarks.push(r.data);
       this.props.returnData(moduleMarks.flat());
     });
