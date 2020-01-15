@@ -54,7 +54,7 @@ class Student(models.Model):
 
 class Grade(models.Model):
     courseCode = models.CharField('Course Code', max_length=30)
-    matricNo = models.CharField('Student', max_length=7)
+    matricNo = models.ForeignKey(Student, on_delete=models.CASCADE, db_column='matricNo')
     alphanum = models.CharField('Alphanumeric Grade', max_length=2)
 
     class Meta:
