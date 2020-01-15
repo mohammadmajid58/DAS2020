@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.navigationBar {
+  background-color: #567aa8;
+  border-bottom: black;
+}
+.navItem:hover {
+  text-decoration: none;
+}
+
+.navButton {
+  color: #f4ebec !important;
+  text-transform: none !important;
+  font-weight: bold !important;
+}
+.navButton:hover {
+  background-color: #7492ba !important;
+}
+
+.nav-item {
+  list-style-type: none;
+}
