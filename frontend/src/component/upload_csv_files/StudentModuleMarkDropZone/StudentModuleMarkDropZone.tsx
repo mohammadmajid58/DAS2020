@@ -4,6 +4,7 @@ import Papa, { ParseResult } from "papaparse";
 import Axios, { AxiosResponse } from "axios";
 import Button from "@material-ui/core/Button";
 import Alert from "../../alerts/Alert";
+import API_URL from "../../../index";
 
 type AllModuleMarks = {
   courseCode: string;
@@ -87,9 +88,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
             };
           });
 
-          const BASE_URL = "http://127.0.0.1:8000";
-
-          Axios.post(`${BASE_URL}/api/grades/`, moduleData)
+          Axios.post(`${API_URL}/api/grades/`, moduleData)
             .then((response: AxiosResponse) => {
               if (response.status === 200 || response.status === 201) {
                 this.setState({
