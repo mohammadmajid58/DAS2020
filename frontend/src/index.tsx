@@ -5,6 +5,13 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
+let API_URL = "http://teamdas123.pythonanywhere.com";
+if (process.env.NODE_ENV === "development") {
+  API_URL = "http://127.0.0.1:8000";
+}
+
+export default API_URL;
+
 ReactDOM.render(
   <BrowserRouter>
     <App />

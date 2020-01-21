@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../index";
 
 type ModuleMark = {
   courseCode: string;
@@ -13,7 +14,7 @@ type Props = {
 
 class GetMarksButton extends React.Component<Props> {
   returnDataHandler = () => {
-    const REQUEST_URL = "http://127.0.0.1:8000/api/grades/";
+    const REQUEST_URL = API_URL + "/api/grades/";
     var moduleMarks: ModuleMark[] = [];
 
     axios.get(`${REQUEST_URL}`).then(r => {
