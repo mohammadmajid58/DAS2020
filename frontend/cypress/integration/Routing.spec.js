@@ -1,11 +1,14 @@
 import { createYield } from "typescript";
 
 const HOME_URL = "http://localhost:3000/";
+const ROSTER_URL = "http://localhost:3000/upload-student-roster";
 
 describe("Routing", () => {
   it("can load content on the Upload Student Roster page", () => {
     cy.visit(HOME_URL + "upload-student-roster");
-    cy.contains("Upload Student Roster Page");
+    cy.url().should("contain", ROSTER_URL);
+    cy.contains("Drag and drop files here, or click to select files");
+    cy.contains("Upload CSV Files to Database");
   });
   it("can load content on the Upload Module Marks page", () => {
     cy.visit(HOME_URL + "upload-module-marks");
