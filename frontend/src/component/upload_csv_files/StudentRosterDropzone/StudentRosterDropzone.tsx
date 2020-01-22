@@ -74,7 +74,7 @@ class StudentRosterDropzone extends React.Component<{}, State> {
           );
         } else {
           // Construct array of Student objects
-          const studentData = studentRoster.map((dataRow) => {
+          const studentData = studentRoster.map(dataRow => {
             // eslint-disable-next-line no-unused-vars
             const [matricNo, fullName, academicPlan] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
