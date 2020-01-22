@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, status, generics
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, csrf_exempt
+from rest_framework.decorators import api_view
 
 from api.models import Grade, Student
 from api.serializers import UserSerializer, GradeSerializer, StudentSerializer
