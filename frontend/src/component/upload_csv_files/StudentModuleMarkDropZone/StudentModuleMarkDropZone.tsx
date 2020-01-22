@@ -62,7 +62,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
         const studentGrades = csvData.slice(1);
 
         const regexp = new RegExp(
-          "^Grade roster ([A-Z]+_[0-9]+)_([0-9]+).csv$"
+          "^Grade roster ([A-Z]+_[0-9]+\\w?)_([0-9]+).csv$"
         );
 
         // We expect three matches, the string itself, course code and year group
@@ -77,7 +77,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
           // const yearGroup = matches[2];
 
           // Construct array of StudentModuleMark objects
-          const moduleData = studentGrades.map(dataRow => {
+          const moduleData = studentGrades.map((dataRow) => {
             // eslint-disable-next-line no-unused-vars
             const [matricNo, fullName, grade] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
