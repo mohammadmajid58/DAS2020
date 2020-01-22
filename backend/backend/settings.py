@@ -24,6 +24,13 @@ SECRET_KEY = ')^gr*ad*mggfg0a9o&u)xm8+h=xe6miv88_!-dc%3%n4!9n5=r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# DEBUG MUST BE SET TO False on STAGING!
+# DEBUG MUST BE SET TO True on DEVELOPMENT!
+if DEBUG:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = '/react-frontend/build/static/'
+
 ALLOWED_HOSTS = ["127.0.0.1", "teamdas123.pythonanywhere.com"]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -77,7 +84,7 @@ TEMPLATES = [
         },
     },
 ]
-STATIC_URL = '/react-frontend/build/static/'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'react-frontend', "build", "static"),  # update the STATICFILES_DIRS
 )
