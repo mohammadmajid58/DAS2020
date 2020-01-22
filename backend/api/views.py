@@ -16,7 +16,6 @@ def index(request):
 
 
 @api_view(('POST',))
-@csrf_exempt
 def calculate(request):
     if request.method == "POST":
         students = Student.objects.all()
