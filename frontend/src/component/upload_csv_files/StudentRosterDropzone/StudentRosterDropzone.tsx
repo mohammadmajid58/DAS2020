@@ -88,7 +88,7 @@ class StudentRosterDropzone extends React.Component<{}, State> {
               givenNames: givenNames,
               surname: surname,
               academicPlan: academicPlan,
-              finalAward: ""
+              finalAward: 0
             };
           });
 
