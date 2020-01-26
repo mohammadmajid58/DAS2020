@@ -1,6 +1,10 @@
 from django.contrib import admin
 from api.models import Grade, Student, AcademicPlan
 
+admin.site.site_header = "DAS 2020"
+admin.site.site_title = "DAS 2020 Admin Portal"
+admin.site.index_title = "Welcome to DAS 2020 Admin Portal"
+
 
 class GradeAdmin(admin.ModelAdmin):
     list_display = ('matricNo', 'courseCode', 'alphanum')
