@@ -41,7 +41,6 @@ export default class NavigationBar extends Component {
             </Button>
           </li>
         </ul>
-
         <div className="col-3"></div>
       </nav>
     );
