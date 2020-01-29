@@ -7,12 +7,12 @@ export default class NavigationBar extends Component {
     return (
       <nav className="navbar navbar-expand-md navigationBar px-0">
         <div className="navLogo col-3 pr-0">
-          <img
+          <a href="/"><img
             src={require("./uog_logo.png")}
             alt="University of Glasgow Logo"
             width={250}
             height={70}
-          />
+          /></a>
         </div>
 
         <ul className="d-flex justify-content-between col-6">
