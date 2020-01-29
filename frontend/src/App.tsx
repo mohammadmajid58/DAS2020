@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import UploadStudentRoster from "./pages/UploadStudentRoster";
 import UploadModuleMarks from "./pages/UploadModuleMarks";
 import ViewAllData from "./pages/ViewAllData";
-
+import Home from "./pages/Home";
 import NavigationBar from "./component/navigation/NavigationBar";
 
 class App extends Component {
@@ -14,6 +14,7 @@ class App extends Component {
       <Router>
         <NavigationBar />
         <Switch>
+          <Route exact path="/" component={Home} />
           <Route
             exact
             path="/upload-student-roster"
