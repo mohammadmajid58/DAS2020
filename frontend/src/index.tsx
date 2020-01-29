@@ -4,6 +4,10 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+import Axios from "axios";
+import { getCookie } from "./abstract_functions";
+
+Axios.defaults.headers.common["X-CSRFToken"] = getCookie("csrftoken");
 
 let API_URL = "http://teamdas123.pythonanywhere.com";
 if (process.env.NODE_ENV === "development") {
