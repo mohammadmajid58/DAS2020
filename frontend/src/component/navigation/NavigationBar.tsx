@@ -40,6 +40,11 @@ export default class NavigationBar extends Component {
               View All Data
             </Button>
           </li>
+          <li className="nav-item adminSiteLink">
+            <button>
+              <a href="/admin/">Admin Tools</a>
+            </button>
+          </li>
         </ul>
         <div className="col-3"></div>
       </nav>

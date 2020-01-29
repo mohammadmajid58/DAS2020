@@ -2,6 +2,7 @@ const VISIT_URL = "http://localhost:3000/";
 const ROSTER_URL = "http://localhost:3000/upload-student-roster";
 const MODULE_URL = "http://localhost:3000/upload-module-marks";
 const ALL_DATA_URL = "http://localhost:3000/view-all-data";
+const ADMIN_URL = "http://localhost:3000/admin/";
 
 describe("The Four Navigation Buttons Work", () => {
   beforeEach(() => {
@@ -24,5 +25,9 @@ describe("The Four Navigation Buttons Work", () => {
     cy.get(".allDataUploadLink").click();
     cy.get(".navLogo").click();
     cy.url().should("equal", VISIT_URL);
+  });
+  it("Navigates to admin site", () => {
+    cy.get(".adminSiteLink").click();
+    cy.url().should("contain", ADMIN_URL);
   });
 });
