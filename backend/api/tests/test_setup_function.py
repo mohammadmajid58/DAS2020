@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from api.models import AcademicPlan, Student, Grade
 
 
@@ -26,3 +28,14 @@ def setup(self):
     student.gradeDataUpdated = True
     student.save()
     self.student = student
+
+
+def login(client):
+    user = User.objects.get_or_create(username="admin")[0]
+    user.is_staff = True
+    user.is_superuser = True
+    user.save()
+
+    user.set_password("adminadmin")
+    user.save()
+    client.login(username="admin", password="adminadmin")
