@@ -1,13 +1,11 @@
-from django.contrib.auth.models import User
-
 from django.shortcuts import render
-from rest_framework import viewsets, status, generics
+from rest_framework import status, generics
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from api.models import Grade, Student
-from api.serializers import UserSerializer, GradeSerializer, StudentSerializer
+from api.serializers import GradeSerializer, StudentSerializer
 from django.db.utils import IntegrityError
 
 
@@ -43,12 +41,6 @@ def calculate(request):
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    # API endpoint that allows users to be viewed or edited
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
 
 
 class GradeViewSet(generics.ListCreateAPIView):
