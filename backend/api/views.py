@@ -18,7 +18,7 @@ def index(request):
 @api_view(('POST',))
 def calculate(request):
     if request.method == "POST":
-        students = Student.objects.all()
+        students = Student.objects.filter(gradeDataUpdated=True)
 
         for student in students:
             academic_plan = student.academicPlan

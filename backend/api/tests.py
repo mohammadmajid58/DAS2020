@@ -15,10 +15,18 @@ class GradeTestCase(APITestCase):
         Student.objects.get_or_create(matricNo="2283653", givenNames="Barry", surname="Burton",
                                       academicPlan=AcademicPlan.objects.get(planCode="CHEM_1234"))
 
-    def test_post_grade_data(self):
-        grade = [{"courseCode": "ORGCHEM", "matricNo": "1234567", "alphanum": "C2"}]
-        response = self.client.post("/api/grades/", grade, format='json')
+    def test_post_grade_data_sets_student_grade_data_updated(self):
+        grades = [{"courseCode": "ORGCHEM", "matricNo": "1234567", "alphanum": "C2"},
+                  {"courseCode": "ORGCHEM", "matricNo": "2283653", "alphanum": "B1"}]
+
+        response = self.client.post("/api/grades/", grades, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        student = Student.objects.get(matricNo="1234567")
+        self.assertTrue(student.gradeDataUpdated)
+
+        student = Student.objects.get(matricNo="2283653")
+        self.assertTrue(student.gradeDataUpdated)
 
     def test_grade_data_stored(self):
         data = [{"courseCode": "INORG", "matricNo": "1234567", "alphanum": "B2"},
@@ -103,25 +111,23 @@ class FinalAwardTestCase(APITestCase):
                                            weight_8=0.125)
         Student.objects.get_or_create(matricNo="2894029", givenNames="Zak", surname="Bagans",
                                       academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward=0)
-        Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="C1")
-        Grade.objects.get_or_create(courseCode="CHEM_3009", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="C2")
-        Grade.objects.get_or_create(courseCode="CHEM_3014", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="D3")
-        Grade.objects.get_or_create(courseCode="CHEM_4003P", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="B1")
-        Grade.objects.get_or_create(courseCode="CHEM_4014", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="C1")
-        Grade.objects.get_or_create(courseCode="CHEM_4012", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="C3")
-        Grade.objects.get_or_create(courseCode="CHEM_4009", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="A1")
-        Grade.objects.get_or_create(courseCode="CHEM_4001", matricNo=Student.objects.get(matricNo="2894029"),
-                                    alphanum="A3")
 
-    def test_correct_final_award(self):
+        student = Student.objects.get(matricNo="2894029")
+        Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=student, alphanum="C1")
+        Grade.objects.get_or_create(courseCode="CHEM_3009", matricNo=student, alphanum="C2")
+        Grade.objects.get_or_create(courseCode="CHEM_3014", matricNo=student, alphanum="D3")
+        Grade.objects.get_or_create(courseCode="CHEM_4003P", matricNo=student, alphanum="B1")
+        Grade.objects.get_or_create(courseCode="CHEM_4014", matricNo=student, alphanum="C1")
+        Grade.objects.get_or_create(courseCode="CHEM_4012", matricNo=student, alphanum="C3")
+        Grade.objects.get_or_create(courseCode="CHEM_4009", matricNo=student, alphanum="A1")
+        Grade.objects.get_or_create(courseCode="CHEM_4001", matricNo=student, alphanum="A3")
+        student.gradeDataUpdated = True
+        student.save()
+        self.student = student
+
+    def test_final_award_is_calculated_correctly(self):
         response = self.client.post('/api/calculate/')
+
         student = Student.objects.get(matricNo="2894029")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(student.finalAward, 16)
