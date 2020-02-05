@@ -1,21 +1,23 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from api.models import Grade, Student, AcademicPlan
 
-admin.site.site_header = "DAS 2020"
-admin.site.site_title = "DAS 2020 Admin Portal"
-admin.site.index_title = "Welcome to DAS 2020 Admin Portal"
 
-
-class GradeAdmin(admin.ModelAdmin):
+@register(Grade)
+class GradeAdmin(ModelAdmin):
+    icon_name = 'grade'
     list_display = ('matricNo', 'courseCode', 'alphanum')
 
 
-class StudentAdmin(admin.ModelAdmin):
+@register(Student)
+class StudentAdmin(ModelAdmin):
+    icon_name = 'school'
     model = Student
     list_display = ('matricNo', 'givenNames', 'surname', 'academicPlan', 'finalAward')
 
 
-class AcademicPlanAdmin(admin.ModelAdmin):
+@register(AcademicPlan)
+class AcademicPlanAdmin(ModelAdmin):
+    icon_name = 'event'
     model = AcademicPlan
     list_display = ('planCode', 'courseCode', 'mcName', 'mcCode',
                     'course_1', 'weight_1', 'course_2', 'weight_2', 'course_3', 'weight_3',
@@ -24,8 +26,3 @@ class AcademicPlanAdmin(admin.ModelAdmin):
                     'course_9', 'weight_9', 'course_10', 'weight_10',
                     'course_11', 'weight_11', 'course_12', 'weight_12', 'course_13', 'weight_13',
                     'course_14', 'weight_14', 'course_15', 'weight_15')
-
-
-admin.site.register(Grade, GradeAdmin)
-admin.site.register(Student, StudentAdmin)
-admin.site.register(AcademicPlan, AcademicPlanAdmin)
