@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class AcademicPlan(models.Model):
@@ -50,6 +51,21 @@ class AcademicPlan(models.Model):
             self.weight_6, self.weight_7, self.weight_8, self.weight_9, self.weight_10,
             self.weight_11, self.weight_12, self.weight_13, self.weight_14, self.weight_15,
         ]
+
+    def _calculate_total_weight(self):
+        return sum(round(w, 3) if w is not None else 0 for w in self.get_weights())
+
+    def _weight_in_correct_range(self):
+        return True if 0.999 <= self._calculate_total_weight() <= 1 else False
+
+    def clean(self):
+        if not self._weight_in_correct_range():
+            total = self._calculate_total_weight()
+            raise ValidationError("Weights summed to " + str(total) + ". Total weight should be 1.0 (or 0.999).")
+
+    def save(self, *args, **kwargs):
+        if self._weight_in_correct_range():
+            super(AcademicPlan, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.planCode
