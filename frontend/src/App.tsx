@@ -7,6 +7,7 @@ import UploadStudentRoster from "./pages/UploadStudentRoster";
 import UploadModuleMarks from "./pages/UploadModuleMarks";
 import ViewAllData from "./pages/ViewAllData";
 import Home from "./pages/Home";
+import LoginPage from "./component/LoginPage/LoginPage";
 import NavigationBar from "./component/navigation/NavigationBar";
 import Footer from "./component/navigation/Footer";
 
@@ -24,6 +25,7 @@ class App extends Component {
           />
           <Route path="/upload-module-marks" component={UploadModuleMarks} />
           <Route path="/view-all-data" component={ViewAllData} />
+          <Route exact path="/" component={LoginPage} />
         </Switch>
         <Footer />
       </Router>
