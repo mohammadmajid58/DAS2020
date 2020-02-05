@@ -77,6 +77,11 @@ class Student(models.Model):
     surname = models.CharField('Last name', max_length=25)
     academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, null=True)
     finalAward = models.IntegerField('Final award', blank=True, default=0)
+    gradeDataUpdated = models.BooleanField(default=False)
+
+    def set_grade_data_updated(self):
+        self.gradeDataUpdated = True
+        self.save()
 
     def __str__(self):
         return self.surname + ", " + self.givenNames
@@ -96,3 +101,11 @@ class Grade(models.Model):
 
     def get_alphanum_as_num(self):
         return self.alpha_to_num[self.alphanum]
+
+    def save(self, *args, **kwargs):
+        self.matricNo.set_grade_data_updated()
+        super(Grade, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.matricNo.set_grade_data_updated()
+        super(Grade, self).delete(*args, **kwargs)
