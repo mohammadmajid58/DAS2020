@@ -14,10 +14,10 @@ export default class NavigationBar extends Component {
         <div className="navLogo col-3 pr-0">
           <a href="/">
             <img
-              src={require("./uog_logo.png")}
+              src={require("./uog_logo.jpg")}
               alt="University of Glasgow Logo"
-              width={250}
-              height={70}
+              width={160}
+              height={44}
             />
           </a>
         </div>
