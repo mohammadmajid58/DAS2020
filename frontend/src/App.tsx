@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap";
 import UploadStudentRoster from "./pages/UploadStudentRoster";
 import UploadModuleMarks from "./pages/UploadModuleMarks";
 import ViewAllData from "./pages/ViewAllData";
@@ -24,7 +25,7 @@ class App extends Component {
           <Route path="/upload-module-marks" component={UploadModuleMarks} />
           <Route path="/view-all-data" component={ViewAllData} />
         </Switch>
-        <Footer/>
+        <Footer />
       </Router>
     );
   }
