@@ -5,11 +5,16 @@ interface PageTitleProps {
 
 const PageTitle: React.FC<PageTitleProps> = props => {
   const title = props.title;
+  const style = {
+    color: "white",
+    backgroundColor: "#7794ba",
+    padding: "2em",
+    marginBottom: "2em",
+    fontFamily: "Arial"
+  };
   return (
-    <div className="d-flex justify-content-center">
-      <h2>
-        <strong>{title}</strong>
-      </h2>
+    <div style={style} className="d-flex justify-content-center">
+      <h3>{title}</h3>
     </div>
   );
 };
