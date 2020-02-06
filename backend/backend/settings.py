@@ -40,7 +40,8 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'material.admin',
+    'material.admin.default',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -84,6 +85,13 @@ TEMPLATES = [
         },
     },
 ]
+
+MATERIAL_ADMIN_SITE = {
+    'HEADER': 'Welcome to DAS 2020 Portal!',
+    'TITLE': 'DAS 2020 Admin Portal',
+    'FAVICON': 'settings',
+    'SHOW_THEMES': True,
+}
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'react-frontend', "build", "static"),  # update the STATICFILES_DIRS
