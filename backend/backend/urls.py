@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import include, path
 from django.contrib import admin
 
-from api.views import index
+from api.views.index import index
 
 urlpatterns = [
     path('api/', include('api.urls')),

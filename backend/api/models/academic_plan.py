@@ -88,6 +88,10 @@ class AcademicPlan(models.Model):
     course_40 = models.CharField('Module 40', max_length=10, blank=True, null=True)
     weight_40 = models.DecimalField('Weight 40', blank=True, null=True, max_digits=4, decimal_places=3)
 
+    class Meta:
+        verbose_name_plural = "Academic Plans"
+        app_label = 'api'
+
     def get_courses(self):
         return [
             self.course_1, self.course_2, self.course_3, self.course_4, self.course_5,
