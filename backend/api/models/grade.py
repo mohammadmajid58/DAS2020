@@ -13,6 +13,8 @@ class Grade(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['courseCode', 'matricNo'], name='composite_key')]
+        verbose_name_plural = "Grades"
+        app_label = 'api'
 
     def get_alphanum_as_num(self):
         return self.alpha_to_num[self.alphanum]

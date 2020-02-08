@@ -10,6 +10,10 @@ class Student(models.Model):
     finalAward = models.IntegerField('Final award', blank=True, default=0)
     gradeDataUpdated = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name_plural = "Students"
+        app_label = 'api'
+
     def set_grade_data_updated(self):
         self.gradeDataUpdated = True
         self.save()
