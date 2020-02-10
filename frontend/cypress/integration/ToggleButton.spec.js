@@ -8,13 +8,15 @@ describe("Test Button", () => {
   });
 
   it("Checks if button exists", () => {
-    cy.get("[ data-cy-toggle-button]").contains("Get Student Final Grades");
+    cy.get("[ data-cy-toggle-button]").contains(
+      "View Degree Classifications and GPAs"
+    );
   });
 
   it("Single Click", () => {
     cy.get("[data-cy-toggle-button]")
       .click()
-      .contains("Get Student Module Grades");
+      .contains("View Student Course Grades");
   });
 
   it("Double click the button", () => {
@@ -23,10 +25,10 @@ describe("Test Button", () => {
   it("Double clicks", () => {
     cy.get("[data-cy-toggle-button]")
       .click()
-      .contains("Get Student Module Grades");
+      .contains("View Student Course Grades");
     cy.get("[data-cy-toggle-button]")
       .click()
-      .contains("Get Student Final Grades");
+      .contains("View Degree Classifications and GPAs");
   });
 
   describe("Loads the right table with button click", () => {

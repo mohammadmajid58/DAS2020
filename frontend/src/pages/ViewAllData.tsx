@@ -22,8 +22,8 @@ class ViewAllData extends React.Component<{}, myState> {
   render() {
     const { showStudentModule } = this.state;
     const textCaption = showStudentModule
-      ? "Get Student Module Grades"
-      : "Get Student Final Grades";
+      ? "View Student Course Grades"
+      : "View Degree Classifications and GPAs";
     return (
       <div className="d-flex-inline">
         <PageTitle title="View All Data" />
