@@ -145,7 +145,7 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
 
     return (
       <div>
-        <Box boxShadow={1}>
+        <Box box-shadow={1}>
           <Dropzone onDrop={this.onDrop}>
             {({ getRootProps, getInputProps, isDragActive }) => (
               <div className="drop-zone-container">

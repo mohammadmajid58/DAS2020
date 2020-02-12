@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap";
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "./../../index";
 
 interface Props {
   isLoggedIn: boolean;
 }
+type ModuleMark = {
+  courseCode: string;
+  student: string;
+  alphanum: string;
+};
 export default class NavigationBar extends Component<Props> {
   handleLogout = () => {
     const POST_URL = API_URL + "/auth/logout/";
@@ -36,6 +43,7 @@ export default class NavigationBar extends Component<Props> {
             />
           </a>
         </div>
+
         {this.props.isLoggedIn && (
           <div>
             <button
@@ -69,14 +77,32 @@ export default class NavigationBar extends Component<Props> {
                     Upload Module Marks
                   </Button>
                 </li>
-                <li className="nav-item allDataUploadLink">
-                  <Button
-                    to="/view-all-data"
-                    component={Link}
-                    className="navButton"
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    data-toggle="dropdown"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
                     View All Data
-                  </Button>
+                  </a>
+                  <div className="dropdown-menu">
+                    <Button
+                      to="/view-module-mark"
+                      component={Link}
+                      className="dropdown-item"
+                    >
+                      View Module Marks
+                    </Button>
+                    <Button
+                      to="/view-final-mark"
+                      component={Link}
+                      className="dropdown-item"
+                    >
+                      View Final Awards
+                    </Button>
+                  </div>
                 </li>
                 <li className="nav-item adminSiteLink">
                   <button>

@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import LoginPage from "./component/LoginPage/LoginPage";
 import NavigationBar from "./component/navigation/NavigationBar";
 import Footer from "./component/navigation/Footer";
+import GetModuleMarkUnit from "./component/combined_elements/GetModuleMarkUnit";
+import GetFinalDataUnit from "./component/combined_elements/GetFinalDataUnit";
 import PrivateRoute from "./component/helperComponents/PrivateRoute";
 import { isLoggedIn } from "./abstract_functions";
 import PasswordReset from "./component/PasswordReset/PasswordReset";
@@ -71,8 +73,14 @@ class App extends Component<{}, State> {
           />
           <PrivateRoute
             exact
-            path="/view-all-data"
-            component={ViewAllData}
+            path="/view-final-mark"
+            component={GetFinalDataUnit}
+            isAuthenticated={this.state.isAuthenticated}
+          />
+          <PrivateRoute
+            exact
+            path="/view-module-mark"
+            component={GetModuleMarkUnit}
             isAuthenticated={this.state.isAuthenticated}
           />
           <PrivateRoute

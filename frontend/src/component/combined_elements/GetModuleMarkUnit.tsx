@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DatabaseTable from "../tables/DatabaseTable";
-import GetModuleMarkButton from "../buttons/GetModuleDataButton";
+import axios from "axios";
+import API_URL from "../../index";
 
 type ModuleMark = {
   courseCode: string;
@@ -14,17 +15,18 @@ class GetModuleMarkUnit extends Component {
   };
 
   componentDidMount() {
-    this.setState({ data: [] });
-  }
+    const REQUEST_URL = API_URL + "/api/grades/";
+    var moduleMarks: ModuleMark[] = [];
 
-  getDataHandler = (moduleData: ModuleMark[]) => {
-    this.setState({ data: moduleData });
-  };
+    axios.get(`${REQUEST_URL}`).then(r => {
+      moduleMarks.push(r.data);
+      this.setState({ data: moduleMarks.flat() });
+    });
+  }
 
   render() {
     return (
       <div className="col-md-6 mx-auto">
-        <GetModuleMarkButton returnData={this.getDataHandler.bind(this)} />
         <DatabaseTable data={this.state.data} />
       </div>
     );
