@@ -5,11 +5,9 @@ from rest_framework.test import APITestCase
 class AcademicPlanTestCase(APITestCase):
 
     def _assert_plan_with_code_exists(self, code):
-        print("TEST_" + code + " " + str(AcademicPlan.objects.filter(planCode=code).exists()))
         self.assertTrue(AcademicPlan.objects.filter(planCode=code).exists())
 
     def _assert_plan_with_code_does_not_exist(self, code):
-        print("TEST_" + code + " " + str(AcademicPlan.objects.filter(planCode=code).exists()))
         self.assertFalse(AcademicPlan.objects.filter(planCode=code).exists())
 
     def test_weights_sum_correctly(self):
