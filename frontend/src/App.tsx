@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
@@ -10,22 +10,71 @@ import Home from "./pages/Home";
 import LoginPage from "./component/LoginPage/LoginPage";
 import NavigationBar from "./component/navigation/NavigationBar";
 import Footer from "./component/navigation/Footer";
+import PrivateRoute from "./component/helperComponents/PrivateRoute";
+import { isLoggedIn } from "./abstract_functions";
 
-class App extends Component {
+interface State {
+  isAuthenticated: boolean;
+}
+
+class App extends Component<{}, State> {
+  state = { isAuthenticated: false };
+
+  componentDidMount() {
+    isLoggedIn().then(response => {
+      if (response === true) {
+        this.setState({ isAuthenticated: true });
+      } else {
+        this.setState({ isAuthenticated: false });
+      }
+    });
+  }
+
+  authenticateUser = () => {
+    this.setState({ isAuthenticated: true });
+  };
+
   render() {
     return (
       <Router>
-        <NavigationBar />
+        <NavigationBar isLoggedIn={this.state.isAuthenticated} />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route
+          <PrivateRoute
+            exact
+            path="/"
+            component={Home}
+            isAuthenticated={this.state.isAuthenticated}
+          />
+          <PrivateRoute
             exact
             path="/upload-student-roster"
             component={UploadStudentRoster}
+            isAuthenticated={this.state.isAuthenticated}
           />
-          <Route path="/upload-module-marks" component={UploadModuleMarks} />
-          <Route path="/view-all-data" component={ViewAllData} />
-          <Route exact path="/" component={LoginPage} />
+          <PrivateRoute
+            exact
+            path="/upload-module-marks"
+            component={UploadModuleMarks}
+            isAuthenticated={this.state.isAuthenticated}
+          />
+          <PrivateRoute
+            exact
+            path="/view-all-data"
+            component={ViewAllData}
+            isAuthenticated={this.state.isAuthenticated}
+          />
+          <PrivateRoute
+            exact
+            path="/login"
+            isAuthenticated={this.state.isAuthenticated}
+          >
+            <LoginPage authenticateUser={this.authenticateUser.bind(this)} />
+          </PrivateRoute>
+          <PrivateRoute
+            path="/"
+            component={Home}
+            isAuthenticated={this.state.isAuthenticated}
+          />
         </Switch>
         <Footer />
       </Router>

@@ -1,9 +1,9 @@
-import { createYield } from "typescript";
-const VISIT_URL = "http://localhost:3000/view-all-data";
+import { loginToApp } from "./data-home.spec";
 
 describe("Test Button", () => {
-  it("Loads the page", () => {
-    cy.visit(VISIT_URL);
+  before(() => {
+    loginToApp();
+    cy.get(".allDataUploadLink").click();
   });
 
   it("Checks if button exists", () => {
@@ -14,10 +14,7 @@ describe("Test Button", () => {
     cy.get("[data-cy-getdata-button]").click();
   });
 
-  it("Double click the button", () => {
-    cy.visit(VISIT_URL);
-  });
-  it("Double clicks", () => {
+  it("Double clicks the button", () => {
     cy.get("[data-cy-getdata-button]").click();
     cy.get("[data-cy-getdata-button]").click();
   });

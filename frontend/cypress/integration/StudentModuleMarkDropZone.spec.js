@@ -1,5 +1,4 @@
-// Url of component on web app
-const visitUrl = "http://localhost:3000/upload-module-marks";
+import { loginToApp } from "./data-home.spec";
 
 const csvFileData = {
   fileContent: "CMCCHEM,\n1000013,A5,\n1000014,B1,\n1000015,B1,",
@@ -19,7 +18,8 @@ const csvFileDataWithInvalidFileName = {
 
 describe("StudentModuleMarkDropZone", () => {
   beforeEach(() => {
-    cy.visit(visitUrl);
+    loginToApp();
+    cy.get(".marksUploadLink").click();
   });
 
   it("accepts a csv file and deletes a csv file", () => {

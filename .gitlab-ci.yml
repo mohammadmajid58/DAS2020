@@ -38,6 +38,6 @@ cypress:
   - node --version
   - cd frontend
   - npm ci
-  - npm run start-with-coverage &
+  - npm run start-with-coverage
   - npm test
   - npx nyc report --reporter=text-summary --check-coverage=true

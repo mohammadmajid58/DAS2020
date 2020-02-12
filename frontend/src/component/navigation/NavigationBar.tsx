@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 
-export default class NavigationBar extends Component {
+interface Props {
+  isLoggedIn: boolean;
+}
+export default class NavigationBar extends Component<Props> {
   render() {
     return (
       <nav
@@ -21,6 +24,7 @@ export default class NavigationBar extends Component {
             />
           </a>
         </div>
+        {this.props.isLoggedIn && (
         <button
           className="navbar-toggler"
           type="button"
@@ -68,6 +72,7 @@ export default class NavigationBar extends Component {
             </li>
           </ul>
         </div>
+        )}
       </nav>
     );
   }

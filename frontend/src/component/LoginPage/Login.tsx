@@ -6,7 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import { Button } from "@material-ui/core";
 import CardHeader from "@material-ui/core/CardHeader";
-import LockIcon from "@material-ui/icons/Lock";
+import { getCookie } from "../../abstract_functions";
+
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "./../../index";
 
@@ -36,7 +37,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Login = () => {
+interface AuthenticateUser {
+  authenticateUser: () => void;
+}
+
+const Login = (props: AuthenticateUser) => {
   const classes = useStyles();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -62,14 +67,13 @@ const Login = () => {
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
           setError(false);
-          localStorage.setItem("login", "yes");
+          Axios.defaults.headers.common["X-CSRFToken"] = getCookie("csrftoken");
           setHelperText("Login Successful");
-          document.location.href = "/";
+          props.authenticateUser();
         }
       })
-      .catch(() => {
+      .catch(e => {
         setError(true);
-        localStorage.setItem("login", "no");
         setHelperText("Incorrect username or password!");
       });
   };
@@ -100,7 +104,6 @@ const Login = () => {
               />
 
               <TextField
-                inputProps={LockIcon}
                 error={error}
                 fullWidth
                 id="password"
