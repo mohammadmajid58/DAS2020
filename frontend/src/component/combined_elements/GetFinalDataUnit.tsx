@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import FinalDataTable from "../tables/FinalDataTable";
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "../../index";
+import PageTitle from "../usability_components/PageTitle";
 
 type FinalData = {
   matricNo: string;
@@ -72,8 +73,11 @@ export default class GetFinalDataUnit extends Component {
 
   render() {
     return (
-      <div className="col-md-8 mx-auto">
-        <FinalDataTable data={this.state.data} />
+      <div className="d-flex-inline">
+        <PageTitle title="Final Degree GPA" />
+        <div className="col-md-8 mx-auto">
+          <FinalDataTable data={this.state.data} />
+        </div>
       </div>
     );
   }

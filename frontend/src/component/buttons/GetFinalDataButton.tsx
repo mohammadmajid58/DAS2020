@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import Axios, { AxiosResponse } from "axios";
-import API_URL from "../../index";
 
 type FinalData = {
   matricNo: string;

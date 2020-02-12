@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import DatabaseTable from "../tables/DatabaseTable";
 import axios from "axios";
 import API_URL from "../../index";
+import PageTitle from "../usability_components/PageTitle";
 
 type ModuleMark = {
   courseCode: string;
@@ -26,8 +27,11 @@ class GetModuleMarkUnit extends Component {
 
   render() {
     return (
-      <div className="col-md-6 mx-auto">
-        <DatabaseTable data={this.state.data} />
+      <div className="d-flex-inline">
+        <PageTitle title="Student Course Grades" />
+        <div className="col-md-6 mx-auto">
+          <DatabaseTable data={this.state.data} />
+        </div>
       </div>
     );
   }
