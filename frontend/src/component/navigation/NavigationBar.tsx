@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import Axios, { AxiosResponse } from "axios";
+import API_URL from "./../../index";
 
 interface Props {
   isLoggedIn: boolean;
 }
 export default class NavigationBar extends Component<Props> {
+  handleLogout = () => {
+    const POST_URL = API_URL + "/auth/logout/";
+    Axios.post(`${POST_URL}`).then((response: AxiosResponse) => {
+      if (response.status === 200) {
+        localStorage.setItem("login", "no");
+        document.location.href = "/";
+      }
+    });
+  };
+
   render() {
     return (
       <nav
@@ -69,6 +81,9 @@ export default class NavigationBar extends Component<Props> {
               <button>
                 <a href="/admin/">Admin Tools</a>
               </button>
+            </li>
+            <li className="nav-item logout">
+              <button onClick={this.handleLogout}>Log Out</button>
             </li>
           </ul>
         </div>
