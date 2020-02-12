@@ -21,17 +21,3 @@ describe("Final Data Table Loads", () => {
       .should("contain", "No records to display");
   });
 });
-
-describe("Final Data Table Displays Data Correctly", () => {
-  before(() => {
-    cy.visit(VISIT_URL);
-    cy.get("[ data-cy-toggle-button]").click();
-    cy.get(".getFinalDataButton").click();
-  });
-
-  it("Has the correct number of entries", () => {
-    cy.get(".finalDataTable")
-      .find("tfoot")
-      .contains("1-0 of 0");
-  });
-});
