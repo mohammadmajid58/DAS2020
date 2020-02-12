@@ -30,13 +30,14 @@ class DatabaseTable extends Component<Props> {
     const tableOptions: Options = {
       search: false,
       filtering: true,
-      pageSize: 10
+      pageSize: 10,
+      pageSizeOptions: [5, 10, 20, this.props.data.length]
     };
 
     this.rows = this.props.data;
 
     const courseCodeData = this.rows
-      .map((row) => {
+      .map(row => {
         return row.courseCode;
       })
       .filter((val, index, arr) => {
@@ -45,7 +46,7 @@ class DatabaseTable extends Component<Props> {
       .sort();
 
     const gradeData = this.rows
-      .map((row) => {
+      .map(row => {
         return row.alphanum;
       })
       .filter((val, index, arr) => {
@@ -54,7 +55,7 @@ class DatabaseTable extends Component<Props> {
       .sort();
 
     // Add Lookup keys for the discrete file
-    columns.forEach((col) => {
+    columns.forEach(col => {
       if (col.field === "courseCode") {
         courseCodeData.forEach((courseCode: string) => {
           col.lookup![courseCode] = courseCode;

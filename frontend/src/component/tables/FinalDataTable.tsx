@@ -45,6 +45,7 @@ export default class FinalDataTable extends Component<Props> {
       search: false,
       filtering: true,
       pageSize: 10,
+      pageSizeOptions: [5, 10, 20, this.props.data.length],
       exportButton: true,
       exportAllData: true,
       exportFileName: "Final Award"
