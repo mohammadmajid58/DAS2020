@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
@@ -12,6 +12,8 @@ import NavigationBar from "./component/navigation/NavigationBar";
 import Footer from "./component/navigation/Footer";
 import PrivateRoute from "./component/helperComponents/PrivateRoute";
 import { isLoggedIn } from "./abstract_functions";
+import PasswordReset from "./component/PasswordReset/PasswordReset";
+import RequestPasswordReset from "./component/PasswordReset/RequestPasswordReset";
 
 interface State {
   isAuthenticated: boolean;
@@ -39,6 +41,16 @@ class App extends Component<{}, State> {
       <Router>
         <NavigationBar isLoggedIn={this.state.isAuthenticated} />
         <Switch>
+          <Route
+            path="/password/reset/:uid/:token"
+            component={PasswordReset}
+            isAuthenticated={this.state.isAuthenticated}
+          />
+          <Route
+            path="/request_password_reset"
+            component={RequestPasswordReset}
+            isAuthenticated={this.state.isAuthenticated}
+          />
           <PrivateRoute
             exact
             path="/"
@@ -70,6 +82,7 @@ class App extends Component<{}, State> {
           >
             <LoginPage authenticateUser={this.authenticateUser.bind(this)} />
           </PrivateRoute>
+
           <PrivateRoute
             path="/"
             component={Home}

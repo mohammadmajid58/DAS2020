@@ -72,7 +72,7 @@ const Login = (props: AuthenticateUser) => {
           props.authenticateUser();
         }
       })
-      .catch(e => {
+      .catch(() => {
         setError(true);
         setHelperText("Incorrect username or password!");
       });

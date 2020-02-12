@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 from api.serializers import GradeSerializer
 import json
 from api.models import Grade, Student
@@ -60,7 +58,6 @@ class GradeTestCase(APITestCase):
         response = self.client.post("/api/grades/", grade, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # TODO: FIX THESE TESTS FOR NEW SETUP
     def test_cannot_get_grades_when_logged_out(self):
         self.client.logout()
         Grade.objects.get_or_create(courseCode="INORG", matricNo=Student.objects.get(matricNo="2894029"), alphanum="B2")

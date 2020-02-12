@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 
 def create_admin_user():
-    user = User.objects.get_or_create(username="admin")[0]
+    user = User.objects.get_or_create(username="admin", email="admin@admin.com")[0]
     user.is_staff = True
     user.is_superuser = True
     user.save()
