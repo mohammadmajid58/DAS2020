@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import UploadStudentRoster from "./pages/UploadStudentRoster";
 import UploadModuleMarks from "./pages/UploadModuleMarks";
-import ViewAllData from "./pages/ViewAllData";
 import Home from "./pages/Home";
 import LoginPage from "./component/LoginPage/LoginPage";
 import NavigationBar from "./component/navigation/NavigationBar";

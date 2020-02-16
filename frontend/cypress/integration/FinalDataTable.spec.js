@@ -3,9 +3,10 @@ import { loginToApp } from "./data-home.spec";
 describe("Final Data Table Loads", () => {
   beforeEach(() => {
     loginToApp();
-
-    cy.get(".allDataUploadLink").click();
-    cy.get("[ data-cy-toggle-button]").click();
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-final")
+      .contains("View Final Awards")
+      .click();
   });
 
   it("Has a Final Data Table", () => {
@@ -21,5 +22,21 @@ describe("Final Data Table Loads", () => {
       .find("tbody")
       .find("td")
       .should("contain", "No records to display");
+  });
+});
+
+describe("Final Data Table Displays Data Correctly", () => {
+  before(() => {
+    loginToApp();
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-final")
+      .contains("View Final Awards")
+      .click();
+  });
+
+  it("Has the correct number of entries", () => {
+    cy.get(".finalDataTable")
+      .find("tfoot")
+      .contains("1-0 of 0");
   });
 });

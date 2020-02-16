@@ -91,14 +91,14 @@ export default class NavigationBar extends Component<Props> {
                     <Button
                       to="/view-module-mark"
                       component={Link}
-                      className="dropdown-item"
+                      className="dropdown-item-module"
                     >
                       View Module Marks
                     </Button>
                     <Button
                       to="/view-final-mark"
                       component={Link}
-                      className="dropdown-item"
+                      className="dropdown-item-final"
                     >
                       View Final Awards
                     </Button>

@@ -158,7 +158,11 @@ const largeData = [
 describe("Database Table Loads", () => {
   before(() => {
     loginToApp();
-    cy.get(".allDataUploadLink").click();
+
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-module")
+      .contains("View Module Marks")
+      .click();
   });
 
   it("Has a Database Table", () => {
@@ -179,7 +183,6 @@ describe("Database Table Loads", () => {
 describe("Database Table Renders Data", () => {
   beforeEach(() => {
     loginToApp();
-    cy.get(".allDataUploadLink").click();
     cy.server();
   });
 
@@ -189,9 +192,12 @@ describe("Database Table Renders Data", () => {
       response: emptyData,
       method: "GET",
       status: 200
-    }).as("getModuleData");
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData"]);
+    }).as("getNoData");
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-module")
+      .contains("View Module Marks")
+      .click();
+    cy.wait(["@getNoData"]);
 
     cy.get(".databaseTable")
       .find("tbody")
@@ -208,10 +214,12 @@ describe("Database Table Renders Data", () => {
       response: smallData,
       method: "GET",
       status: 200
-    }).as("getModuleData");
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData"]);
-
+    }).as("getSmallData");
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-module")
+      .contains("View Module Marks")
+      .click();
+    cy.wait("@getSmallData");
     cy.get("span.MuiTypography-root").should("contain", "1-3 of 3");
   });
 });
@@ -219,16 +227,19 @@ describe("Database Table Renders Data", () => {
 describe("Database Table Pagination Works", () => {
   beforeEach(() => {
     loginToApp();
-    cy.get(".allDataUploadLink").click();
     cy.server();
     cy.route({
       url: `${SERVER_URL}/api/grades/`,
       response: largeData,
       method: "GET",
       status: 200
-    }).as("getModuleData");
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData"]);
+    }).as("getBigData");
+
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-module")
+      .contains("View Module Marks")
+      .click();
+    cy.wait(["@getBigData"]);
   });
 
   it("Can Move to Next/Previous Page", () => {
@@ -267,16 +278,19 @@ describe("Database Table Pagination Works", () => {
 describe("Database Table Filtering Works", () => {
   beforeEach(() => {
     loginToApp();
-    cy.get(".allDataUploadLink").click();
     cy.server();
     cy.route({
       url: `${SERVER_URL}/api/grades/`,
       response: twoDegreeData,
       method: "GET",
       status: 200
-    }).as("getModuleData");
-    cy.get(".getModuleDataButton").click();
-    cy.wait(["@getModuleData"]);
+    }).as("getSmallData");
+    cy.get(".dropdown").click();
+    cy.get(".dropdown-item-module")
+      .contains("View Module Marks")
+      .click();
+
+    cy.wait(["@getSmallData"]);
   });
 
   it("Has Correct Number of Discrete Options for Course Code and Grade", () => {
