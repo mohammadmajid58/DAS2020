@@ -1,5 +1,6 @@
+import { loginToApp } from "./data-home.spec";
+
 const SERVER_URL = "http://127.0.0.1:8000";
-const VISIT_URL = "http://localhost:3000/view-all-data";
 
 const emptyData = [];
 const smallData = [
@@ -156,7 +157,8 @@ const largeData = [
 
 describe("Database Table Loads", () => {
   before(() => {
-    cy.visit(VISIT_URL);
+    loginToApp();
+    cy.get(".allDataUploadLink").click();
   });
 
   it("Has a Database Table", () => {
@@ -176,7 +178,8 @@ describe("Database Table Loads", () => {
 
 describe("Database Table Renders Data", () => {
   beforeEach(() => {
-    cy.visit(VISIT_URL);
+    loginToApp();
+    cy.get(".allDataUploadLink").click();
     cy.server();
   });
 
@@ -215,7 +218,8 @@ describe("Database Table Renders Data", () => {
 
 describe("Database Table Pagination Works", () => {
   beforeEach(() => {
-    cy.visit(VISIT_URL);
+    loginToApp();
+    cy.get(".allDataUploadLink").click();
     cy.server();
     cy.route({
       url: `${SERVER_URL}/api/grades/`,
@@ -262,7 +266,8 @@ describe("Database Table Pagination Works", () => {
 
 describe("Database Table Filtering Works", () => {
   beforeEach(() => {
-    cy.visit(VISIT_URL);
+    loginToApp();
+    cy.get(".allDataUploadLink").click();
     cy.server();
     cy.route({
       url: `${SERVER_URL}/api/grades/`,

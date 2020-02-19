@@ -17,7 +17,7 @@ const reset = () => {
     });
 };
 
-const TempResetDatabase: React.FC = props => {
+const TempResetDatabase: React.FC = () => {
   return (
     <div className="d-flex justify-content-center">
       <div className="center">

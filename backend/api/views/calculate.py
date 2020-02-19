@@ -7,6 +7,9 @@ from api.models import Grade, Student
 
 @api_view(('POST',))
 def calculate(request):
+    user = request.user
+    if not user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
     if request.method == "POST":
         students = Student.objects.filter(gradeDataUpdated=True)
 

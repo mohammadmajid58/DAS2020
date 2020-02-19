@@ -37,7 +37,17 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
-# Application definition
+DEFAULT_FROM_EMAIL = "hello@das2020.com"
+REST_SESSION_LOGIN = True
+SITE_ID = 1
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER':
+        'api.serializers.PasswordResetSerializer',
+}
 
 INSTALLED_APPS = [
     'material.admin',
@@ -49,6 +59,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'api',
+    'rest_auth',
+    'rest_framework.authtoken',
     'rest_framework',
 ]
 
@@ -73,7 +85,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'react-frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'react-frontend'), os.path.join(BASE_DIR, 'email_templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

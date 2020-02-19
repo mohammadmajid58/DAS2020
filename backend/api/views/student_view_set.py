@@ -6,7 +6,13 @@ from api.models import Student
 from api.serializers import StudentSerializer
 from django.db.utils import IntegrityError
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.decorators import authentication_classes, permission_classes
 
+
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 class StudentViewSet(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer

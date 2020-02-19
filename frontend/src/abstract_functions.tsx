@@ -1,3 +1,6 @@
+import Axios from "axios";
+import API_URL from "./index";
+
 export function getCookie(cname: string) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -13,3 +16,13 @@ export function getCookie(cname: string) {
   }
   return "";
 }
+
+export const isLoggedIn = () => {
+  return Axios.get(`${API_URL}/auth/user/`).then(response => {
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+};

@@ -1,12 +1,13 @@
+import { loginToApp } from "./data-home.spec";
 const VISIT_URL = "http://localhost:3000/";
 const ROSTER_URL = "http://localhost:3000/upload-student-roster";
 const MODULE_URL = "http://localhost:3000/upload-module-marks";
 const ALL_DATA_URL = "http://localhost:3000/view-all-data";
-const ADMIN_URL = "http://localhost:3000/admin/";
 
-describe("The Four Navigation Buttons Work", () => {
+describe("The Three Main Navigation Buttons Work", () => {
   beforeEach(() => {
     cy.visit(VISIT_URL);
+    loginToApp();
   });
 
   it("Navigates to the Roster Upload Page", () => {
@@ -20,14 +21,5 @@ describe("The Four Navigation Buttons Work", () => {
   it("Navigates to the View All Data Page", () => {
     cy.get(".allDataUploadLink").click();
     cy.url().should("contain", ALL_DATA_URL);
-  });
-  it("Navigates to the 'home' page", () => {
-    cy.get(".allDataUploadLink").click();
-    cy.get(".navLogo").click();
-    cy.url().should("equal", VISIT_URL);
-  });
-  it("Navigates to admin site", () => {
-    cy.get(".adminSiteLink").click();
-    cy.url().should("contain", ADMIN_URL);
   });
 });

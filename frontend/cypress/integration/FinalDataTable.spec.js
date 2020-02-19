@@ -1,8 +1,10 @@
-const VISIT_URL = "http://localhost:3000/view-all-data";
+import { loginToApp } from "./data-home.spec";
 
 describe("Final Data Table Loads", () => {
-  before(() => {
-    cy.visit(VISIT_URL);
+  beforeEach(() => {
+    loginToApp();
+
+    cy.get(".allDataUploadLink").click();
     cy.get("[ data-cy-toggle-button]").click();
   });
 

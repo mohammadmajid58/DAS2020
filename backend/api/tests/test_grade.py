@@ -1,7 +1,7 @@
 from api.serializers import GradeSerializer
 import json
 from api.models import Grade, Student
-from .test_setup_function import setup
+from .test_setup_function import setup, login
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 class GradeTestCase(APITestCase):
 
     def setUp(self):
+        login(self.client)
         setup(self)
 
     def test_post_grade_data_sets_student_grade_data_updated(self):
@@ -56,3 +57,17 @@ class GradeTestCase(APITestCase):
         grade = [{"courseCode": "CHEM_3012", "matricNo": "2894029", "alphanum": "C1"}]
         response = self.client.post("/api/grades/", grade, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_cannot_get_grades_when_logged_out(self):
+        self.client.logout()
+        Grade.objects.get_or_create(courseCode="INORG", matricNo=Student.objects.get(matricNo="2894029"), alphanum="B2")
+        response = self.client.get('/api/grades/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_cannot_post_grade_data_when_logged_out(self):
+        self.client.logout()
+        grade = [{"courseCode": "ORGCHEM", "matricNo": "1234567", "alphanum": "C2"}]
+        response = self.client.post("/api/grades/", grade, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        grade_exists = Grade.objects.filter(courseCode="ORGCHEM", matricNo="1234567", alphanum="C2").exists()
+        self.assertFalse(grade_exists)

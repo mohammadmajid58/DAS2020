@@ -32,13 +32,14 @@
     "react-dropzone": "^10.1.10",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "wait-on": "^4.0.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "cypress run",
-    "start-with-coverage": "CYPRESS_COVERAGE=true npm start",
+    "start-with-coverage": "CYPRESS_COVERAGE=true npm start & wait-on http://localhost:3000/",
     "eject": "react-scripts eject"
   },
   "nyc": {
