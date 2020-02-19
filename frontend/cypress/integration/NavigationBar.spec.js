@@ -2,7 +2,7 @@ import { loginToApp } from "./data-home.spec";
 const VISIT_URL = "http://localhost:3000/";
 const ROSTER_URL = "http://localhost:3000/upload-student-roster";
 const MODULE_URL = "http://localhost:3000/upload-module-marks";
-const ALL_DATA_URL = "http://localhost:3000/view-all-data";
+const ADMIN_URL = "http://localhost:3000/admin/";
 
 describe("The Three Main Navigation Buttons Work", () => {
   beforeEach(() => {
@@ -19,7 +19,6 @@ describe("The Three Main Navigation Buttons Work", () => {
     cy.url().should("contain", MODULE_URL);
   });
   it("Navigates to the View All Data Page", () => {
-    cy.get(".allDataUploadLink").click();
-    cy.url().should("contain", ALL_DATA_URL);
+    cy.get(".dropdown").click();
   });
 });
