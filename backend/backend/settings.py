@@ -28,8 +28,10 @@ DEBUG = True
 # DEBUG MUST BE SET TO True on DEVELOPMENT!
 if DEBUG:
     STATIC_URL = '/static/'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     STATIC_URL = '/react-frontend/build/static/'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ALLOWED_HOSTS = ["127.0.0.1", "teamdas123.pythonanywhere.com"]
 REST_FRAMEWORK = {
@@ -37,10 +39,16 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
-DEFAULT_FROM_EMAIL = "hello@das2020.com"
 REST_SESSION_LOGIN = True
 SITE_ID = 1
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "teamdas123@gmail.com"
+EMAIL_HOST_PASSWORD = "@teamdas321"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
