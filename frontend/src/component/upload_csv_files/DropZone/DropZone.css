@@ -13,3 +13,7 @@
   margin-bottom: 1em !important;
   font-weight: lighter;
 }
+
+.drop-zone-box {
+  background-color: white;
+}
