@@ -9,10 +9,10 @@ import { getCookie } from "./abstract_functions";
 
 Axios.defaults.headers.common["X-CSRFToken"] = getCookie("csrftoken");
 
-// let API_URL = "http://teamdas123.pythonanywhere.com";
-// if (process.env.NODE_ENV === "development") {
-const API_URL = "http://127.0.0.1:8000";
-// }
+let API_URL = "http://teamdas123.pythonanywhere.com";
+if (process.env.NODE_ENV === "development") {
+  API_URL = "http://127.0.0.1:8000";
+}
 
 export default API_URL;
 

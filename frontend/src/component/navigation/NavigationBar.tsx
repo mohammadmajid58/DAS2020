@@ -25,6 +25,10 @@ export default class NavigationBar extends Component<Props> {
     });
   };
 
+  handleAdminRedirect = () => {
+    document.location.href = "/admin/";
+  };
+
   render() {
     return (
       <nav
@@ -33,7 +37,7 @@ export default class NavigationBar extends Component<Props> {
           backgroundColor: "#567aa8"
         }}
       >
-        <div className="navLogo col-3 pr-0">
+        <div className="navLogo col-4 pr-0">
           <a href="/">
             <img
               src={require("./uog_logo.jpg")}
@@ -45,7 +49,7 @@ export default class NavigationBar extends Component<Props> {
         </div>
 
         {this.props.isLoggedIn && (
-          <div>
+          <div className="col-8">
             <button
               className="navbar-toggler"
               type="button"
@@ -58,7 +62,7 @@ export default class NavigationBar extends Component<Props> {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav">
+              <ul className="navbar-nav col-11">
                 <li className="nav-item rosterUploadLink">
                   <Button
                     to="/upload-student-roster"
@@ -105,12 +109,19 @@ export default class NavigationBar extends Component<Props> {
                   </div>
                 </li>
                 <li className="nav-item adminSiteLink">
-                  <button>
-                    <a href="/admin/">Admin Tools</a>
-                  </button>
+                  <Button
+                    onClick={this.handleAdminRedirect}
+                    className="navButton"
+                  >
+                    Admin Tools
+                  </Button>
                 </li>
+              </ul>
+              <ul className="navbar-nav">
                 <li className="nav-item logout">
-                  <button onClick={this.handleLogout}>Log Out</button>
+                  <Button onClick={this.handleLogout} className="navButton">
+                    Log Out
+                  </Button>
                 </li>
               </ul>
             </div>
