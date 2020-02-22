@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "./../../index";
+import "./NavigationBar.css";
+
+import { Link } from "react-router-dom";
+import { ButtonBase } from "@material-ui/core";
 
 interface Props {
   isLoggedIn: boolean;
@@ -32,96 +34,122 @@ export default class NavigationBar extends Component<Props> {
   render() {
     return (
       <nav
-        className="navbar navbar-dark navbar-expand-lg"
+        className="navbar navbar-expand-lg navbar-dark static-top"
         style={{
           backgroundColor: "#567aa8"
         }}
       >
-        <div className="navLogo col-4 pr-0">
-          <a href="/">
-            <img
-              src={require("./uog_logo.jpg")}
-              alt="University of Glasgow Logo"
-              width={160}
-              height={44}
-            />
-          </a>
-        </div>
-
+        {!this.props.isLoggedIn && (
+          <div className="container">
+            <a className="navbar-brand" href="/">
+              <img
+                src={require("./uog_logo.jpg")}
+                alt="University of Glasgow Logo"
+                width={160}
+                height={44}
+              />
+            </a>
+          </div>
+        )}
         {this.props.isLoggedIn && (
-          <div className="col-8">
+          <div className="container">
+            <a className="navbar-brand" href="/">
+              <img
+                src={require("./uog_logo.jpg")}
+                alt="University of Glasgow Logo"
+                width={160}
+                height={44}
+              />
+            </a>
+
             <button
               className="navbar-toggler"
               type="button"
               data-toggle="collapse"
-              data-target="#navbarNav"
-              aria-controls="navbarNav"
+              data-target="#navbarResponsive"
+              aria-controls="navbarResponsive"
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav col-11">
-                <li className="nav-item rosterUploadLink">
-                  <Button
-                    to="/upload-student-roster"
-                    component={Link}
-                    className="navButton"
-                  >
-                    Upload Student Roster
-                  </Button>
-                </li>
-                <li className="mx-10 nav-item marksUploadLink">
-                  <Button
-                    to="/upload-module-marks"
-                    component={Link}
-                    className="navButton"
-                  >
-                    Upload Module Marks
-                  </Button>
+            <div className="collapse navbar-collapse" id="navbarResponsive">
+              <ul className="navbar-nav ml-auto mx-auto">
+                <li className="nav-item">
+                  <a className="nav-link" href="/">
+                    Home
+                  </a>
                 </li>
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
+                    href="/"
+                    id="navbardrop"
                     data-toggle="dropdown"
-                    role="button"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                    data-cy="upload-data-dropdown"
                   >
-                    View All Data
+                    Upload CSV
                   </a>
                   <div className="dropdown-menu">
-                    <Button
-                      to="/view-module-mark"
+                    <ButtonBase
+                      to="/upload-student-roster"
                       component={Link}
-                      className="dropdown-item-module"
+                      className="dropdown-item"
+                      data-cy="upload-student-roster"
                     >
-                      View Module Marks
-                    </Button>
-                    <Button
-                      to="/view-final-mark"
+                      Student Roster
+                    </ButtonBase>
+                    <ButtonBase
+                      to="/upload-module-marks"
                       component={Link}
-                      className="dropdown-item-final"
+                      className="dropdown-item"
+                      data-cy="upload-module-marks"
                     >
-                      View Final Awards
-                    </Button>
+                      Module Marks
+                    </ButtonBase>
                   </div>
                 </li>
-                <li className="nav-item adminSiteLink">
-                  <Button
-                    onClick={this.handleAdminRedirect}
-                    className="navButton"
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="/"
+                    id="navbardrop"
+                    data-toggle="dropdown"
+                    data-cy="view-data-dropdown"
                   >
-                    Admin Tools
-                  </Button>
+                    View Data
+                  </a>
+                  <div className="dropdown-menu">
+                    <ButtonBase
+                      to="/view-module-mark"
+                      component={Link}
+                      className="dropdown-item"
+                      data-cy="view-module-marks"
+                    >
+                      Module Marks
+                    </ButtonBase>
+                    <ButtonBase
+                      to="/view-final-mark"
+                      component={Link}
+                      className="dropdown-item"
+                      data-cy="view-final-awards"
+                    >
+                      Final Awards
+                    </ButtonBase>
+                  </div>
                 </li>
               </ul>
-              <ul className="navbar-nav">
-                <li className="nav-item logout">
-                  <Button onClick={this.handleLogout} className="navButton">
-                    Log Out
-                  </Button>
+              <ul className="navbar-nav ml-0">
+                <li className="nav-item">
+                  <a className="nav-link" href="/admin/">
+                    Admin Tools
+                  </a>
+                </li>
+
+                <li className="nav-item">
+                  <a onClick={this.handleLogout} className="nav-link" href="/">
+                    Logout
+                  </a>
                 </li>
               </ul>
             </div>

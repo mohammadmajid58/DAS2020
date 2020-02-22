@@ -1,0 +1,22 @@
+.nav-item a {
+  color: white !important;
+  font-weight: 430;
+}
+
+.nav-item a:hover {
+  opacity: 0.75;
+}
+
+.nav-item .dropdown-item {
+  color: black !important;
+  text-transform: capitalize;
+}
+
+.navbar-nav > li {
+  padding: 0 0.25em;
+}
+
+.dropdown-menu .dropdown-item {
+  margin: 2px 0;
+  padding: 3px 0;
+}

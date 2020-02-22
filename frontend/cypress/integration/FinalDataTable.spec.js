@@ -3,9 +3,9 @@ import { loginToApp } from "./data-home.spec";
 describe("Final Data Table Loads", () => {
   beforeEach(() => {
     loginToApp();
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-final")
-      .contains("View Final Awards")
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-final-awards]")
+      .contains("Final Awards")
       .click();
   });
 
@@ -28,9 +28,9 @@ describe("Final Data Table Loads", () => {
 describe("Final Data Table Displays Data Correctly", () => {
   before(() => {
     loginToApp();
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-final")
-      .contains("View Final Awards")
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-final-awards]")
+      .contains("Final Awards")
       .click();
   });
 

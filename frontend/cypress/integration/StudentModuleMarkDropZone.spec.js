@@ -19,7 +19,8 @@ const csvFileDataWithInvalidFileName = {
 describe("StudentModuleMarkDropZone", () => {
   beforeEach(() => {
     loginToApp();
-    cy.get(".marksUploadLink").click();
+    cy.get("[data-cy=upload-data-dropdown]").click();
+    cy.get("[data-cy=upload-module-marks]").click();
   });
 
   it("accepts a csv file and deletes a csv file", () => {
