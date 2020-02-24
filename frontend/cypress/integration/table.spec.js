@@ -158,11 +158,8 @@ const largeData = [
 describe("Database Table Loads", () => {
   before(() => {
     loginToApp();
-
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-module")
-      .contains("View Module Marks")
-      .click();
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-module-marks]").click();
   });
 
   it("Has a Database Table", () => {
@@ -193,10 +190,8 @@ describe("Database Table Renders Data", () => {
       method: "GET",
       status: 200
     }).as("getNoData");
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-module")
-      .contains("View Module Marks")
-      .click();
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-module-marks]").click();
     cy.wait(["@getNoData"]);
 
     cy.get(".databaseTable")
@@ -215,10 +210,8 @@ describe("Database Table Renders Data", () => {
       method: "GET",
       status: 200
     }).as("getSmallData");
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-module")
-      .contains("View Module Marks")
-      .click();
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-module-marks]").click();
     cy.wait("@getSmallData");
     cy.get("span.MuiTypography-root").should("contain", "1-3 of 3");
   });
@@ -235,10 +228,8 @@ describe("Database Table Pagination Works", () => {
       status: 200
     }).as("getBigData");
 
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-module")
-      .contains("View Module Marks")
-      .click();
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-module-marks]").click();
     cy.wait(["@getBigData"]);
   });
 
@@ -285,10 +276,8 @@ describe("Database Table Filtering Works", () => {
       method: "GET",
       status: 200
     }).as("getSmallData");
-    cy.get(".dropdown").click();
-    cy.get(".dropdown-item-module")
-      .contains("View Module Marks")
-      .click();
+    cy.get("[data-cy=view-data-dropdown]").click();
+    cy.get("[data-cy=view-module-marks]").click();
 
     cy.wait(["@getSmallData"]);
   });
