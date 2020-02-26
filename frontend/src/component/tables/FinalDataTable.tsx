@@ -17,6 +17,7 @@ type Row = {
 
 type Props = {
   data: Row[];
+  columnsToHide?: string[];
 };
 
 const uniqueData = (inData: string[]) => {
@@ -39,6 +40,36 @@ const columns: CustomColumn[] = [
 export default class FinalDataTable extends Component<Props> {
   rows: Row[] = [];
   title: string = "Final Award Data";
+
+  handleRowData(rowData: any) {
+    const awardsToHighlightRed = [
+      8, // E1
+      11, // D1
+      14, // C1
+      17 // B1
+    ];
+    if (awardsToHighlightRed.includes(rowData.finalAward)) {
+      return { backgroundColor: "pink" };
+    }
+    return {};
+  }
+
+  handleHiddenColumns = (columns: CustomColumn[]) => {
+    const colsToHide = this.props.columnsToHide;
+    if (colsToHide) {
+      columns.forEach(col => {
+        if (col.field !== undefined) {
+          if (colsToHide.includes(col.field)) {
+            col.hidden = true;
+            return col;
+          } else {
+            col.hidden = false;
+          }
+        }
+      });
+    }
+    return columns;
+  };
 
   render() {
     const tableOptions: Options = {
@@ -112,6 +143,8 @@ export default class FinalDataTable extends Component<Props> {
           data={this.rows}
           options={tableOptions}
           title={this.title}
+          handleRowData={this.handleRowData}
+          handleHiddenColumns={this.handleHiddenColumns}
         />
       </div>
     );
