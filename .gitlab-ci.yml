@@ -1,22 +1,26 @@
-stages:
-  - Backend Static Analysis
-  - Backend Unit Testing
-  - Frontend Static Analysis
-  - Frontend Testing
+cache:
+  untracked: true
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - frontend/node_modules/
 
-eslint:
-  image: cypress/base:10
-  stage: Frontend Static Analysis
+stages:
+- setup
+- backend_static_analysis
+- backend_testing
+- frontend_static_analysis
+- frontend_testing
+
+install_dependencies:
+  stage: setup
+  image: node
   script:
-  - node --version
-  - cd frontend
-  - npm ci
-  - npm install
-  - ./node_modules/.bin/eslint "**/*.tsx"
+    - cd frontend
+    - npm install
 
 flake8:
+  stage: backend_static_analysis
   image: python:3.7
-  stage: Backend Static Analysis
   script:
   - python -V
   - pip -V
@@ -24,20 +28,27 @@ flake8:
   - flake8 backend
 
 backend-coverage:
+  stage: backend_testing
   image: python:3.7
-  stage: Backend Unit Testing
   script:
   - pip install -r backend/requirements.txt
   - coverage run --branch backend/manage.py test backend
   - coverage report --fail-under=70
 
-cypress:
+eslint:
+  stage: frontend_static_analysis
   image: cypress/base:10
-  stage: Frontend Testing
   script:
   - node --version
   - cd frontend
-  - npm ci
+  - ./node_modules/.bin/eslint "**/*.tsx"
+
+cypress:
+  stage: frontend_testing
+  image: cypress/base:10
+  script:
+  - node --version
+  - cd frontend
   - npm run start-with-coverage
   - npm test
   - npx nyc report --reporter=text-summary --check-coverage=true

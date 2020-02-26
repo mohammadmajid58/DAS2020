@@ -38,8 +38,9 @@
     "wait-on": "^4.0.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "REACT_APP_STAGE=dev react-app-rewired start",
+    "build": "REACT_APP_STAGE=dev react-app-rewired build",
+    "build-staging": "react-app-rewired build",
     "test": "cypress run",
     "start-with-coverage": "CYPRESS_COVERAGE=true npm start & wait-on http://localhost:3000/",
     "eject": "react-scripts eject"
