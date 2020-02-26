@@ -1,58 +1,29 @@
 stages:
-- setup
-- backend_static_analysis
-- backend_testing
-- frontend_static_analysis
-- frontend_testing
+- backend
+- frontend
 
-install_dependencies:
-  stage: setup
-  image: cypress/base:10
-  script:
-    - cd frontend
-    - npm install
-
-flake8:
-  stage: backend_static_analysis
+backend:
+  stage: backend
   image: python:3.7
   script:
-  - python -V
-  - pip -V
   - pip install -r backend/requirements.txt
   - flake8 backend
-
-backend-coverage:
-  stage: backend_testing
-  image: python:3.7
-  script:
-  - pip install -r backend/requirements.txt
   - coverage run --branch backend/manage.py test backend
   - coverage report --fail-under=70
 
-eslint:
-  stage: frontend_static_analysis
-  image: node
+frontend:
+  stage: frontend
+  image: cypress/base:10
   cache:
     untracked: true
     key: "$CI_BUILD_REF_NAME"
     paths:
       - frontend/node_modules/
+      - /root/.cache/Cypress
   script:
-  - node --version
   - cd frontend
+  - npm ci
   - ./node_modules/.bin/eslint "**/*.tsx"
-
-cypress:
-  stage: frontend_testing
-  image: node
-  cache:
-    untracked: true
-    key: "$CI_BUILD_REF_NAME"
-    paths:
-      - frontend/node_modules/
-  script:
-  - node --version
-  - cd frontend
   - npm run start-with-coverage
   - npm test
   - npx nyc report --reporter=text-summary --check-coverage=true
