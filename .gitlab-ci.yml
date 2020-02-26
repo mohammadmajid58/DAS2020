@@ -1,9 +1,3 @@
-cache:
-  untracked: true
-  key: "$CI_BUILD_REF_NAME"
-  paths:
-    - frontend/node_modules/
-
 stages:
 - setup
 - backend_static_analysis
@@ -13,7 +7,7 @@ stages:
 
 install_dependencies:
   stage: setup
-  image: node
+  image: cypress/base:10
   script:
     - cd frontend
     - npm install
@@ -37,7 +31,12 @@ backend-coverage:
 
 eslint:
   stage: frontend_static_analysis
-  image: cypress/base:10
+  image: node
+  cache:
+    untracked: true
+    key: "$CI_BUILD_REF_NAME"
+    paths:
+      - frontend/node_modules/
   script:
   - node --version
   - cd frontend
@@ -45,7 +44,12 @@ eslint:
 
 cypress:
   stage: frontend_testing
-  image: cypress/base:10
+  image: node
+  cache:
+    untracked: true
+    key: "$CI_BUILD_REF_NAME"
+    paths:
+      - frontend/node_modules/
   script:
   - node --version
   - cd frontend
