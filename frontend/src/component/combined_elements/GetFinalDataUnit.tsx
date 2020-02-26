@@ -3,6 +3,17 @@ import FinalDataTable from "../tables/FinalDataTable";
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "../../index";
 import PageTitle from "../usability_components/PageTitle";
+import Select from "react-select";
+import "./GetFinalDataUnit.css";
+
+const options = [
+  { value: "matricNo", label: "Matric No" },
+  { value: "givenNames", label: "Given Names" },
+  { value: "surname", label: "Surname" },
+  { value: "finalAward", label: "Final Degree GPA" },
+  { value: "academicPlan", label: "Academic Plan" },
+  { value: "mcAward", label: "MC Award" }
+];
 
 type FinalData = {
   matricNo: string;
@@ -15,7 +26,19 @@ type FinalData = {
 
 export default class GetFinalDataUnit extends Component {
   state = {
-    data: []
+    data: [],
+    selectedOption: null,
+    columnsToHide: []
+  };
+
+  handleChange = (selectedOption: any) => {
+    if (selectedOption) {
+      const result = selectedOption.map((option: any) => option.value);
+      this.setState({
+        columnsToHide: result,
+        selectedOption: selectedOption
+      });
+    }
   };
 
   componentDidMount() {
@@ -76,7 +99,18 @@ export default class GetFinalDataUnit extends Component {
       <div className="d-flex-inline">
         <PageTitle title="Final Degree GPA" />
         <div className="col-md-8 mx-auto">
-          <FinalDataTable data={this.state.data} />
+          <Select
+            value={this.state.selectedOption}
+            onChange={this.handleChange}
+            options={options}
+            isMulti
+            className="basic-multi-select"
+            classNamePrefix="select"
+          />
+          <FinalDataTable
+            data={this.state.data}
+            columnsToHide={this.state.columnsToHide}
+          />
         </div>
       </div>
     );
