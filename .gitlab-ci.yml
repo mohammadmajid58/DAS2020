@@ -1,36 +1,43 @@
 stages:
-- backend
-- frontend
+  - Backend Static Analysis
+  - Backend Unit Testing
+  - Frontend Static Analysis
+  - Frontend Testing
 
-cache:
-  untracked: true
-  key: "$CI_BUILD_REF_NAME"
-  paths:
-    - frontend/node_modules/
-    - Cypress/
-
-backend:
-  stage: backend
-  image: python:3.7
-  cache: {}
+eslint:
+  image: cypress/base:10
+  stage: Frontend Static Analysis
   script:
+  - node --version
+  - cd frontend
+  - npm ci
+  - npm install
+  - ./node_modules/.bin/eslint "**/*.tsx"
+
+flake8:
+  image: python:3.7
+  stage: Backend Static Analysis
+  script:
+  - python -V
+  - pip -V
   - pip install -r backend/requirements.txt
   - flake8 backend
+
+backend-coverage:
+  image: python:3.7
+  stage: Backend Unit Testing
+  script:
+  - pip install -r backend/requirements.txt
   - coverage run --branch backend/manage.py test backend
   - coverage report --fail-under=70
 
-frontend:
-  stage: frontend
+cypress:
   image: cypress/base:10
+  stage: Frontend Testing
   script:
+  - node --version
   - cd frontend
-  - cp Cypress/* /root/.cache/ || true
-  - test -e /root/.cache/Cypress && npm install
-  - ! test -e /root/.cache/Cypress && npm ci
-  - npx cypress cache path
-  - ./node_modules/.bin/eslint "**/*.tsx"
+  - npm ci
   - npm run start-with-coverage
   - npm test
   - npx nyc report --reporter=text-summary --check-coverage=true
-  - mv /root/.cache/Cypress . || true
-  - ls frontend || true
