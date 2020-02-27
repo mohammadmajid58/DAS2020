@@ -2,9 +2,17 @@ stages:
 - backend
 - frontend
 
+cache:
+  untracked: true
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - frontend/node_modules/
+    - ~/.cache
+
 backend:
   stage: backend
   image: python:3.7
+  cache: {}
   script:
   - pip install -r backend/requirements.txt
   - flake8 backend
@@ -14,15 +22,10 @@ backend:
 frontend:
   stage: frontend
   image: cypress/base:10
-  cache:
-    untracked: true
-    key: "$CI_BUILD_REF_NAME"
-    paths:
-      - frontend/node_modules/
-      - /root/.cache/Cypress
   script:
   - cd frontend
   - npm ci
+  - npx cypress cache path
   - ./node_modules/.bin/eslint "**/*.tsx"
   - npm run start-with-coverage
   - npm test
