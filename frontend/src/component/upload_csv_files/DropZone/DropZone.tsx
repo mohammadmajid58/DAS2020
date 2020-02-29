@@ -38,12 +38,13 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
     };
   }
 
-  updateStateForInvalidFile = (invalidFileName: string) => {
+  updateStateForInvalidFilenameExtensions = (invalidFileNames: string[]) => {
+    const names: string = invalidFileNames.join(", ");
     this.setState({
       newFileState: newFileState.invalidFormat,
       showAlert: true,
       showAlertTimestamp: Date.now(),
-      fileName: invalidFileName
+      fileName: "The following files: " + names
     });
   };
 
@@ -78,29 +79,44 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
     const validFileExtensions = this.props.validFileExtensions;
     const filesHandler = this.props.filesHandler;
 
-    const latestFileUploaded: File = files[0];
-
-    let validFileExtension = false;
-    for (var extension of validFileExtensions) {
-      if (latestFileUploaded.name.endsWith(extension)) {
-        validFileExtension = true;
+    const filesWithInvalidExtension = [];
+    for (var file of files) {
+      var hasValidFileExtension = false;
+      for (var extension of validFileExtensions) {
+        if (file.name.endsWith(extension)) {
+          hasValidFileExtension = true;
+        }
+      }
+      if (!hasValidFileExtension) {
+        filesWithInvalidExtension.push(file.name);
       }
     }
 
-    if (!validFileExtension) {
-      this.updateStateForInvalidFile(latestFileUploaded.name);
+    if (filesWithInvalidExtension.length > 0) {
+      this.updateStateForInvalidFilenameExtensions(filesWithInvalidExtension);
       return;
     }
 
     const existingFileNames: String[] = this.state.files.map(
       (file: File) => file.name
     );
-    const alreadyExists = existingFileNames.includes(latestFileUploaded.name);
+    const newlyUpdatedFileNames = files.map((file: File) => file.name);
+    let foundBadFile = false;
 
-    if (alreadyExists) {
-      this.updateStateForFileAlreadyExists(latestFileUploaded.name);
-    } else {
-      const newFiles = this.state.files.concat(files[0]);
+    for (var f of newlyUpdatedFileNames) {
+      const alreadyExists = existingFileNames.includes(f);
+      if (alreadyExists) {
+        foundBadFile = true;
+        this.updateStateForFileAlreadyExists(
+          f +
+            " is already waiting to be uploaded, as a result, none of the files that were selecteddropped are ready to be uploaded"
+        );
+      }
+    }
+
+    if (!foundBadFile) {
+      const newFiles = this.state.files.concat(files);
+      console.log("Success, new state files are", newFiles);
       filesHandler(newFiles);
       this.updateStateForFileAddedSuccessfully(newFiles);
     }
@@ -136,7 +152,7 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
       msg = fileName + " is already waiting to be uploaded";
       alert = <Alert key={showAlertTimestamp} message={msg} type="warning" />;
     } else if (this.state.newFileState === newFileState.invalidFormat) {
-      msg = fileName + " is of invalid format";
+      msg = fileName + " are of invalid format";
       alert = <Alert key={showAlertTimestamp} message={msg} type="error" />;
     } else if (this.state.newFileState === newFileState.deleted) {
       msg = fileName + " will not be uploaded";
@@ -146,7 +162,7 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
     return (
       <div>
         <Box boxShadow={1} className="drop-zone-box">
-          <Dropzone onDrop={this.onDrop}>
+          <Dropzone onDrop={this.onDrop} multiple>
             {({ getRootProps, getInputProps, isDragActive }) => (
               <div className="drop-zone-container">
                 <section className="">

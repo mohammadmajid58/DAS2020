@@ -44,7 +44,9 @@ describe("StudentModuleMarkDropZone", () => {
       .get(".added-file")
       .should("not.exist");
     cy.get("[data-cy=alert-message]").contains(
-      nonCsvFileData.fileName + " is of invalid format"
+      "The following files: " +
+        nonCsvFileData.fileName +
+        " are of invalid format"
     );
   });
 
