@@ -10,9 +10,12 @@ const options = [
   { value: "matricNo", label: "Matric No" },
   { value: "givenNames", label: "Given Names" },
   { value: "surname", label: "Surname" },
-  { value: "finalAward", label: "Final Degree GPA" },
+  { value: "finalAward1", label: "Final Degree GPA 1 d.p." },
+  { value: "finalAward2", label: "Final Degree GPA 2 d.p." },
+  { value: "finalAward3", label: "Final Degree GPA 3 d.p." },
   { value: "academicPlan", label: "Academic Plan" },
-  { value: "mcAward", label: "MC Award" }
+  { value: "initialAward", label: "Initial Award" },
+  { value: "updatedAward", label: "Overridden Award" }
 ];
 
 type FinalData = {
@@ -20,13 +23,31 @@ type FinalData = {
   academicPlan: string;
   givenNames: string;
   surname: string;
-  finalAward: string;
+  finalAward1: string;
+  finalAward2: string;
+  finalAward3: string;
+  updatedAward: string;
   mcAward: string;
+};
+
+const convertAlphaToMC = (award: string) => {
+  const alphanum = parseFloat(award);
+  if (alphanum >= 18) {
+    return "01";
+  } else if (alphanum >= 15) {
+    return "0U";
+  } else if (alphanum >= 12) {
+    return "0L";
+  } else if (alphanum >= 9) {
+    return "3";
+  } else {
+    return "Fail";
+  }
 };
 
 export default class GetFinalDataUnit extends Component {
   state = {
-    data: [],
+    data: [] as any[], // Needed since Object cannot be cast to the required type
     selectedOption: null,
     columnsToHide: []
   };
@@ -39,6 +60,14 @@ export default class GetFinalDataUnit extends Component {
         selectedOption: selectedOption
       });
     }
+  };
+
+  updateData = (oldData: Object, newData: Object) => {
+    const updatedData = this.state.data;
+    const index = updatedData.indexOf(oldData);
+    updatedData[index] = newData;
+    this.setState({ data: [] }); // To force re-render without page refresh
+    this.setState({ data: updatedData });
   };
 
   componentDidMount() {
@@ -58,21 +87,16 @@ export default class GetFinalDataUnit extends Component {
               givenNames,
               surname,
               academicPlan,
-              finalAward
+              finalAward1,
+              finalAward2,
+              finalAward3,
+              updatedAward
             } = dataRow;
 
-            let mcAward = "";
-
-            if (finalAward > 17) {
-              mcAward = "1";
-            } else if (finalAward > 14) {
-              mcAward = "2:1";
-            } else if (finalAward > 11) {
-              mcAward = "2:2";
-            } else if (finalAward > 8) {
-              mcAward = "3";
-            } else if (finalAward <= 8) {
-              mcAward = "Fail";
+            const initialAward = convertAlphaToMC(finalAward3);
+            let changedAward = updatedAward;
+            if (updatedAward === "-1") {
+              changedAward = initialAward;
             }
 
             return {
@@ -80,8 +104,11 @@ export default class GetFinalDataUnit extends Component {
               givenNames: givenNames,
               surname: surname,
               academicPlan: academicPlan,
-              finalAward: finalAward,
-              mcAward: mcAward
+              finalAward1: finalAward1,
+              finalAward2: finalAward2,
+              finalAward3: finalAward3,
+              initialAward: initialAward,
+              updatedAward: changedAward
             };
           });
           this.setState({ data: finalData });
@@ -98,7 +125,7 @@ export default class GetFinalDataUnit extends Component {
     return (
       <div className="d-flex-inline">
         <PageTitle title="Final Degree GPA" />
-        <div className="col-md-8 mx-auto">
+        <div className="col-11 mx-auto">
           <Select
             value={this.state.selectedOption}
             onChange={this.handleChange}
@@ -110,6 +137,7 @@ export default class GetFinalDataUnit extends Component {
           <FinalDataTable
             data={this.state.data}
             columnsToHide={this.state.columnsToHide}
+            updateData={this.updateData.bind(this)}
           />
         </div>
       </div>

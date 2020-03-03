@@ -14,7 +14,8 @@ class GradeSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['matricNo', 'givenNames', 'surname', 'academicPlan', 'finalAward']
+        fields = ['matricNo', 'givenNames', 'surname', 'academicPlan',
+                  'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward']
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -24,6 +25,7 @@ class PasswordResetSerializer(serializers.Serializer):
     def validate_email(self, value):
         self.reset_form = self.password_reset_form_class(data=self.initial_data)
         if not self.reset_form.is_valid():
+            from pylint.checkers.typecheck import _
             raise serializers.ValidationError(_('Error'))  # noqa: F821
         return value
 

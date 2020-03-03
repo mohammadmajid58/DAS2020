@@ -9,9 +9,19 @@ def convert_a(n):
     if type(n) == str:
         return grade_codes[n]
 
-    elif type(n) == int:
+    elif type(n) == float:
         return [alpha for alpha, num in grade_codes.items() if num == n]
 
 
 def convert_mc(n):
-    pass
+    n = float(n)
+    if n > 17:
+        return "01"
+    elif n > 14:
+        return "0U"
+    elif n > 11:
+        return "0L"
+    elif n > 8:
+        return "3"
+    else:
+        return "Fail"
