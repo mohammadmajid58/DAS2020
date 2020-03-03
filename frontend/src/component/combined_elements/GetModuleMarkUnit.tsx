@@ -29,7 +29,7 @@ class GetModuleMarkUnit extends Component {
     return (
       <div className="d-flex-inline">
         <PageTitle title="Student Course Grades" />
-        <div className="col-md-6 mx-auto">
+        <div className="col-md-8 mx-auto">
           <DatabaseTable data={this.state.data} />
         </div>
       </div>

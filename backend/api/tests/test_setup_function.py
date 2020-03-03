@@ -12,9 +12,11 @@ def setup(self):
                                        weight_8=0.125)
 
     Student.objects.get_or_create(matricNo="2894029", givenNames="Zak", surname="Bagans",
-                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward=0)
+                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward1=0.0,
+                                  finalAward2=0.00, finalAward3=0.000)
     Student.objects.get_or_create(matricNo="2283853", givenNames="Robert", surname="Goulet",
-                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward=0)
+                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward1=0.0,
+                                  finalAward2=0.00, finalAward3=0.000)
 
     student = Student.objects.get(matricNo="2894029")
     Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=student, alphanum="C1")

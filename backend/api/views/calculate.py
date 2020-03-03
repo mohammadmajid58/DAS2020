@@ -30,7 +30,7 @@ def calculate(request):
                         overall_points += numerical_score * weight
                         break
 
-            student.finalAward = round(overall_points)
+            student.finalAward3 = overall_points
             student.save()
 
         return Response(status=status.HTTP_201_CREATED)

@@ -12,7 +12,8 @@ class GradeAdmin(ModelAdmin):
 class StudentAdmin(ModelAdmin):
     icon_name = 'school'
     model = Student
-    list_display = ('matricNo', 'givenNames', 'surname', 'academicPlan', 'finalAward')
+    list_display = ('matricNo', 'givenNames', 'surname', 'academicPlan',
+                    'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward')
 
 
 @register(AcademicPlan)
