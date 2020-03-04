@@ -31,6 +31,9 @@ class DatabaseTable extends Component<Props> {
       search: false,
       filtering: true,
       pageSize: 10,
+      exportButton: true,
+      exportAllData: true,
+      exportFileName: "Module Grades",
       pageSizeOptions: [5, 10, 20, this.props.data.length]
     };
 
