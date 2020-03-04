@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Table from "./Table";
 import { Options, Column } from "material-table";
+import { convertAlphanumTo22pt } from "../../abstract_functions";
 
 type Row = {
   courseCode: string;
   matricNo: string;
   alphanum: string;
+  twentyTwoPoint: string;
 };
 
 type Props = {
@@ -19,7 +21,8 @@ interface CustomColumn extends Column<Object> {
 const columns: CustomColumn[] = [
   { title: "Course Code", field: "courseCode", lookup: {} },
   { title: "Matric No.", field: "matricNo" },
-  { title: "Grade", field: "alphanum", lookup: {} }
+  { title: "Alphanumeric Grade", field: "alphanum", lookup: {} },
+  { title: "22pt Grade", field: "twentyTwoPoint", lookup: {} }
 ];
 
 class DatabaseTable extends Component<Props> {
@@ -66,6 +69,11 @@ class DatabaseTable extends Component<Props> {
       } else if (col.field === "alphanum") {
         gradeData.forEach((grade: string) => {
           col.lookup![grade] = grade;
+        });
+      } else if (col.field === "twentyTwoPoint") {
+        gradeData.forEach((grade: string) => {
+          const twentyTwoPoint = convertAlphanumTo22pt(grade);
+          col.lookup![twentyTwoPoint] = twentyTwoPoint;
         });
       }
     });

@@ -326,7 +326,7 @@ describe("Database Table Filtering Works", () => {
   it("Filters the Grade", () => {
     cy.get(".databaseTable")
       .find(".MuiFormControl-root")
-      .last()
+      .eq(2)
       .click();
     cy.get("ul.MuiList-root")
       .children()
@@ -336,12 +336,12 @@ describe("Database Table Filtering Works", () => {
 
     cy.get(".databaseTable")
       .find(".MuiFormControl-root")
-      .last()
+      .eq(2)
       .should("contain", "A1");
     for (var index = 0; index < 2; index++) {
       cy.get(`tr[index=${index}]`)
         .children()
-        .last()
+        .eq(2)
         .should("contain", "A1");
     }
     cy.get("span.MuiTypography-root").should("contain", "1-2 of 2");
