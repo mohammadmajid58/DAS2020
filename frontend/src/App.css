@@ -3,3 +3,18 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.overlay {
+  background: #3e3e3e;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.inner-overlay {
+  margin-top: 45vh;
+}

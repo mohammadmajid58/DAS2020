@@ -21,7 +21,12 @@ interface State {
   errorMessage: string;
 }
 
-class StudentRosterDropzone extends React.Component<{}, State> {
+type Props = {
+  showOverlay: () => void;
+  hideOverlay: () => void;
+};
+
+class StudentRosterDropzone extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -34,12 +39,15 @@ class StudentRosterDropzone extends React.Component<{}, State> {
 
   uploadFiles() {
     const files = this.state.files;
+    const hideOverlay = this.props.hideOverlay;
+
     if (files.length === 0) {
       this.setState({
         errorMessage: "No files to upload"
       });
       return;
     }
+    this.props.showOverlay();
 
     for (var i = 0; i < files.length; i++) {
       const file: File = files[i];
@@ -95,11 +103,13 @@ class StudentRosterDropzone extends React.Component<{}, State> {
           Axios.post(`${API_URL}/api/students/`, studentData)
             .then((response: AxiosResponse) => {
               if (response.status === 200 || response.status === 201) {
+                hideOverlay();
                 this.setState({
                   uploading: true,
                   numOfFilesUploaded: this.state.numOfFilesUploaded + 1
                 });
               } else {
+                hideOverlay();
                 this.setState({
                   errorMessage: "Error occured"
                 });
@@ -107,6 +117,7 @@ class StudentRosterDropzone extends React.Component<{}, State> {
               }
             })
             .catch(function(error) {
+              hideOverlay();
               alert("Error occured");
               console.log(error);
             });
