@@ -19,7 +19,12 @@ interface State {
   errorMessage: string;
 }
 
-class StudentModuleMarkDropZone extends React.Component<{}, State> {
+type Props = {
+  showOverlay: () => void;
+  hideOverlay: () => void;
+};
+
+class StudentModuleMarkDropZone extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,12 +37,15 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
 
   uploadFiles() {
     const files = this.state.files;
+    const hideOverlay = this.props.hideOverlay;
+
     if (files.length === 0) {
       this.setState({
         errorMessage: "No files to upload"
       });
       return;
     }
+    this.props.showOverlay();
 
     for (var i = 0; i < files.length; i++) {
       const file: File = files[i];
@@ -77,7 +85,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
           // const yearGroup = matches[2];
 
           // Construct array of StudentModuleMark objects
-          const moduleData = studentGrades.map((dataRow) => {
+          const moduleData = studentGrades.map(dataRow => {
             // eslint-disable-next-line no-unused-vars
             const [matricNo, fullName, grade] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
@@ -91,11 +99,13 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
           Axios.post(`${API_URL}/api/grades/`, moduleData)
             .then((response: AxiosResponse) => {
               if (response.status === 200 || response.status === 201) {
+                hideOverlay();
                 this.setState({
                   uploading: true,
                   numOfFilesUploaded: this.state.numOfFilesUploaded + 1
                 });
               } else {
+                hideOverlay();
                 this.setState({
                   errorMessage: "Error occured"
                 });
@@ -103,6 +113,7 @@ class StudentModuleMarkDropZone extends React.Component<{}, State> {
               }
             })
             .catch(function(error) {
+              hideOverlay();
               alert("Error occured");
               console.log(error);
             });
