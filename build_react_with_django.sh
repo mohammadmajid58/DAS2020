@@ -11,8 +11,8 @@ fi
 
 if [[ "$running_in_dev" -ne 1 ]]; then
     # ensure debug setting is on false if not in DEV mode
-    if grep -e "DEBUG = True" backend/backend/settings.py; then
-        printf "\033[1;33mFound DEBUG = True in settings.py\033[0m\n"
+    if grep -e "DEBUG=True" backend/.env; then
+        printf "\033[1;33mFound DEBUG = True in backend/.env\033[0m\n"
         printf "\033[1;33mIf you'd like to create a ZIP for Staging, please turn this to False now!\033[0m\n"
         printf "\033[1;33mWould you like to continue? (y/n)\033[0m\n"
         read result
