@@ -17,6 +17,53 @@ export function getCookie(cname: string) {
   return "";
 }
 
+export const getDate = () => {
+  var d = new Date();
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  let minutes = d.getMinutes().toString();
+  let hours = d.getHours().toString();
+
+  if (minutes.length === 1) {
+    minutes = `0${minutes}`;
+  }
+  if (hours.length === 1) {
+    hours = `0${hours}`;
+  }
+
+  return `${d.getDate()} ${
+    months[d.getMonth()]
+  } ${d.getFullYear()} - ${hours}:${minutes}`;
+};
+
+export const getUsername = () => {
+  return Axios.get(`${API_URL}/auth/user/`).then(r => {
+    let username = "";
+    if (r.data.first_name.length === 0) {
+      username = r.data.username;
+    } else {
+      username = r.data.first_name;
+      if (r.data.last_name.length !== 0) {
+        username = username + " " + r.data.last_name;
+      }
+    }
+    return username;
+  });
+};
+
 export const isLoggedIn = () => {
   return Axios.get(`${API_URL}/auth/user/`).then(response => {
     if (response.status === 200) {
