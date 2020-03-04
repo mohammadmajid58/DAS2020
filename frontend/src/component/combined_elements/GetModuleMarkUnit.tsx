@@ -3,11 +3,13 @@ import DatabaseTable from "../tables/DatabaseTable";
 import axios from "axios";
 import API_URL from "../../index";
 import PageTitle from "../usability_components/PageTitle";
+import { convertAlphanumTo22pt } from "../../abstract_functions";
 
 type ModuleMark = {
   courseCode: string;
   student: string;
   alphanum: string;
+  twentyTwoPoint: string;
 };
 
 class GetModuleMarkUnit extends Component {
@@ -20,7 +22,11 @@ class GetModuleMarkUnit extends Component {
     var moduleMarks: ModuleMark[] = [];
 
     axios.get(`${REQUEST_URL}`).then(r => {
-      moduleMarks.push(r.data);
+      r.data.map((item: ModuleMark) => {
+        item.twentyTwoPoint = convertAlphanumTo22pt(item.alphanum);
+        moduleMarks.push(item);
+      });
+
       this.setState({ data: moduleMarks.flat() });
     });
   }
