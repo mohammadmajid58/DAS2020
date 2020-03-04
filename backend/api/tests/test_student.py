@@ -1,9 +1,21 @@
+from django.core.exceptions import ValidationError
+
 from api.serializers import StudentSerializer
 import json
 from api.models import Student, AcademicPlan
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .test_setup_function import setup, login
+
+
+def _create_default_student():
+    return {"matricNo": "2578812", "givenNames": "Phillip J", "surname": "Fry", "academicPlan": "F100-2208"}
+
+
+def _create_default_student_with_matric_no(matric_no):
+    student = _create_default_student()
+    student["matricNo"] = matric_no
+    return student
 
 
 class StudentTestCase(APITestCase):
@@ -106,3 +118,52 @@ class StudentTestCase(APITestCase):
 
         final_award2_dec = str(student.finalAward2).partition('.')[-1]
         self.assertEqual(len(final_award2_dec), 2)
+
+    def test_student_matric_no_length_must_be_seven(self):
+        student = _create_default_student()
+        self.client.post("/api/students/", [student], format='json')
+        self.assertTrue(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_matric_no_length_cannot_be_length_six(self):
+        student = _create_default_student_with_matric_no("123456")
+        self.client.post("/api/students/", [student], format='json')
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_matric_no_length_cannot_be_length_eight(self):
+        student = _create_default_student_with_matric_no("12345678")
+        self.client.post("/api/students/", [student], format='json')
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_must_have_a_surname(self):
+        student = _create_default_student()
+        student.pop("surname", None)
+        self.client.post("/api/students/", [student], format='json')
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_must_have_given_names(self):
+        student = _create_default_student()
+        student.pop("givenNames", None)
+        self.client.post("/api/students/", [student], format='json')
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_must_have_an_academic_plan(self):
+        student = _create_default_student()
+        student.pop("academicPlan", None)
+        self.client.post("/api/students/", [student], format='json')
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_can_have_several_given_names(self):
+        student = _create_default_student()
+        student["givenNames"] = "Hello I have ten given names hahaha I am awesome"
+        self.client.post("/api/students/", [student], format='json')
+        self.assertTrue(Student.objects.filter(matricNo=student["matricNo"]).exists())
+
+    def test_student_matric_no_is_entirely_numeric(self):
+        student = _create_default_student()
+        student["matricNo"] = "123456a"
+        try:
+            self.client.post("/api/students/", [student], format='json')
+        except ValidationError as v:
+            self.assertEqual("['Student matric no must be a number.']", str(v))
+
+        self.assertFalse(Student.objects.filter(matricNo=student["matricNo"]).exists())
