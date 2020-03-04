@@ -8,33 +8,9 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import CardHeader from "@material-ui/core/CardHeader";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { themeStyles } from "../DesignElements/styles";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-      width: 400,
-      margin: `${theme.spacing(0)} auto`
-    },
-    loginBtn: {
-      marginTop: theme.spacing(4),
-      flexGrow: 1,
-      background: "#0F54B0"
-    },
-    header: {
-      textAlign: "center",
-      background: "#0F54B0",
-      font: "Verdana",
-      color: "#fff"
-    },
-    card: {
-      marginTop: theme.spacing(10),
-      width: "100%"
-    }
-  })
-);
+const useStyles = themeStyles();
 
 interface State {
   email: string;
