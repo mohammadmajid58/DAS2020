@@ -12,12 +12,18 @@ type ModuleMark = {
   twentyTwoPoint: string;
 };
 
-class GetModuleMarkUnit extends Component {
+type Props = {
+  showOverlay: () => void;
+  hideOverlay: () => void;
+};
+
+class GetModuleMarkUnit extends Component<Props> {
   state = {
     data: []
   };
 
   componentDidMount() {
+    this.props.showOverlay();
     const REQUEST_URL = API_URL + "/api/grades/";
     var moduleMarks: ModuleMark[] = [];
 
@@ -27,6 +33,7 @@ class GetModuleMarkUnit extends Component {
         moduleMarks.push(item);
       });
 
+      this.props.hideOverlay();
       this.setState({ data: moduleMarks.flat() });
     });
   }
