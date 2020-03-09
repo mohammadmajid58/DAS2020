@@ -36,6 +36,56 @@ class DatabaseTable extends Component<Props> {
       pageSize: 10,
       exportButton: true,
       exportAllData: true,
+      // Custom Export Function for Module Data
+      exportCsv: (columns: CustomColumn[], renderData: Row[]) => {
+        interface courseObject {
+          [courseName: string]: string;
+        }
+        interface allStudents {
+          [matricNo: string]: courseObject;
+        }
+
+        const students: allStudents = {};
+        const csvData: string[][] = [];
+
+        const allCourses = Object.keys(columns[0].lookup!);
+        const matricList: string[] = [];
+
+        renderData.map(data => {
+          if (!matricList.includes(data.matricNo)) {
+            students[data.matricNo] = {};
+            matricList.push(data.matricNo);
+          }
+          students[data.matricNo][data.courseCode] = data.alphanum;
+        });
+
+        csvData.push(["Student", ...allCourses]);
+        matricList.map(student => {
+          const row = [student];
+          allCourses.map(course => {
+            const studentCourseList = Object.keys(students[student]);
+            if (studentCourseList.includes(course)) {
+              row.push(students[student][course]);
+            } else {
+              row.push("N/A");
+            }
+          });
+          csvData.push(row);
+        });
+
+        let csvString = "";
+        csvData.map(row => {
+          csvString += row.join(",");
+          csvString += "\n";
+        });
+
+        var hiddenElement = document.createElement("a");
+        hiddenElement.href =
+          "data:text/csv;charset=utf-8," + encodeURI(csvString);
+        hiddenElement.target = "_blank";
+        hiddenElement.download = "all_module_data.csv";
+        hiddenElement.click();
+      },
       exportFileName: "Module Grades",
       pageSizeOptions: [5, 10, 20, this.props.data.length]
     };
