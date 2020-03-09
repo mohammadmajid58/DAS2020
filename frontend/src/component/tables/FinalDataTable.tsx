@@ -87,7 +87,9 @@ export default class FinalDataTable extends Component<Props> {
       14, // C1
       17 // B1
     ];
-    if (rowData.initialAward !== rowData.updatedAward) {
+    if (rowData.updatedAward === "TBC") {
+      return { backgroundColor: "orange" };
+    } else if (rowData.initialAward !== rowData.updatedAward) {
       return { backgroundColor: "lightgreen" };
     } else if (awardsToHighlightRed.includes(parseInt(rowData.finalAward2))) {
       return { backgroundColor: "pink" };
@@ -159,7 +161,18 @@ export default class FinalDataTable extends Component<Props> {
       })
     );
 
-    const mcAwards = ["01", "0U", "0L", "3", "Fail"];
+    const mcAwards = [
+      "01",
+      "0U",
+      "0L",
+      "33",
+      "TBC",
+      "GC",
+      "DD-UD",
+      "DD-UM",
+      "DD-UQ",
+      "Fail"
+    ];
 
     // Assigns lookup keys for each field
     columns.forEach(col => {

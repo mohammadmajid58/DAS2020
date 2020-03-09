@@ -39,9 +39,9 @@ const convertAlphaToMC = (award: string) => {
   } else if (alphanum >= 12) {
     return "0L";
   } else if (alphanum >= 9) {
-    return "3";
+    return "33";
   } else {
-    return "Fail";
+    return "TBC";
   }
 };
 
