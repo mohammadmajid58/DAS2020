@@ -101,15 +101,24 @@ class App extends Component<{}, State> {
             <PrivateRoute
               exact
               path="/view-final-mark"
-              component={GetFinalDataUnit}
               isAuthenticated={this.state.isAuthenticated}
-            />
+            >
+              <GetFinalDataUnit
+                showOverlay={this.showOverlay.bind(this)}
+                hideOverlay={this.hideOverlay.bind(this)}
+              />
+            </PrivateRoute>
             <PrivateRoute
               exact
               path="/view-module-mark"
-              component={GetModuleMarkUnit}
               isAuthenticated={this.state.isAuthenticated}
-            />
+            >
+              <GetModuleMarkUnit
+                showOverlay={this.showOverlay.bind(this)}
+                hideOverlay={this.hideOverlay.bind(this)}
+              />
+            </PrivateRoute>
+
             <PrivateRoute
               exact
               path="/login"

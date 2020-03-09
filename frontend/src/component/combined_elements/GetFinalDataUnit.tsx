@@ -45,7 +45,12 @@ const convertAlphaToMC = (award: string) => {
   }
 };
 
-export default class GetFinalDataUnit extends Component {
+type Props = {
+  showOverlay: () => void;
+  hideOverlay: () => void;
+};
+
+export default class GetFinalDataUnit extends Component<Props> {
   state = {
     data: [] as any[], // Needed since Object cannot be cast to the required type
     selectedOption: null,
@@ -71,6 +76,8 @@ export default class GetFinalDataUnit extends Component {
   };
 
   componentDidMount() {
+    this.props.showOverlay();
+
     const POST_URL = API_URL + "/api/calculate/";
     const GET_URL = API_URL + "/api/students/";
 
@@ -111,9 +118,11 @@ export default class GetFinalDataUnit extends Component {
               updatedAward: changedAward
             };
           });
+          this.props.hideOverlay();
           this.setState({ data: finalData });
         });
       } else {
+        this.props.hideOverlay();
         this.setState({
           errorMessage: "Error Occurred"
         });
