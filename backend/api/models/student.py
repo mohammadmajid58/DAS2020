@@ -15,7 +15,7 @@ class Student(models.Model):
     finalAward2 = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     finalAward3 = models.DecimalField(max_digits=5, decimal_places=3, null=True, default=0.000)
     gradeDataUpdated = models.BooleanField(default=False)
-    updatedAward = models.CharField("Updated Award", blank=True, default="-1", max_length=4)
+    updatedAward = models.CharField("Updated Award", blank=True, default="-1", max_length=5)
 
     class Meta:
         verbose_name_plural = "Students"
