@@ -135,6 +135,9 @@ export default class GetFinalDataUnit extends Component<Props> {
       <div className="d-flex-inline">
         <PageTitle title="Final Degree GPA" />
         <div className="col-11 mx-auto">
+          <div>
+            <h5>Hide single or multiple columns by choosing them here</h5>
+          </div>
           <Select
             value={this.state.selectedOption}
             onChange={this.handleChange}
