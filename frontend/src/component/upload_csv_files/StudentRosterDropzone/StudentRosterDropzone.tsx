@@ -38,12 +38,17 @@ class StudentRosterDropzone extends React.Component<Props, State> {
     }
     this.props.showOverlay();
 
-    handleFileUpload(files, false, () => {
-      this.setState({
-        uploading: true,
-        numOfFilesUploaded: this.state.numOfFilesUploaded + 1
-      });
-    })
+    handleFileUpload(
+      files,
+      false,
+      () => {
+        this.setState({
+          uploading: true,
+          numOfFilesUploaded: this.state.numOfFilesUploaded + 1
+        });
+      },
+      this.props.hideOverlay
+    )
       .then((response: boolean) => {
         console.log({ response });
         hideOverlay();

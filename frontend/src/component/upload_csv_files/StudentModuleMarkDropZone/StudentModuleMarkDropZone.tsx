@@ -37,14 +37,19 @@ class StudentModuleMarkDropZone extends React.Component<Props, State> {
     }
     this.props.showOverlay();
 
-    handleFileUpload(files, true, () => {
-      this.setState(state => {
-        return {
-          uploading: true,
-          numOfFilesUploaded: state.numOfFilesUploaded + 1
-        };
-      });
-    })
+    handleFileUpload(
+      files,
+      true,
+      () => {
+        this.setState(state => {
+          return {
+            uploading: true,
+            numOfFilesUploaded: state.numOfFilesUploaded + 1
+          };
+        });
+      },
+      this.props.hideOverlay
+    )
       .then((response: boolean) => {
         console.log({ response });
         hideOverlay();

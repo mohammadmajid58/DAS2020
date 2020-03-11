@@ -28,7 +28,8 @@ export function getDropZoneUtils(stateValue: any): any {
 export function handleFileUpload(
   files: any[],
   isModule: boolean,
-  callbackFn: Function
+  callbackFn: Function,
+  hideOverlay: Function
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     for (let i = 0; i < files.length; i++) {
@@ -61,6 +62,7 @@ export function handleFileUpload(
         const matches: any = filename.match(regexp);
         const matchesLength = isModule ? 3 : 1;
         if (matches === null || matches.length !== matchesLength) {
+          hideOverlay();
           alert(
             "Error attempting to upload file with invalid file name. Received filename: " +
               filename
