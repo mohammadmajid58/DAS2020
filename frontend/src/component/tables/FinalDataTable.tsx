@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Table from "./Table";
-import { Options, Column } from "material-table";
+import { Options, Column, MTableToolbar } from "material-table";
 import Axios from "axios";
 import API_URL from "../../index";
+import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
 
 interface CustomColumn extends Column<Object> {
   lookup?: { [key: string]: string };
@@ -76,9 +77,77 @@ const columns: CustomColumn[] = [
   }
 ];
 
+const handleCustomCsvExport = (columns: CustomColumn[], renderData: Row[]) => {
+  interface Student {
+    [studentID: string]: { name: string; degreeHonor: string };
+  }
+  interface AcadPlan {
+    [plan: string]: string[];
+  }
+
+  const allPlans: AcadPlan = {};
+  const planList: string[] = [];
+
+  renderData.map(row => {
+    if (!planList.includes(row.academicPlan)) {
+      allPlans[row.academicPlan] = [];
+      planList.push(row.academicPlan);
+    }
+
+    allPlans[row.academicPlan].push(
+      row.matricNo +
+        // eslint-disable-next-line quotes
+        ',"' +
+        row.surname +
+        "," +
+        row.givenNames +
+        // eslint-disable-next-line quotes
+        '",' +
+        row.academicPlan +
+        "," +
+        row.updatedAward
+    );
+  });
+
+  const csvData: string[] = [];
+
+  planList.map(plan => {
+    let csvString = "StudentID,Name,Acad Plan,Degree Honors\n";
+    allPlans[plan].map(row => {
+      csvString += row;
+      csvString += "\n";
+    });
+
+    csvData.push(csvString);
+  });
+
+  downloadCSV(planList, csvData);
+};
+
+const downloadCSV = (planList: string[], csvData: string[]) => {
+  const filename = planList.pop() + ".csv";
+  const hiddenElement = document.createElement("a");
+  hiddenElement.href =
+    "data:text/csv;charset=utf-8," + encodeURI(csvData.pop()!);
+  hiddenElement.target = "_blank";
+  hiddenElement.download = filename;
+  hiddenElement.click();
+  if (planList.length > 0) {
+    setTimeout(downloadCSV, 300, planList, csvData);
+  }
+};
+
 export default class FinalDataTable extends Component<Props> {
   rows: Row[] = [];
   title: string = "Final Award Data";
+  state = { mcExport: false };
+
+  handleMCExportChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) {
+    this.setState({ mcExport: checked });
+  }
 
   handleRowData(rowData: any) {
     const awardsToHighlightRed = [
@@ -124,8 +193,11 @@ export default class FinalDataTable extends Component<Props> {
       pageSizeOptions: [5, 10, 20, this.props.data.length],
       exportButton: true,
       exportAllData: true,
-      exportFileName: "Final Award"
+      exportFileName: "Final_Award_Data"
     };
+    if (this.state.mcExport === true) {
+      tableOptions.exportCsv = handleCustomCsvExport;
+    }
 
     const rows = this.props.data;
 
@@ -236,6 +308,28 @@ export default class FinalDataTable extends Component<Props> {
           title={title}
           handleRowData={this.handleRowData}
           handleHiddenColumns={this.handleHiddenColumns}
+          components={{
+            Toolbar: props => (
+              <div>
+                <MTableToolbar {...props} />
+                <div>
+                  <FormGroup row className="d-flex justify-content-end pr-3">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={this.handleMCExportChange.bind(this)}
+                          value="EnableMCExport"
+                          checked={this.state.mcExport}
+                        />
+                      }
+                      label="Enable MyCampus Export"
+                      labelPlacement="start"
+                    />
+                  </FormGroup>
+                </div>
+              </div>
+            )
+          }}
         />
       </div>
     );
