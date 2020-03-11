@@ -5,6 +5,10 @@ from rest_auth.views import PasswordResetConfirmView
 
 from api.views.index import index
 
+admin.site.site_header = "DAS 2020"
+admin.site.site_title = "DAS 2020 Admin Portal"
+admin.site.index_title = "DAS 2020 Administration"
+
 urlpatterns = [
     re_path(
         r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,'
