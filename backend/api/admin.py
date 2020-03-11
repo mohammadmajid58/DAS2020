@@ -20,7 +20,7 @@ class StudentAdmin(ModelAdmin):
 class AcademicPlanAdmin(ModelAdmin):
     icon_name = 'event'
     model = AcademicPlan
-    list_display = ('planCode', 'courseCode', 'mcName', 'mcCode',
+    list_display = ('planCode', 'courseCode', 'mcName',
                     'course_1', 'weight_1', 'course_2', 'weight_2', 'course_3', 'weight_3',
                     'course_4', 'weight_4', 'course_5', 'weight_5',
                     'course_6', 'weight_6', 'course_7', 'weight_7', 'course_8', 'weight_8',
