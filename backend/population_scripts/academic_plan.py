@@ -3,7 +3,7 @@ from api.models import AcademicPlan
 
 def create_academic_plan():
     AcademicPlan.objects.get_or_create(planCode="F100-2208", courseCode="CHEM-4H",
-                                       mcName="Chemistry, BSc", mcCode="2208",
+                                       mcName="Chemistry, BSc",
                                        course_1="CHEM_3012", weight_1=0.083,
                                        course_2="CHEM_3009", weight_2=0.083,
                                        course_3="CHEM_3014", weight_3=0.083,

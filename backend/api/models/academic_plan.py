@@ -5,8 +5,7 @@ from django.core.exceptions import ValidationError
 class AcademicPlan(models.Model):
     planCode = models.CharField('Academic Plan Code', max_length=9, unique=True, primary_key=True)
     courseCode = models.CharField('Internal Course Code', max_length=15)
-    mcName = models.CharField('MyCampus Name', max_length=6)
-    mcCode = models.CharField('MyCampus Code', max_length=4)
+    mcName = models.CharField('MyCampus Description', max_length=35)
 
     class Meta:
         verbose_name_plural = "Academic Plans"
