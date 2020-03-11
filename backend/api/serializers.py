@@ -15,7 +15,8 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['matricNo', 'givenNames', 'surname', 'academicPlan',
-                  'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward']
+                  'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward',
+                  'hasSpecialCode', 'isMissingGrades']
 
 
 class PasswordResetSerializer(serializers.Serializer):

@@ -28,6 +28,7 @@ type FinalData = {
   finalAward3: string;
   updatedAward: string;
   mcAward: string;
+  isMissingGrades: string;
 };
 
 const convertAlphaToMC = (award: string) => {
@@ -97,10 +98,18 @@ export default class GetFinalDataUnit extends Component<Props> {
               finalAward1,
               finalAward2,
               finalAward3,
-              updatedAward
+              updatedAward,
+              isMissingGrades,
+              hasSpecialCode
             } = dataRow;
 
-            const initialAward = convertAlphaToMC(finalAward3);
+            let initialAward = "";
+            if (hasSpecialCode === true) {
+              initialAward = "TBC";
+            } else {
+              initialAward = convertAlphaToMC(finalAward3);
+            }
+
             let changedAward = updatedAward;
             if (updatedAward === "-1") {
               changedAward = initialAward;
@@ -115,7 +124,8 @@ export default class GetFinalDataUnit extends Component<Props> {
               finalAward2: finalAward2,
               finalAward3: finalAward3,
               initialAward: initialAward,
-              updatedAward: changedAward
+              updatedAward: changedAward,
+              isMissingGrades: isMissingGrades
             };
           });
           this.props.hideOverlay();

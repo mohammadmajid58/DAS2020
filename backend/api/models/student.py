@@ -16,6 +16,8 @@ class Student(models.Model):
     finalAward3 = models.DecimalField(max_digits=5, decimal_places=3, null=True, default=0.000)
     gradeDataUpdated = models.BooleanField(default=False)
     updatedAward = models.CharField("Updated Award", blank=True, default="-1", max_length=5)
+    hasSpecialCode = models.BooleanField(default=False)
+    isMissingGrades = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "Students"
@@ -34,6 +36,14 @@ class Student(models.Model):
 
     def set_grade_data_updated(self):
         self.gradeDataUpdated = True
+        self.save()
+
+    def set_has_special_code(self, value):
+        self.hasSpecialCode = value
+        self.save()
+
+    def set_is_missing_grades(self, value):
+        self.isMissingGrades = value
         self.save()
 
     def __str__(self):

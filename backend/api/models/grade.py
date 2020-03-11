@@ -6,7 +6,14 @@ from api.grade_converter import convert_a
 class Grade(models.Model):
     courseCode = models.CharField('Course Code', max_length=30)
     matricNo = models.ForeignKey(Student, on_delete=models.CASCADE, db_column='matricNo')
-    alphanum = models.CharField('Alphanumeric Grade', max_length=2)
+    alphanum = models.CharField('Alphanumeric Grade', max_length=2, choices=[("A1", "A1"), ("A2", "A2"),
+                                                                             ("A3", "A3"), ("A4", "A4"), ("A5", "A5"),
+                                                                             ("B1", "B1"), ("B2", "B2"), ("B3", "B3"),
+                                                                             ("C1", "C1"), ("C2", "C2"), ("C3", "C3"),
+                                                                             ("D1", "D1"), ("D2", "D2"), ("D3", "D3"),
+                                                                             ("E1", "E1"), ("E2", "E2"), ("E3", "E3"),
+                                                                             ("F1", "F1"), ("F2", "F2"), ("H", "H"),
+                                                                             ("CW", "CW"), ("CR", "CR"), ("MV", "MV")])
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['courseCode', 'matricNo'], name='composite_key')]
@@ -15,6 +22,9 @@ class Grade(models.Model):
 
     def get_alphanum_as_num(self):
         return convert_a(self.alphanum)
+
+    def is_grade_a_special_code(self):
+        return self.alphanum in ["MV", "CW", "CR"]
 
     def save(self, *args, **kwargs):
         self.matricNo.set_grade_data_updated()

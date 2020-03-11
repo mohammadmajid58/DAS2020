@@ -53,10 +53,12 @@ class StudentTestCase(APITestCase):
         response_dict = json.loads(response)
         self.assertEqual(response_dict, [{"matricNo": "2894029", "givenNames": "Zak", "surname": "Bagans",
                                           "academicPlan": "F100-2208", "finalAward1": '0.0', "finalAward2": '0.00',
-                                          "finalAward3": '0.000', "updatedAward": "-1"},
+                                          "finalAward3": '0.000', "updatedAward": "-1", "isMissingGrades": True,
+                                          "hasSpecialCode": False},
                                          {"matricNo": "2283853", "givenNames": "Robert", "surname": "Goulet",
                                           "academicPlan": "F100-2208", "finalAward1": '0.0', "finalAward2": '0.00',
-                                          "finalAward3": '0.000', "updatedAward": "-1"}])
+                                          "finalAward3": '0.000', "updatedAward": "-1", "isMissingGrades": True,
+                                          "hasSpecialCode": False}])
 
     def test_duplicate_student_entries_not_created(self):
         student = [{"matricNo": "2894029", "givenNames": "Zak", "surname": "Bagans",
