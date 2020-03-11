@@ -19,6 +19,7 @@ interface Row extends Object {
   finalAward3: string;
   initialAward: string;
   updatedAward: string;
+  isMissingGrades: string;
 }
 
 type Props = {
@@ -156,12 +157,12 @@ export default class FinalDataTable extends Component<Props> {
       14, // C1
       17 // B1
     ];
-    if (rowData.updatedAward === "TBC") {
-      return { backgroundColor: "orange" };
+    if (rowData.updatedAward === "TBC" || rowData.isMissingGrades) {
+      return { backgroundColor: "pink" };
     } else if (rowData.initialAward !== rowData.updatedAward) {
       return { backgroundColor: "lightgreen" };
     } else if (awardsToHighlightRed.includes(parseInt(rowData.finalAward2))) {
-      return { backgroundColor: "pink" };
+      return { backgroundColor: "orange" };
     }
     return {};
   }

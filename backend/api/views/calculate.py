@@ -20,8 +20,21 @@ def calculate(request):
 
             grades = Grade.objects.filter(matricNo=student.matricNo)
             overall_points = 0
+            is_missing_grades = False
+            has_special_code = False
+            academic_plan_course_count = sum([1 if c is not None else 0 for c in courses])
+
+            if academic_plan_course_count != len(grades):
+                is_missing_grades = True
 
             for grade in grades:
+                if grade.is_grade_a_special_code():
+                    has_special_code = True
+                    continue
+
+                if grade.courseCode not in courses:
+                    is_missing_grades = True
+                    continue
 
                 numerical_score = grade.get_alphanum_as_num()
                 for i, co in enumerate(courses):
@@ -31,6 +44,8 @@ def calculate(request):
                         break
 
             student.finalAward3 = overall_points
+            student.set_is_missing_grades(is_missing_grades)
+            student.set_has_special_code(has_special_code)
             student.save()
 
         return Response(status=status.HTTP_201_CREATED)
