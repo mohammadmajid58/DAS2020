@@ -46,6 +46,8 @@ def calculate(request):
             student.finalAward3 = overall_points
             student.set_is_missing_grades(is_missing_grades)
             student.set_has_special_code(has_special_code)
+            student.unset_grade_data_updated()
+            student.updatedAward = "-1"
             student.save()
 
         return Response(status=status.HTTP_201_CREATED)
