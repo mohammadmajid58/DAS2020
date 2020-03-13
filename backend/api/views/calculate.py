@@ -14,6 +14,7 @@ def calculate(request):
         students = Student.objects.filter(gradeDataUpdated=True)
 
         for student in students:
+            # print(student.matricNo)
             academic_plan = student.academicPlan
             weights = academic_plan.get_weights()
             courses = academic_plan.get_courses()
@@ -40,7 +41,10 @@ def calculate(request):
                 for i, co in enumerate(courses):
                     if co == grade.courseCode:
                         weight = weights[i]
+                        # print(grade.courseCode + " - Adding " + str(numerical_score * weight) + " to " + str(
+                        # overall_points), end="")
                         overall_points += numerical_score * weight
+                        # print(" to get " + str(overall_points))
                         break
 
             student.finalAward3 = overall_points

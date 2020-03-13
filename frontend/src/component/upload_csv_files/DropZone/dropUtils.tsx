@@ -82,7 +82,7 @@ export function handleFileUpload(
               };
             } else {
               // eslint-disable-next-line no-unused-vars
-              const [matricNo, fullName, academicPlan] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
+              const [matricNo, fullName, academicPlan, gradYear] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
               // Parse and Split the full name into givenNames and surname
               const nameArray = fullName.split(",");
@@ -94,7 +94,8 @@ export function handleFileUpload(
                 givenNames: givenNames,
                 surname: surname,
                 academicPlan: academicPlan,
-                finalAward: 0
+                finalAward: 0,
+                gradYear: gradYear
               };
             }
           });

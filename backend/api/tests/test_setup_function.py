@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
 
-from api.models import AcademicPlan, Student, Grade
+from api.models import AcademicPlan, Student, Grade, GraduationYear
 
 
 def setup(self):
-    AcademicPlan.objects.get_or_create(planCode="F100-2208", courseCode="CHEM-4H", mcName="Chemistry, BSc",
+    GraduationYear.objects.get_or_create(gradYear="19-20")
+
+    AcademicPlan.objects.get_or_create(gradYear=GraduationYear.objects.get(gradYear="19-20"), planCode="F100-2208",
+                                       courseCode="CHEM-4H", mcName="Chemistry, BSc",
                                        course_1="CHEM_3012", weight_1=0.083, course_2="CHEM_3009",
                                        weight_2=0.083, course_3="CHEM_3014", weight_3=0.083, course_4="CHEM_4003P",
                                        weight_4=0.25, course_5="CHEM_4014", weight_5=0.125, course_6="CHEM_4012",
@@ -12,10 +15,12 @@ def setup(self):
                                        weight_8=0.125)
 
     Student.objects.get_or_create(matricNo="2894029", givenNames="Zak", surname="Bagans",
-                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward1=0.0,
+                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"),
+                                  gradYear=GraduationYear.objects.get(gradYear="19-20"), finalAward1=0.0,
                                   finalAward2=0.00, finalAward3=0.000)
     Student.objects.get_or_create(matricNo="2283853", givenNames="Robert", surname="Goulet",
-                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"), finalAward1=0.0,
+                                  academicPlan=AcademicPlan.objects.get(planCode="F100-2208"),
+                                  gradYear=GraduationYear.objects.get(gradYear="19-20"), finalAward1=0.0,
                                   finalAward2=0.00, finalAward3=0.000)
 
     student = Student.objects.get(matricNo="2894029")
