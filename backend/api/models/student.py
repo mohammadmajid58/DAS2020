@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from api.models.graduation_year import GraduationYear
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -11,6 +11,7 @@ class Student(models.Model):
     givenNames = models.CharField('Given name(s)', max_length=64)
     surname = models.CharField('Last name', max_length=32)
     academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, null=False)
+    gradYear = models.ForeignKey(GraduationYear, on_delete=models.CASCADE, db_column='gradYear')
     finalAward1 = models.DecimalField(max_digits=3, decimal_places=1, null=True)
     finalAward2 = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     finalAward3 = models.DecimalField(max_digits=5, decimal_places=3, null=True, default=0.000)

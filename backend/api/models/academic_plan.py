@@ -1,15 +1,18 @@
 from django.db import models
+from api.models.graduation_year import GraduationYear
 from django.core.exceptions import ValidationError
 
 
 class AcademicPlan(models.Model):
-    planCode = models.CharField('Academic Plan Code', max_length=9, unique=True, primary_key=True)
+    gradYear = models.ForeignKey(GraduationYear, on_delete=models.CASCADE, db_column='gradYear')
+    planCode = models.CharField('Academic Plan Code', max_length=9, primary_key=True)
     courseCode = models.CharField('Internal Course Code', max_length=15)
     mcName = models.CharField('MyCampus Description', max_length=35)
 
     class Meta:
         verbose_name_plural = "Academic Plans"
         app_label = 'api'
+        constraints = [models.UniqueConstraint(fields=['gradYear', 'planCode'], name='composite_key')]
 
     def get_courses(self):
         course_list = []
@@ -29,7 +32,7 @@ class AcademicPlan(models.Model):
         return sum(round(w, 3) if w is not None else 0 for w in self.get_weights())
 
     def _weight_in_correct_range(self):
-        return True if 0.999 <= self._calculate_total_weight() <= 1 else False
+        return True if 0.99 <= self._calculate_total_weight() <= 1.01 else False
 
     def clean(self):
         if not self._weight_in_correct_range():

@@ -14,7 +14,7 @@ class GradeSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['matricNo', 'givenNames', 'surname', 'academicPlan',
+        fields = ['matricNo', 'givenNames', 'surname', 'academicPlan', 'gradYear',
                   'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward',
                   'hasSpecialCode', 'isMissingGrades']
 
