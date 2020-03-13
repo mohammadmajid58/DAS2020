@@ -21,6 +21,7 @@ interface Row extends Object {
   initialAward: string;
   updatedAward: string;
   isMissingGrades: string;
+  hasSpecialCode: string;
 }
 
 type Props = {
@@ -159,7 +160,7 @@ export default class FinalDataTable extends Component<Props> {
       14, // C1
       17 // B1
     ];
-    if (rowData.updatedAward === "TBC" || rowData.isMissingGrades) {
+    if (rowData.isMissingGrades || rowData.hasSpecialCode) {
       return { backgroundColor: "pink" };
     } else if (rowData.initialAward !== rowData.updatedAward) {
       return { backgroundColor: "lightgreen" };

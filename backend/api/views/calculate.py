@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from api.grade_converter import new_grade_in_higher_band
 from api.models import Grade, Student
 
 
@@ -43,11 +44,13 @@ def calculate(request):
                         overall_points += numerical_score * weight
                         break
 
+            oldGrade = student.finalAward3
             student.finalAward3 = overall_points
             student.set_is_missing_grades(is_missing_grades)
             student.set_has_special_code(has_special_code)
             student.unset_grade_data_updated()
-            student.updatedAward = "-1"
+            if new_grade_in_higher_band(oldGrade, overall_points):
+                student.updatedAward = "-1"
             student.save()
 
         return Response(status=status.HTTP_201_CREATED)

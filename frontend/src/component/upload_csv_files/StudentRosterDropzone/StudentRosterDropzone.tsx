@@ -52,10 +52,9 @@ class StudentRosterDropzone extends React.Component<Props, State> {
       .then(() => {
         hideOverlay();
       })
-      .catch(function(error) {
+      .catch(function() {
         hideOverlay();
         alert("Error occured");
-        console.error(error);
       });
   }
 

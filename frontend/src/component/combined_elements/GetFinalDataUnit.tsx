@@ -29,6 +29,7 @@ type FinalData = {
   updatedAward: string;
   mcAward: string;
   isMissingGrades: string;
+  hasSpecialCode: string;
 };
 
 const convertAlphaToMC = (award: string) => {
@@ -42,7 +43,7 @@ const convertAlphaToMC = (award: string) => {
   } else if (alphanum >= 9) {
     return "33";
   } else {
-    return "TBC";
+    return "Fail";
   }
 };
 
@@ -113,7 +114,8 @@ export default class GetFinalDataUnit extends Component<Props> {
           finalAward3: finalAward3,
           initialAward: initialAward,
           updatedAward: changedAward,
-          isMissingGrades: isMissingGrades
+          isMissingGrades: isMissingGrades,
+          hasSpecialCode: hasSpecialCode
         };
         this.setState(currentState);
       });

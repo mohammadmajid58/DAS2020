@@ -17,7 +17,7 @@ def override_grade(request):
         course_code = request.data.get("courseCode")
 
         student = Student.objects.get(matricNo=matric_no)
-        grade, exists = Grade.objects.get_or_create(matricNo=student, courseCode=course_code)
+        grade, _ = Grade.objects.get_or_create(matricNo=student, courseCode=course_code)
         grade.alphanum = new_grade
         grade.save()
 
