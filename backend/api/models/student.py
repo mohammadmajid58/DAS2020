@@ -45,7 +45,10 @@ class Student(models.Model):
 
     def set_is_missing_grades(self, value):
         self.isMissingGrades = value
+
+    def unset_grade_data_updated(self):
+        self.gradeDataUpdated = False
         self.save()
 
     def __str__(self):
-        return self.surname + ", " + self.givenNames
+        return "{0} ({1}, {2})".format(self.matricNo, self.surname, self.givenNames)

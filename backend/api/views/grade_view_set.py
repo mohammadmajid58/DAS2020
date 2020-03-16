@@ -1,4 +1,5 @@
 from rest_framework import status, generics
+from rest_framework.mixins import ListModelMixin
 
 from rest_framework.response import Response
 
@@ -13,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
-class GradeViewSet(generics.ListCreateAPIView):
+class GradeViewSet(generics.ListCreateAPIView, ListModelMixin):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
     pagination_class = None
