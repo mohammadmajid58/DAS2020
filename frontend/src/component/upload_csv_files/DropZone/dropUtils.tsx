@@ -38,7 +38,6 @@ export function handleFileUpload(
 
       const papaParseHandler = async (results: ParseResult) => {
         var csvData = results.data;
-
         // Removes any empty columns
         csvData = csvData.map((dataRow: []) => {
           return dataRow.filter((columnData: string) => {

@@ -1,9 +1,11 @@
+from decimal import Decimal
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from api.grade_converter import new_grade_in_higher_band
 from api.models import Grade, Student
+import numpy as np
 
 
 @api_view(('POST',))
@@ -13,22 +15,33 @@ def calculate(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
     if request.method == "POST":
         students = Student.objects.filter(gradeDataUpdated=True)
+        academic_plan_course_counts = {}
+        academic_plan_course_weights = {}
 
-        for student in students:
+        for student in students.iterator():
             academic_plan = student.academicPlan
             weights = academic_plan.get_weights()
             courses = academic_plan.get_courses()
+            numerical_scores = []
+            weight_list = []
 
             grades = Grade.objects.filter(matricNo=student.matricNo)
-            overall_points = 0
             is_missing_grades = False
             has_special_code = False
-            academic_plan_course_count = sum([1 if c is not None else 0 for c in courses])
+            if academic_plan.planCode not in academic_plan_course_counts.keys():
+                academic_plan_course_counts[academic_plan.planCode] = sum(
+                    [1 if c is not None else 0 for c in courses])
 
-            if academic_plan_course_count != len(grades):
+            if academic_plan.planCode not in academic_plan_course_weights.keys():
+                plan_code = academic_plan.planCode
+                academic_plan_course_weights[plan_code] = {}
+                for i in range(academic_plan_course_counts[plan_code]):
+                    academic_plan_course_weights[plan_code][courses[i]] = weights[i]
+
+            if academic_plan_course_counts[academic_plan.planCode] != len(grades):
                 is_missing_grades = True
 
-            for grade in grades:
+            for grade in grades.iterator():
                 if grade.is_grade_a_special_code():
                     has_special_code = True
                     continue
@@ -37,21 +50,18 @@ def calculate(request):
                     is_missing_grades = True
                     continue
 
-                numerical_score = grade.get_alphanum_as_num()
-                for i, co in enumerate(courses):
-                    if co == grade.courseCode:
-                        weight = weights[i]
-                        overall_points += numerical_score * weight
-                        break
+                numerical_scores.append(grade.get_alphanum_as_num())
+                weight_list.append(academic_plan_course_weights[
+                    academic_plan.planCode][grade.courseCode])
 
-            oldGrade = student.finalAward3
-            student.finalAward3 = overall_points
+            overall_points = np.dot(weight_list, numerical_scores)
+            student.finalAward1 = Decimal(round(overall_points, 1))
+            student.finalAward2 = Decimal(round(overall_points, 2))
+            student.finalAward3 = Decimal(round(overall_points, 3))
             student.set_is_missing_grades(is_missing_grades)
             student.set_has_special_code(has_special_code)
-            student.unset_grade_data_updated()
-            if new_grade_in_higher_band(oldGrade, overall_points):
-                student.updatedAward = "-1"
-            student.save()
+
+        students.update(gradeDataUpdated=False, updatedAward="-1")
 
         return Response(status=status.HTTP_201_CREATED)
     else:

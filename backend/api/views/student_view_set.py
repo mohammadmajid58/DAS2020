@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from api.models import Student
 from api.serializers import StudentSerializer
 from django.db.utils import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -31,17 +30,3 @@ class StudentViewSet(generics.ListCreateAPIView):
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request, *args, **kwargs):
-        matric_no = request.query_params.get("q")
-        data = self.get_queryset().all()
-        if matric_no is None:
-            serializer = StudentSerializer(data, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            try:
-                student = data.get(matricNo=matric_no)
-                serializer = StudentSerializer(student, many=False)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except ObjectDoesNotExist:
-                return Response({}, status=status.HTTP_200_OK)
