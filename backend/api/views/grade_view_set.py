@@ -3,7 +3,7 @@ from rest_framework.mixins import ListModelMixin
 
 from rest_framework.response import Response
 
-from api.models import Grade
+from api.models import Grade, Student
 from api.serializers import GradeSerializer
 from django.db.utils import IntegrityError
 
@@ -25,6 +25,7 @@ class GradeViewSet(generics.ListCreateAPIView, ListModelMixin):
         if serializer.is_valid():
             try:
                 serializer.save()
+                Student.objects.filter(matricNo__in=(m["matricNo"] for m in data)).update(gradeDataUpdated=True)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except IntegrityError:
                 return Response("Data already exists", status=status.HTTP_200_OK)

@@ -33,7 +33,7 @@ class StudentViewSet(generics.ListCreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, *args, **kwargs):
-        matric_no = request.query_params.get("q")
+        matric_no = request.query_params.get("matricNo")
         data = self.get_queryset().all()
         if matric_no is None:
             serializer = StudentSerializer(data, many=True)
