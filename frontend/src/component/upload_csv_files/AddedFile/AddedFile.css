@@ -1,11 +1,10 @@
 .added-file {
-  padding: 8px 2em 2px 2em;
+  padding: 1em 2em 1em 2em;
 }
 
 .added-file .delete-file-icon {
   position: relative;
   float: right;
-  top: -1.5em;
   color: red !important;
   opacity: 0.75;
 }

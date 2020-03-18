@@ -52,9 +52,58 @@ class StudentRosterDropzone extends React.Component<Props, State> {
       .then(() => {
         hideOverlay();
       })
-      .catch(function() {
+      .catch(error => {
         hideOverlay();
-        alert("Error occured");
+
+        const responseErrors = error.response.data;
+        let errorOccurred = false;
+        let errorMessage = "";
+
+        for (var studentError of responseErrors) {
+          if ("matricNo" in studentError) {
+            let studentAlreadyExists = "";
+            if (studentError.matricNo[0].includes("already exists")) {
+              studentAlreadyExists =
+                "This is because this student already exists in the system. \n\n";
+            }
+            errorMessage =
+              "A file you are trying to upload contains an invalid matriculation number. \n" +
+              studentAlreadyExists +
+              "The matriculation number is required, it must be numeric with exactly 7 digits.";
+            errorOccurred = true;
+            break;
+          }
+
+          if ("givenNames" in studentError || "surname" in studentError) {
+            errorMessage =
+              "A file you are trying to upload contains an invalid student name. \n" +
+              'The student name is required, it must be of the following format: "surname, givenNames"'; // eslint-disable-line quotes
+            errorOccurred = true;
+            break;
+          }
+
+          if ("academicPlan" in studentError) {
+            errorMessage =
+              "A file you are trying to upload contains a student on an academic plan that does not exist. \n" +
+              "You must first create the academic plan on the admin site.";
+            errorOccurred = true;
+            break;
+          }
+
+          if ("gradYear" in studentError) {
+            errorMessage =
+              "A file you are trying to upload contains a student on a graduation year that does not exist. \n" +
+              "You must first create the graduation year on the admin site.";
+            errorOccurred = true;
+            break;
+          }
+        }
+        if (errorOccurred) {
+          alert(
+            "An error has occurred, no CSV files have been uploaded, please see below for details. \n \n" +
+              errorMessage
+          );
+        }
       });
   }
 

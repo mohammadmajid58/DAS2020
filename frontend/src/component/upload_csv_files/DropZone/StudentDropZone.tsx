@@ -15,6 +15,10 @@ interface DropZoneProps {
   uploadFiles: () => void;
   filesHandler: (file: File[]) => void;
 }
+var uploadCSVButtonStyle = {
+  marginLeft: "1em !important",
+  marginTop: "2em"
+};
 
 const StudentDropZone: React.SFC<DropZoneProps> = ({
   uploadStarted,
@@ -50,6 +54,7 @@ const StudentDropZone: React.SFC<DropZoneProps> = ({
             variant="contained"
             color="primary"
             data-cy="upload-csv-files"
+            style={uploadCSVButtonStyle}
           >
             Upload CSV Files to Database
           </Button>
