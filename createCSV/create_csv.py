@@ -16,9 +16,7 @@ def _random_student_id():
 ## START OVERRIDE HERE
 num_of_students = 5000
 
-module_mark_file_names = ["Grade roster CHEM_3009_2019","Grade roster CHEM_3012_2019","Grade roster CHEM_3014_2019",
-                            "Grade roster CHEM_4001_2019","Grade roster CHEM_4003P_2019",
-                            "Grade roster CHEM_4009_2019","Grade roster CHEM_4012_2019","Grade roster CHEM_4014_2019"]
+module_mark_file_name = "Grade roster CHEM_3009_2019"
 module_mark_column_names = ["EMPLID", "Name", "Grade"]
 
 roster_file_name = "Roster"
@@ -45,10 +43,11 @@ with open(roster_file_name + '.csv', 'w', newline='') as file:
     for line in roster_lines:
     	writer.writerow(line)
 
-for module_name in module_mark_file_names:
-    with open(module_name + '.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(module_mark_column_names)
-        lines = module_mark_lines
-        writer.writerows(lines)
+
+with open(module_mark_file_name + '.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(module_mark_column_names)
+    lines = module_mark_lines
+    for line in lines:
+    	writer.writerow(line)
     

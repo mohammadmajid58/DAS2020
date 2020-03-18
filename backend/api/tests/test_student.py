@@ -79,15 +79,15 @@ class StudentTestCase(APITestCase):
         Student.objects.get_or_create(matricNo="1234567", givenNames="Lionel", surname="Hutz",
                                       academicPlan=AcademicPlan.objects.get(planCode="F100-2208"),
                                       gradYear=GraduationYear.objects.get(gradYear="19-20"),
-                                      finalAward1=None,
-                                      finalAward2=None, finalAward3=0.000)
+                                      finalAward1=0.0,
+                                      finalAward2=None, finalAward3=None)
         response = self.client.get('/api/students/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_cannot_post_student_data_when_logged_out(self):
         self.client.logout()
         student = [{"matricNo": "1234567", "givenNames": "Philip J", "surname": "Fry", "academicPlan": "CHEM_1234",
-                    "gradYear": "19-20", "finalAward1": None, "finalAward2": None, "finalAward3": 0.000}]
+                    "gradYear": "19-20", "finalAward1": 0.0, "finalAward2": None, "finalAward3": None}]
         response = self.client.post("/api/students/", student, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         student_exists = Student.objects.filter(matricNo="1234567", givenNames="Phillip J", surname="Fry",
@@ -105,8 +105,6 @@ class StudentTestCase(APITestCase):
             serializer.save()
 
         student = Student.objects.get(matricNo=matric_no)
-        student.save()
-
         self.assertEqual(str(student.finalAward1), '1.2')
         self.assertEqual(str(student.finalAward2), '1.20')
         self.assertEqual(str(student.finalAward3), '1.200')
