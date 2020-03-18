@@ -34,6 +34,7 @@ class GradeAdmin(ModelAdmin):
 class StudentAdmin(ModelAdmin):
     icon_name = 'school'
     model = Student
+    exclude = ('gradeDataUpdated', 'finalAward1', 'finalAward2', 'updatedAward')
     list_display = ('matricNo', 'givenNames', 'surname', 'academicPlan',
                     'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward')
 
