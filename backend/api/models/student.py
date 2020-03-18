@@ -1,13 +1,18 @@
 from decimal import Decimal
 from api.models.graduation_year import GraduationYear
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from api.models import AcademicPlan
 
+IsNumericValidator = RegexValidator(r'^[0-9]*$',
+                                    message='Student Matric No must be a Number',
+                                    code='Invalid Matric No')
+
 
 class Student(models.Model):
-    matricNo = models.CharField('Student', max_length=7, validators=[MinLengthValidator(7)], primary_key=True)
+    matricNo = models.CharField('Student', max_length=7, validators=[MinLengthValidator(7), IsNumericValidator],
+                                primary_key=True)
     givenNames = models.CharField('Given name(s)', max_length=64)
     surname = models.CharField('Last name', max_length=32)
     academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, null=False)
@@ -25,10 +30,9 @@ class Student(models.Model):
         app_label = 'api'
 
     def save(self, *args, **kwargs):
-        if self.finalAward3:
-            self.finalAward1 = Decimal(round(self.finalAward3, 1))
-            self.finalAward2 = Decimal(round(self.finalAward3, 2))
-            self.finalAward3 = Decimal(round(self.finalAward3, 3))
+        self.finalAward1 = Decimal(round(self.finalAward3, 1))
+        self.finalAward2 = Decimal(round(self.finalAward3, 2))
+        self.finalAward3 = Decimal(round(self.finalAward3, 3))
         try:
             int(self.matricNo)
             super().save(*args, **kwargs)
@@ -39,16 +43,17 @@ class Student(models.Model):
         self.gradeDataUpdated = True
         self.save()
 
+    def unset_grade_data_updated(self):
+        self.gradeDataUpdated = False
+        self.save()
+
     def set_has_special_code(self, value):
         self.hasSpecialCode = value
         self.save()
 
     def set_is_missing_grades(self, value):
         self.isMissingGrades = value
-
-    def unset_grade_data_updated(self):
-        self.gradeDataUpdated = False
         self.save()
 
     def __str__(self):
-        return "{0} ({1}, {2})".format(self.matricNo, self.surname, self.givenNames)
+        return self.surname + ", " + self.givenNames

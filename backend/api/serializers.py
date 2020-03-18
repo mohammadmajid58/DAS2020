@@ -5,15 +5,30 @@ from api.models import Grade, Student
 from backend import settings
 
 
+class ListGradeSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        grades = [Grade(**item) for item in validated_data]
+        return Grade.objects.bulk_create(grades)
+
+
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
+        list_serializer_class = ListGradeSerializer
         fields = ['courseCode', 'matricNo', 'alphanum']
+
+
+class ListStudentSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        students = [Student(**item) for item in validated_data]
+        return Student.objects.bulk_create(students)
 
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
+        list_serializer_class = ListStudentSerializer
+
         fields = ['matricNo', 'givenNames', 'surname', 'academicPlan', 'gradYear',
                   'finalAward1', 'finalAward2', 'finalAward3', 'updatedAward',
                   'hasSpecialCode', 'isMissingGrades']

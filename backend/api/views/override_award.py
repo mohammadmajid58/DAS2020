@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from api.grade_converter import convert_mc
 from api.models import Student
 
 
@@ -18,8 +17,7 @@ def override_award(request):
 
         student = Student.objects.get(matricNo=matric_no)
 
-        if new_grade != convert_mc(student.finalAward2):
-            student.updatedAward = new_grade
-            student.save()
+        student.updatedAward = new_grade
+        student.save()
 
     return Response(status=status.HTTP_200_OK)
