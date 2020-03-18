@@ -34,3 +34,6 @@ class Grade(models.Model):
     def delete(self, *args, **kwargs):
         self.matricNo.set_grade_data_updated()
         super(Grade, self).delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.matricNo.matricNo + " : " + self.courseCode + " " + self.alphanum
