@@ -2,6 +2,18 @@ import Papa, { ParseResult } from "papaparse";
 import Axios from "axios";
 import API_URL from "../../../index";
 
+function stringArraysEqual(a: Array<String>, b: Array<String>) {
+  if (a.length === b.length) {
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 export function getDropZoneUtils(stateValue: any): any {
   const fileNamesToUpload = stateValue.files.map((file: File) => file.name);
 
@@ -50,6 +62,25 @@ export function handleFileUpload(
         csvData = csvData.filter((dataRow: []) => {
           return dataRow.length > 0;
         });
+
+        if (!isModule) {
+          const actualFileHeader = csvData[0].map((header: string) =>
+            header.trim()
+          );
+          const expectedFileHeader = [
+            "EMPLID",
+            "Name",
+            "AcademicPlan",
+            "GradYear"
+          ];
+          if (!stringArraysEqual(actualFileHeader, expectedFileHeader)) {
+            hideOverlay();
+            alert(
+              "Error uploading file with invalid header, it must be:  EMPLID,  Name, AcademicPlan, GradYear"
+            );
+            return;
+          }
+        }
 
         // Separate Module Name and array of grades
         const studentFile = csvData.slice(1);

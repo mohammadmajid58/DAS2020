@@ -13,7 +13,7 @@ const AddedFile: React.FC<AddedFileProps> = props => {
   const removeAddedFile = props.removeAddedFile;
   return (
     <Box className="added-file" box-shadow={0}>
-      <p>{fileName}</p>
+      {fileName}
       <CancelIcon
         className="delete-file-icon"
         onClick={() => removeAddedFile(fileName)}

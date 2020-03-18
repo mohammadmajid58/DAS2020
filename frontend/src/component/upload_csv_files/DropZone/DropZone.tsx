@@ -116,7 +116,6 @@ class DropZone extends Component<DropZoneProps, DropZoneState> {
 
     if (!foundBadFile) {
       const newFiles = this.state.files.concat(files);
-      console.log("Success, new state files are", newFiles);
       filesHandler(newFiles);
       this.updateStateForFileAddedSuccessfully(newFiles);
     }
