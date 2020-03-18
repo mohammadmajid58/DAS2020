@@ -44,4 +44,4 @@ class StudentViewSet(generics.ListCreateAPIView):
                 serializer = StudentSerializer(student, many=False)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except ObjectDoesNotExist:
-                return Response({}, status=status.HTTP_200_OK)
+                return Response("Student with MatricNo " + matric_no + " Doesn't Exist", status=status.HTTP_200_OK)

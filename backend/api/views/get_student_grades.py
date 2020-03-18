@@ -14,7 +14,9 @@ def get_student_grades(request):
     if not user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    matric_no = request.GET.get("matric_no")
+    matric_no = request.GET.get("matricNo")
+    if matric_no is None:
+        return Response("Bad Request No MatricNo Provided", status=status.HTTP_400_BAD_REQUEST)
     try:
         grades = Grade.objects.filter(matricNo=matric_no)
         student = Student.objects.get(matricNo=matric_no)
@@ -29,4 +31,4 @@ def get_student_grades(request):
                             if a not in special_codes else "NA"} for c, a in all_grades.items()]
         return Response(formatted_grades, status=status.HTTP_200_OK)
     except ObjectDoesNotExist:
-        return Response("Student with MatricNo " + matric_no + "not found", status=status.HTTP_404_NOT_FOUND)
+        return Response("Student with MatricNo " + matric_no + " not found", status=status.HTTP_404_NOT_FOUND)
