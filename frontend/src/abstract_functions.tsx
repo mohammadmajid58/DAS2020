@@ -100,8 +100,12 @@ export const convertAlphanumTo22pt = (alphanum: string) => {
     "G2",
     "H"
   ];
+  const gradesToHighlight = ["MV", "CW", "CR", "NA"];
 
   const pointScale = 22;
 
+  if (gradesToHighlight.includes(alphanum)) {
+    return "NA";
+  }
   return (pointScale - alphaNumGrades.indexOf(alphanum)).toString();
 };

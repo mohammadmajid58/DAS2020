@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Table from "./Table";
-import { Options, Column, MTableToolbar } from "material-table";
+import { MTableToolbar, Column, Options } from "material-table";
 import Axios from "axios";
 import API_URL from "../../index";
 import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
+import GradeSubTable from "./GradeSubTable";
 
 interface CustomColumn extends Column<Object> {
   lookup?: { [key: string]: string };
@@ -20,12 +21,14 @@ interface Row extends Object {
   initialAward: string;
   updatedAward: string;
   isMissingGrades: string;
+  hasSpecialCode: string;
 }
 
 type Props = {
   data: Row[];
   columnsToHide?: string[];
   updateData: (oldData: Object, newData: Object) => void;
+  updateStudent: (index: number) => void;
 };
 
 const uniqueData = (inData: string[]) => {
@@ -157,7 +160,7 @@ export default class FinalDataTable extends Component<Props> {
       14, // C1
       17 // B1
     ];
-    if (rowData.updatedAward === "TBC" || rowData.isMissingGrades) {
+    if (rowData.isMissingGrades || rowData.hasSpecialCode) {
       return { backgroundColor: "pink" };
     } else if (rowData.initialAward !== rowData.updatedAward) {
       return { backgroundColor: "lightgreen" };
@@ -194,7 +197,10 @@ export default class FinalDataTable extends Component<Props> {
       pageSizeOptions: [5, 10, 20, this.props.data.length],
       exportButton: true,
       exportAllData: true,
-      exportFileName: "Final_Award_Data"
+      exportFileName: "Final_Award_Data",
+      emptyRowsWhenPaging: false,
+      detailPanelType: "single",
+      defaultExpanded: true
     };
     if (this.state.mcExport === true) {
       tableOptions.exportCsv = handleCustomCsvExport;
@@ -330,6 +336,25 @@ export default class FinalDataTable extends Component<Props> {
                 </div>
               </div>
             )
+          }}
+          detailPanel={[
+            {
+              tooltip: "Show Module Grades",
+              render: (rowData: any) => {
+                return (
+                  <div className="col-12">
+                    <GradeSubTable
+                      matricNo={rowData.matricNo}
+                      tableID={rowData.tableData.id}
+                      updateStudent={this.props.updateStudent}
+                    />
+                  </div>
+                );
+              }
+            }
+          ]}
+          onRowClick={(event, rowData, togglePanel) => {
+            togglePanel!();
           }}
         />
       </div>

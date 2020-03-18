@@ -29,6 +29,15 @@ class DatabaseTable extends Component<Props> {
   rows: Row[] = [];
   title: string = "All Module Grade Data";
 
+  handleRowData(rowData: any) {
+    const gradesToHighlight = ["MV", "CW", "CR", "NA"];
+
+    if (gradesToHighlight.includes(rowData.alphanum)) {
+      return { backgroundColor: "pink" };
+    }
+    return {};
+  }
+
   render() {
     const tableOptions: Options = {
       search: false,
@@ -135,6 +144,7 @@ class DatabaseTable extends Component<Props> {
           data={this.rows}
           options={tableOptions}
           title={this.title}
+          handleRowData={this.handleRowData}
         />
       </div>
     );
