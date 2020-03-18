@@ -2,7 +2,7 @@ from django.contrib.admin import ModelAdmin, register
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from rest_framework.authtoken.models import Token
-from api.models import Grade, Student, AcademicPlan
+from api.models import Grade, Student, AcademicPlan, GraduationYear
 
 
 @register(Grade)
@@ -58,6 +58,12 @@ class AcademicPlanAdmin(ModelAdmin):
                     'course_32', 'weight_32', 'course_33', 'weight_33', 'course_34', 'weight_34',
                     'course_35', 'weight_35', 'course_36', 'weight_36', 'course_37', 'weight_37',
                     'course_38', 'weight_38', 'course_39', 'weight_39', 'course_40', 'weight_40')
+
+
+@register(GraduationYear)
+class GraduationYearAdmin(ModelAdmin):
+    model = GraduationYear
+    list_display = ("gradYear",)
 
 
 admin.site.unregister(Group)

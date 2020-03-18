@@ -34,7 +34,10 @@ class StudentViewSet(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         matric_no = request.query_params.get("matricNo")
+        student_list = request.GET.getlist("years")
         data = self.get_queryset().all()
+        if len(student_list) > 0:
+            data = data.filter(gradYear__in=student_list)
         if matric_no is None:
             serializer = StudentSerializer(data, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

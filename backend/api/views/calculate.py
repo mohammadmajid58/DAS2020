@@ -14,7 +14,11 @@ def calculate(request):
     if not user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)
     if request.method == "POST":
-        students = Student.objects.filter(gradeDataUpdated=True)
+        selectedYears = request.data
+        if len(selectedYears) > 0:
+            students = Student.objects.filter(gradeDataUpdated=True, gradYear__in=selectedYears)
+        else:
+            students = Student.objects.filter(gradeDataUpdated=True)
         academic_plan_course_counts = {}
         academic_plan_course_weights = {}
 
