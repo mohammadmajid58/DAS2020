@@ -3,20 +3,7 @@ import FinalDataTable from "../tables/FinalDataTable";
 import Axios, { AxiosResponse } from "axios";
 import API_URL from "../../index";
 import PageTitle from "../usability_components/PageTitle";
-import Select from "react-select";
 import "./GetFinalDataUnit.css";
-
-const options = [
-  { value: "matricNo", label: "Matric No" },
-  { value: "givenNames", label: "Given Names" },
-  { value: "surname", label: "Surname" },
-  { value: "finalAward1", label: "Final Degree GPA 1 d.p." },
-  { value: "finalAward2", label: "Final Degree GPA 2 d.p." },
-  { value: "finalAward3", label: "Final Degree GPA 3 d.p." },
-  { value: "academicPlan", label: "Academic Plan" },
-  { value: "initialAward", label: "Initial Award" },
-  { value: "updatedAward", label: "Overridden Award" }
-];
 
 type FinalData = {
   matricNo: string;
@@ -60,16 +47,6 @@ export default class GetFinalDataUnit extends Component<Props> {
     columnsToHide: []
   };
 
-  handleChange = (selectedOption: any) => {
-    if (selectedOption) {
-      const result = selectedOption.map((option: any) => option.value);
-      this.setState({
-        columnsToHide: result,
-        selectedOption: selectedOption
-      });
-    }
-  };
-
   updateData = (oldData: Object, newData: Object) => {
     const updatedData = this.state.data;
     const index = updatedData.indexOf(oldData);
@@ -94,7 +71,8 @@ export default class GetFinalDataUnit extends Component<Props> {
             finalAward3,
             updatedAward,
             isMissingGrades,
-            hasSpecialCode
+            hasSpecialCode,
+            gradYear
           } = r.data;
           let initialAward = "";
           if (hasSpecialCode === true) {
@@ -117,7 +95,8 @@ export default class GetFinalDataUnit extends Component<Props> {
             initialAward: initialAward,
             updatedAward: changedAward,
             isMissingGrades: isMissingGrades,
-            hasSpecialCode: hasSpecialCode
+            hasSpecialCode: hasSpecialCode,
+            gradYear: gradYear
           };
           this.setState({ data: currentState });
         }
@@ -191,6 +170,7 @@ export default class GetFinalDataUnit extends Component<Props> {
               initialAward: initialAward,
               updatedAward: changedAward,
               isMissingGrades: isMissingGrades,
+              hasSpecialCode: hasSpecialCode,
               gradYear: gradYear
             };
           });
@@ -211,20 +191,8 @@ export default class GetFinalDataUnit extends Component<Props> {
       <div className="d-flex-inline">
         <PageTitle title="Final Degree GPA" />
         <div className="col-11 mx-auto">
-          <div>
-            <h5>Hide single or multiple columns by choosing them here</h5>
-          </div>
-          <Select
-            value={this.state.selectedOption}
-            onChange={this.handleChange}
-            options={options}
-            isMulti
-            className="basic-multi-select"
-            classNamePrefix="select"
-          />
           <FinalDataTable
             data={this.state.data}
-            columnsToHide={this.state.columnsToHide}
             updateData={this.updateData.bind(this)}
             updateStudent={this.updateStudentData.bind(this)}
             getSelectedYears={this.getSelectedData.bind(this)}
