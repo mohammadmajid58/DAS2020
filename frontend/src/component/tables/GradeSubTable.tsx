@@ -41,7 +41,7 @@ export default class GradeSubTable extends Component<Props, State> {
 
   componentDidMount() {
     Axios.get(
-      API_URL + "/api/student_grades/?matric_no=" + this.props.matricNo
+      API_URL + "/api/student_grades/?matricNo=" + this.props.matricNo
     ).then(r => {
       this.setState({ data: r.data });
     });

@@ -81,44 +81,46 @@ export default class GetFinalDataUnit extends Component<Props> {
     const currentState = this.state.data;
     const currentStudent = currentState[index].matricNo;
     Axios.post(API_URL + "/api/calculate/").then(() => {
-      Axios.get(API_URL + "/api/students/?q=" + currentStudent).then(r => {
-        const {
-          matricNo,
-          givenNames,
-          surname,
-          academicPlan,
-          finalAward1,
-          finalAward2,
-          finalAward3,
-          updatedAward,
-          isMissingGrades,
-          hasSpecialCode
-        } = r.data;
-        let initialAward = "";
-        if (hasSpecialCode === true) {
-          initialAward = "TBC";
-        } else {
-          initialAward = convertAlphaToMC(finalAward3);
+      Axios.get(API_URL + "/api/students/?matricNo=" + currentStudent).then(
+        r => {
+          const {
+            matricNo,
+            givenNames,
+            surname,
+            academicPlan,
+            finalAward1,
+            finalAward2,
+            finalAward3,
+            updatedAward,
+            isMissingGrades,
+            hasSpecialCode
+          } = r.data;
+          let initialAward = "";
+          if (hasSpecialCode === true) {
+            initialAward = "TBC";
+          } else {
+            initialAward = convertAlphaToMC(finalAward3);
+          }
+          let changedAward = updatedAward;
+          if (updatedAward === "-1") {
+            changedAward = initialAward;
+          }
+          currentState[index] = {
+            matricNo: matricNo,
+            givenNames: givenNames,
+            surname: surname,
+            academicPlan: academicPlan,
+            finalAward1: finalAward1,
+            finalAward2: finalAward2,
+            finalAward3: finalAward3,
+            initialAward: initialAward,
+            updatedAward: changedAward,
+            isMissingGrades: isMissingGrades,
+            hasSpecialCode: hasSpecialCode
+          };
+          this.setState({ data: currentState });
         }
-        let changedAward = updatedAward;
-        if (updatedAward === "-1") {
-          changedAward = initialAward;
-        }
-        currentState[index] = {
-          matricNo: matricNo,
-          givenNames: givenNames,
-          surname: surname,
-          academicPlan: academicPlan,
-          finalAward1: finalAward1,
-          finalAward2: finalAward2,
-          finalAward3: finalAward3,
-          initialAward: initialAward,
-          updatedAward: changedAward,
-          isMissingGrades: isMissingGrades,
-          hasSpecialCode: hasSpecialCode
-        };
-        this.setState(currentState);
-      });
+      );
     });
   };
 
