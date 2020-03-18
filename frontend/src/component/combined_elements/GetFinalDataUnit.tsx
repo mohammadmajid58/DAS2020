@@ -30,6 +30,7 @@ type FinalData = {
   mcAward: string;
   isMissingGrades: string;
   hasSpecialCode: string;
+  gradYear: string;
 };
 
 const convertAlphaToMC = (award: string) => {
@@ -124,15 +125,30 @@ export default class GetFinalDataUnit extends Component<Props> {
     });
   };
 
-  componentDidMount() {
+  getSelectedData = (selectedYears: string[]) => {
     this.props.showOverlay();
 
     const POST_URL = API_URL + "/api/calculate/";
-    const GET_URL = API_URL + "/api/students/";
 
-    var studentData: FinalData[] = [];
+    var queryParameter = "";
+    if (selectedYears[0] === "all") {
+      selectedYears = [];
+    }
 
-    Axios.post(`${POST_URL}`, studentData).then((response: AxiosResponse) => {
+    if (selectedYears.length > 0) {
+      queryParameter += "?";
+      const parameterList = selectedYears.map(year => {
+        return "years=" + year;
+      });
+      queryParameter += parameterList.pop();
+      parameterList.map(param => {
+        queryParameter += "&" + param;
+      });
+    }
+
+    const GET_URL = API_URL + "/api/students/" + queryParameter;
+
+    Axios.post(`${POST_URL}`, selectedYears).then((response: AxiosResponse) => {
       if (response.status === 201) {
         Axios.get(`${GET_URL}`).then(r => {
           const data = r.data;
@@ -148,7 +164,8 @@ export default class GetFinalDataUnit extends Component<Props> {
               finalAward3,
               updatedAward,
               isMissingGrades,
-              hasSpecialCode
+              hasSpecialCode,
+              gradYear
             } = dataRow;
 
             let initialAward = "";
@@ -173,7 +190,8 @@ export default class GetFinalDataUnit extends Component<Props> {
               finalAward3: finalAward3,
               initialAward: initialAward,
               updatedAward: changedAward,
-              isMissingGrades: isMissingGrades
+              isMissingGrades: isMissingGrades,
+              gradYear: gradYear
             };
           });
           this.props.hideOverlay();
@@ -186,7 +204,7 @@ export default class GetFinalDataUnit extends Component<Props> {
         });
       }
     });
-  }
+  };
 
   render() {
     return (
@@ -209,6 +227,7 @@ export default class GetFinalDataUnit extends Component<Props> {
             columnsToHide={this.state.columnsToHide}
             updateData={this.updateData.bind(this)}
             updateStudent={this.updateStudentData.bind(this)}
+            getSelectedYears={this.getSelectedData.bind(this)}
           />
         </div>
       </div>

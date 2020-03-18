@@ -5,6 +5,7 @@ import Axios from "axios";
 import API_URL from "../../index";
 import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
 import GradeSubTable from "./GradeSubTable";
+import GradYearSelector from "../combined_elements/GradYearSelector";
 
 interface CustomColumn extends Column<Object> {
   lookup?: { [key: string]: string };
@@ -22,6 +23,7 @@ interface Row extends Object {
   updatedAward: string;
   isMissingGrades: string;
   hasSpecialCode: string;
+  gradYear: string;
 }
 
 type Props = {
@@ -29,6 +31,7 @@ type Props = {
   columnsToHide?: string[];
   updateData: (oldData: Object, newData: Object) => void;
   updateStudent: (index: number) => void;
+  getSelectedYears: (selectedYears: string[]) => void;
 };
 
 const uniqueData = (inData: string[]) => {
@@ -40,6 +43,7 @@ const uniqueData = (inData: string[]) => {
 };
 
 const columns: CustomColumn[] = [
+  { title: "Grad Year", field: "gradYear", editable: "never", lookup: {} },
   { title: "EMPLID", field: "matricNo", editable: "never" },
   {
     title: "Academic Plan",
@@ -209,6 +213,12 @@ export default class FinalDataTable extends Component<Props> {
     const rows = this.props.data;
 
     // Get a unique list of data entries for each column, used as lookup keys
+    const gradYearData = uniqueData(
+      rows.map(row => {
+        return row.gradYear;
+      })
+    );
+
     const academicPlanData = uniqueData(
       rows.map(row => {
         return row.academicPlan;
@@ -287,6 +297,10 @@ export default class FinalDataTable extends Component<Props> {
         mcAwards.forEach(mcAward => {
           col.lookup![mcAward] = mcAward;
         });
+      } else if (col.field === "gradYear") {
+        gradYearData.forEach(gradYear => {
+          col.lookup![gradYear] = gradYear;
+        });
       }
     });
 
@@ -320,8 +334,12 @@ export default class FinalDataTable extends Component<Props> {
               <div>
                 <MTableToolbar {...props} />
                 <div>
-                  <FormGroup row className="d-flex justify-content-end pr-3">
+                  <FormGroup row className="pr-3">
+                    <GradYearSelector
+                      getSelectedYears={this.props.getSelectedYears}
+                    />
                     <FormControlLabel
+                      className="ml-auto"
                       control={
                         <Checkbox
                           onChange={this.handleMCExportChange.bind(this)}
