@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 from api.models import AcademicPlan, GraduationYear
 from .test_setup_function import setup
 from rest_framework.test import APITestCase
@@ -50,3 +52,30 @@ class AcademicPlanTestCase(APITestCase):
         codes_that_should_not_exist = ["a", "b"]
         for code in codes_that_should_not_exist:
             self._assert_plan_with_code_does_not_exist("TEST_" + code)
+
+    def test_duplicate_course_names(self):
+        plan = AcademicPlan.objects.get_or_create(gradYear=GraduationYear.objects.get(gradYear="19-20"),
+                                                  planCode="F100-2299", courseCode="CHEM-4H", mcName="Chemistry, BSc",
+                                                  course_1="CHEM_3012", weight_1=0.25, course_2="CHEM_3009",
+                                                  weight_2=0.25, course_3="CHEM_3012", weight_3=0.25,
+                                                  course_4="CHEM_3014", weight_4=0.25)
+        with self.assertRaises(ValidationError):
+            plan[0].clean()
+
+    def test_corresponding_weight_exists(self):
+        with self.assertRaises(ValidationError):
+            AcademicPlan.objects.get_or_create(gradYear=GraduationYear.objects.get(gradYear="19-20"),
+                                               planCode="F100-2299", courseCode="CHEM-4H",
+                                               mcName="Chemistry, BSc",
+                                               course_1="CHEM_3012", weight_1=0.25, course_2="CHEM_3009",
+                                               weight_2=0.25, course_3="CHEM_4001", weight_3=0.25,
+                                               course_4="CHEM_3014")
+
+    def test_corresponding_course_exists(self):
+        with self.assertRaises(ValidationError):
+            AcademicPlan.objects.get_or_create(gradYear=GraduationYear.objects.get(gradYear="19-20"),
+                                               planCode="F100-2299", courseCode="CHEM-4H",
+                                               mcName="Chemistry, BSc",
+                                               course_1="CHEM_3012", weight_1=0.25, course_2="CHEM_3009",
+                                               weight_2=0.25, course_3="CHEM_4001", weight_3=0.25,
+                                               weight_4=0.25)
