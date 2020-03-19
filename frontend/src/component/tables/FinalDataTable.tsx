@@ -7,6 +7,8 @@ import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
 import GradeSubTable from "./GradeSubTable";
 import GradYearSelector from "../combined_elements/GradYearSelector";
 
+import "./FinalDataTable.css";
+
 interface CustomColumn extends Column<Object> {
   lookup?: { [key: string]: string };
 }
@@ -28,7 +30,6 @@ interface Row extends Object {
 
 type Props = {
   data: Row[];
-  columnsToHide?: string[];
   updateData: (oldData: Object, newData: Object) => void;
   updateStudent: (index: number) => void;
   getSelectedYears: (selectedYears: string[]) => void;
@@ -85,53 +86,6 @@ const columns: CustomColumn[] = [
   }
 ];
 
-const handleCustomCsvExport = (columns: CustomColumn[], renderData: Row[]) => {
-  interface Student {
-    [studentID: string]: { name: string; degreeHonor: string };
-  }
-  interface AcadPlan {
-    [plan: string]: string[];
-  }
-
-  const allPlans: AcadPlan = {};
-  const planList: string[] = [];
-
-  renderData.map(row => {
-    if (!planList.includes(row.academicPlan)) {
-      allPlans[row.academicPlan] = [];
-      planList.push(row.academicPlan);
-    }
-
-    allPlans[row.academicPlan].push(
-      row.matricNo +
-        // eslint-disable-next-line quotes
-        ',"' +
-        row.surname +
-        "," +
-        row.givenNames +
-        // eslint-disable-next-line quotes
-        '",' +
-        row.academicPlan +
-        "," +
-        row.updatedAward
-    );
-  });
-
-  const csvData: string[] = [];
-
-  planList.map(plan => {
-    let csvString = "StudentID,Name,Acad Plan,Degree Honors\n";
-    allPlans[plan].map(row => {
-      csvString += row;
-      csvString += "\n";
-    });
-
-    csvData.push(csvString);
-  });
-
-  downloadCSV(planList, csvData);
-};
-
 const downloadCSV = (planList: string[], csvData: string[]) => {
   const filename = planList.pop() + ".csv";
   const hiddenElement = document.createElement("a");
@@ -148,7 +102,7 @@ const downloadCSV = (planList: string[], csvData: string[]) => {
 export default class FinalDataTable extends Component<Props> {
   rows: Row[] = [];
   title: string = "Final Award Data";
-  state = { mcExport: false };
+  state = { mcExport: false, anonymizeData: false, pageSize: 10 };
 
   handleMCExportChange(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -156,6 +110,203 @@ export default class FinalDataTable extends Component<Props> {
   ) {
     this.setState({ mcExport: checked });
   }
+
+  handleAnonymizeDataChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) {
+    this.setState({ anonymizeData: checked });
+  }
+
+  handleCustomCsvExport = (columns: CustomColumn[], renderData: Row[]) => {
+    interface Student {
+      [studentID: string]: { name: string; degreeHonor: string };
+    }
+    interface AcadPlan {
+      [plan: string]: { rowData: string[]; lastAnonCount: number };
+    }
+    interface ColMap {
+      [col: string]: string;
+    }
+
+    const allPlans: AcadPlan = {};
+    const planList: string[] = [];
+    const hiddenColumns = [] as any[];
+    const usedColumns = [] as any[];
+    const colFieldNames = [] as any[];
+    const nonAnonCols = ["matricNo", "givenNames", "surname"];
+    columns.map(col => {
+      if (!col.hidden) {
+        usedColumns.push(col.field!);
+        colFieldNames.push(col.title!);
+      } else {
+        hiddenColumns.push(col.field!);
+      }
+    });
+
+    if (usedColumns.length === 0) {
+      alert("No Columns Selected. No CSV File Created.");
+      return;
+    }
+    var nonAnonColCount = 0;
+    nonAnonCols.map(col => {
+      if (usedColumns.includes(col)) {
+        nonAnonColCount += 1;
+      }
+    });
+
+    if (nonAnonColCount === usedColumns.length && this.state.anonymizeData) {
+      alert(
+        "Not Enough Columns Selected. To Anonymize Data columns other than: EMPLID, Given Names or Surname must be chosen."
+      );
+      return;
+    }
+    if (renderData.length === 0) {
+      alert(
+        "No Data to Export. Make sure there is at least 1 row visible in the table."
+      );
+      return;
+    }
+
+    if (this.state.mcExport) {
+      renderData.map(row => {
+        if (!planList.includes(row.academicPlan)) {
+          allPlans[row.academicPlan] = { rowData: [], lastAnonCount: 1 };
+          planList.push(row.academicPlan);
+        }
+
+        if (this.state.anonymizeData) {
+          if (!planList.includes(row.academicPlan + "_ANON")) {
+            allPlans[row.academicPlan + "_ANON"] = {
+              rowData: [],
+              lastAnonCount: 1
+            };
+            planList.push(row.academicPlan + "_ANON");
+          }
+          allPlans[row.academicPlan].rowData.push(
+            allPlans[row.academicPlan].lastAnonCount +
+              // eslint-disable-next-line quotes
+              "," +
+              row.matricNo +
+              // eslint-disable-next-line quotes
+              ',"' +
+              row.surname +
+              "," +
+              row.givenNames +
+              // eslint-disable-next-line quotes
+              '",' +
+              row.academicPlan +
+              "," +
+              row.updatedAward
+          );
+          allPlans[row.academicPlan + "_ANON"].rowData.push(
+            allPlans[row.academicPlan].lastAnonCount++ +
+              // eslint-disable-next-line quotes
+              "," +
+              row.updatedAward
+          );
+        } else {
+          allPlans[row.academicPlan].rowData.push(
+            row.matricNo +
+              // eslint-disable-next-line quotes
+              ',"' +
+              row.surname +
+              "," +
+              row.givenNames +
+              // eslint-disable-next-line quotes
+              '",' +
+              row.academicPlan +
+              "," +
+              row.updatedAward
+          );
+        }
+      });
+    } else {
+      const academicPlan = "Final_Data_Table";
+      allPlans[academicPlan] = { rowData: [], lastAnonCount: 1 };
+      planList.push(academicPlan);
+      if (this.state.anonymizeData) {
+        allPlans[academicPlan + "_ANON"] = { rowData: [], lastAnonCount: 1 };
+        planList.push(academicPlan + "_ANON");
+        renderData.map(row => {
+          var rowData: ColMap = {};
+
+          for (const [key, value] of Object.entries(row)) {
+            if (usedColumns.includes(key)) {
+              rowData[key] = value;
+            }
+          }
+          let anonString = allPlans[
+            academicPlan + "_ANON"
+          ].lastAnonCount.toString();
+          let nonAnonString = allPlans[
+            academicPlan + "_ANON"
+          ].lastAnonCount.toString();
+          allPlans[academicPlan + "_ANON"].lastAnonCount += 1;
+          usedColumns.map(col => {
+            nonAnonString = nonAnonString + "," + rowData[col];
+            if (!nonAnonCols.includes(col)) {
+              anonString = anonString + "," + rowData[col];
+            }
+          });
+          allPlans[academicPlan + "_ANON"].rowData.push(anonString);
+          allPlans[academicPlan].rowData.push(nonAnonString);
+        });
+      } else {
+        renderData.map(row => {
+          var rowData: ColMap = {};
+
+          for (const [key, value] of Object.entries(row)) {
+            if (usedColumns.includes(key)) {
+              rowData[key] = value;
+            }
+          }
+          let rowString = rowData[usedColumns[0]];
+          usedColumns.slice(1).map(col => {
+            rowString = rowString + "," + rowData[col];
+          });
+          allPlans[academicPlan].rowData.push(rowString);
+        });
+      }
+    }
+
+    const csvData: string[] = [];
+
+    planList.map((plan: string) => {
+      var csvString = "";
+      if (this.state.mcExport) {
+        if (plan.endsWith("_ANON")) {
+          csvString = "ANON Name,Degree Honors\n";
+        } else if (this.state.anonymizeData) {
+          csvString = "ANON Name,StudentID,Name,Acad Plan,Degree Honors\n";
+        } else {
+          csvString = "StudentID,Name,Acad Plan,Degree Honors\n";
+        }
+      } else {
+        if (plan.endsWith("_ANON")) {
+          const anonCols: string[] = [];
+          usedColumns.map((col, index) => {
+            if (!nonAnonCols.includes(col)) {
+              anonCols.push(colFieldNames[index]);
+            }
+          });
+          csvString = "ANON Name," + anonCols.join(",") + "\n";
+        } else if (this.state.anonymizeData) {
+          csvString = "ANON Name," + colFieldNames.join(",") + "\n";
+        } else {
+          csvString = colFieldNames.join(",") + "\n";
+        }
+      }
+      allPlans[plan].rowData.map(row => {
+        csvString += row;
+        csvString += "\n";
+      });
+
+      csvData.push(csvString);
+    });
+
+    downloadCSV(planList, csvData);
+  };
 
   handleRowData(rowData: any) {
     const awardsToHighlightRed = [
@@ -174,31 +325,15 @@ export default class FinalDataTable extends Component<Props> {
     return {};
   }
 
-  handleHiddenColumns = (columns: CustomColumn[]) => {
-    const colsToHide = this.props.columnsToHide;
-    if (colsToHide) {
-      columns.forEach(col => {
-        if (col.field !== undefined) {
-          if (colsToHide.includes(col.field)) {
-            col.hidden = true;
-            return col;
-          } else {
-            col.hidden = false;
-          }
-        }
-      });
-    }
-    return columns;
-  };
-
   render() {
     const title = "Final Award Data";
 
     const tableOptions: Options = {
       search: false,
       filtering: true,
-      pageSize: 10,
-      pageSizeOptions: [5, 10, 20, this.props.data.length],
+      pageSizeOptions: [5, 10, 20, 50, 100],
+      pageSize: this.state.pageSize,
+      columnsButton: true,
       exportButton: true,
       exportAllData: true,
       exportFileName: "Final_Award_Data",
@@ -206,9 +341,8 @@ export default class FinalDataTable extends Component<Props> {
       detailPanelType: "single",
       defaultExpanded: true
     };
-    if (this.state.mcExport === true) {
-      tableOptions.exportCsv = handleCustomCsvExport;
-    }
+
+    tableOptions.exportCsv = this.handleCustomCsvExport;
 
     const rows = this.props.data;
 
@@ -328,7 +462,6 @@ export default class FinalDataTable extends Component<Props> {
           options={tableOptions}
           title={title}
           handleRowData={this.handleRowData}
-          handleHiddenColumns={this.handleHiddenColumns}
           components={{
             Toolbar: props => (
               <div>
@@ -340,6 +473,17 @@ export default class FinalDataTable extends Component<Props> {
                     />
                     <FormControlLabel
                       className="ml-auto"
+                      control={
+                        <Checkbox
+                          onChange={this.handleAnonymizeDataChange.bind(this)}
+                          value="AnonymizeData"
+                          checked={this.state.anonymizeData}
+                        />
+                      }
+                      label="Anonymized Output"
+                      labelPlacement="start"
+                    />
+                    <FormControlLabel
                       control={
                         <Checkbox
                           onChange={this.handleMCExportChange.bind(this)}
