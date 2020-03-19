@@ -33,7 +33,9 @@ const RequestPasswordReset = () => {
     Axios.post(`${API_URL}/auth/password/reset/`, { email: emailAddress })
       .then((response: AxiosResponse) => {
         if (response.status === 200) {
-          alert("Success, please check your email");
+          alert(
+            "Success, if you have an account with us, we have sent you an email. Please check your inbox, it may take up to 5 minutes."
+          );
         }
       })
       .catch(error => {
@@ -42,15 +44,19 @@ const RequestPasswordReset = () => {
       });
   };
 
-  const handleKeyPress = (e: any) => {
-    if (e.keyCode === 13 || e.which === 13) {
-      reset(e.target.value);
-    }
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    reset(email);
   };
 
   return (
     <div>
-      <form className={classes.container} noValidate autoComplete="off">
+      <form
+        className={classes.container}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         <Card className={classes.card}>
           <CardHeader
             className={classes.header}
@@ -65,7 +71,6 @@ const RequestPasswordReset = () => {
               placeholder="Email"
               margin="normal"
               onChange={e => setEmail(e.target.value)}
-              onKeyPress={e => handleKeyPress(e)}
             />
           </CardContent>
 
