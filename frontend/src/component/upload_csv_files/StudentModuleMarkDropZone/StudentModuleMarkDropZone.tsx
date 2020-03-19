@@ -50,7 +50,7 @@ class StudentModuleMarkDropZone extends React.Component<Props, State> {
       },
       this.props.hideOverlay
     )
-      .then((response: boolean) => {
+      .then(() => {
         hideOverlay();
       })
       .catch(function(error) {
