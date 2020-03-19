@@ -3,7 +3,7 @@ import Table from "./Table";
 import { MTableToolbar, Column, Options } from "material-table";
 import Axios from "axios";
 import API_URL from "../../index";
-import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
+import { Checkbox, FormControlLabel } from "@material-ui/core";
 import GradeSubTable from "./GradeSubTable";
 import GradYearSelector from "../combined_elements/GradYearSelector";
 
@@ -44,7 +44,13 @@ const uniqueData = (inData: string[]) => {
 };
 
 const columns: CustomColumn[] = [
-  { title: "Grad Year", field: "gradYear", editable: "never", lookup: {} },
+  {
+    title: "Grad Year",
+    field: "gradYear",
+    editable: "never",
+    lookup: {},
+    hidden: true
+  },
   { title: "EMPLID", field: "matricNo", editable: "never" },
   {
     title: "Academic Plan",
@@ -64,13 +70,15 @@ const columns: CustomColumn[] = [
     title: "Final Degree GPA (2 d.p)",
     field: "finalAward2",
     lookup: {},
-    editable: "never"
+    editable: "never",
+    hidden: true
   },
   {
     title: "Final Degree GPA (3 d.p)",
     field: "finalAward3",
     lookup: {},
-    editable: "never"
+    editable: "never",
+    hidden: true
   },
   {
     title: "Initial Award",
@@ -438,6 +446,22 @@ export default class FinalDataTable extends Component<Props> {
       }
     });
 
+    var green = {
+      backgroundColor: "lightgreen",
+      padding: "0.35em",
+      borderRadius: "0.4em"
+    };
+    var pink = {
+      backgroundColor: "pink",
+      padding: "0.35em",
+      borderRadius: "0.4em"
+    };
+    var orange = {
+      backgroundColor: "orange",
+      padding: "0.35em",
+      borderRadius: "0.4em"
+    };
+
     return (
       <div className="mx-md-auto finalDataTable">
         <Table
@@ -465,37 +489,58 @@ export default class FinalDataTable extends Component<Props> {
           components={{
             Toolbar: props => (
               <div>
-                <MTableToolbar {...props} />
-                <div>
-                  <FormGroup row className="pr-3">
-                    <GradYearSelector
-                      getSelectedYears={this.props.getSelectedYears}
-                    />
-                    <FormControlLabel
-                      className="ml-auto"
-                      control={
-                        <Checkbox
-                          onChange={this.handleAnonymizeDataChange.bind(this)}
-                          value="AnonymizeData"
-                          checked={this.state.anonymizeData}
-                        />
-                      }
-                      label="Anonymized Output"
-                      labelPlacement="start"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={this.handleMCExportChange.bind(this)}
-                          value="EnableMCExport"
-                          checked={this.state.mcExport}
-                        />
-                      }
-                      label="Enable MyCampus Export"
-                      labelPlacement="start"
-                    />
-                  </FormGroup>
+                <div className="center mx-auto">
+                  <GradYearSelector
+                    getSelectedYears={this.props.getSelectedYears}
+                  />
+
+                  <div className="d-flex-inline mt-4">
+                    <div className="d-inline-block mr-md-6 mr-sm-5 mr-3">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={this.handleMCExportChange.bind(this)}
+                            value="EnableMCExport"
+                            checked={this.state.mcExport}
+                          />
+                        }
+                        label="MyCampus Export"
+                        labelPlacement="start"
+                      />
+                    </div>
+                    <div className="d-inline-block mr-md-6 mr-3">
+                      <FormControlLabel
+                        className="ml-auto"
+                        control={
+                          <Checkbox
+                            onChange={this.handleAnonymizeDataChange.bind(this)}
+                            value="AnonymizeData"
+                            checked={this.state.anonymizeData}
+                          />
+                        }
+                        label="Anonymized Export"
+                        labelPlacement="start"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <hr />
+                    <p>Table Row Colour Key</p>
+                    <span className="d-inline-block mr-3" style={pink}>
+                      Missing grades or special codes
+                    </span>
+                    <span className="d-inline-block mr-3" style={orange}>
+                      Discretionary zones
+                    </span>
+                    <span className="d-inline-block" style={green}>
+                      Overridden final award
+                    </span>
+                    <hr />
+                  </div>
                 </div>
+
+                <MTableToolbar {...props} />
               </div>
             )
           }}

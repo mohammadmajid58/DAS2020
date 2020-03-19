@@ -17,13 +17,15 @@ export default class GradYearSelector extends Component<Props> {
   };
 
   componentDidMount() {
-    Axios.get(API_URL + "/api/get_grad_years/").then(r => {
-      const gradYears = r.data.map((year: string) => {
-        return { value: year, label: year };
+    if (this.state.allGradYears.length === 0) {
+      Axios.get(API_URL + "/api/get_grad_years/").then(r => {
+        const gradYears = r.data.map((year: string) => {
+          return { value: year, label: year };
+        });
+        gradYears.push({ value: "all", label: "All Years" });
+        this.setState({ allGradYears: gradYears });
       });
-      gradYears.push({ value: "all", label: "All Years" });
-      this.setState({ allGradYears: gradYears });
-    });
+    }
   }
 
   handleChange = (selectedOption: any) => {
@@ -52,17 +54,25 @@ export default class GradYearSelector extends Component<Props> {
 
   render() {
     return (
-      <div className="d-inline-flex col-8">
+      <div>
         <Select
           options={this.state.allGradYears}
           value={this.state.selectedOption}
           onChange={this.handleChange}
           isMulti
-          className="multi-select col-9"
+          className="multi-select mx-auto col-md-6 col-lg-5"
           classNamePrefix="select"
           placeholder="Select Academic Year(s)..."
         />
-        <Button onClick={this.getStudentsHandler}>Get Students</Button>
+        <Button
+          variant="contained"
+          color="primary"
+          className="mt-2"
+          size="small"
+          onClick={this.getStudentsHandler}
+        >
+          Get Students
+        </Button>
       </div>
     );
   }
