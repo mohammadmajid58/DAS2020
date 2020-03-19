@@ -1,5 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+
+from api.models import Student, Grade
 from api.models.graduation_year import GraduationYear
 from django.core.exceptions import ValidationError
 
@@ -9,14 +11,16 @@ class AcademicPlan(models.Model):
                                  db_column='gradYear', help_text='Select one of the existing graduation years',
                                  verbose_name='Graduation year')
     planCode = models.CharField('Academic plan code', max_length=9, primary_key=True,
-                                help_text="The plan code that contains a letter and 3 numbers, e.g F100-2208")
+                                help_text="The plan code that contains a letter and 3 numbers, e.g F100-2208. This "
+                                          "field cannot be updated.")
     courseCode = models.CharField('Internal course code', max_length=15,
                                   help_text="The simple degree code used in Chemistry, e.g CHEM-4H")
     mcName = models.CharField('MyCampus description', max_length=35,
                               help_text="How MyCampus describes the plan code, e.g Chemistry. Bsc")
     course_1 = models.CharField(max_length=10, blank=True, null=True,
                                 help_text="Enter the name each course name in the Course fields."
-                                          " One course can't exist without its weight and vice versa")
+                                          "One course can't exist without its weight and vice versa. Note: changes to "
+                                          "the course names will cascade to student's module marks.")
     weight_1 = models.DecimalField(blank=True, null=True, max_digits=4,
                                    decimal_places=3, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
                                    help_text="Enter the corresponding weight of the course with the same number."
@@ -88,24 +92,43 @@ class AcademicPlan(models.Model):
                 raise ValidationError("Weight %s has no corresponding course" % num)
 
     def save(self, *args, **kwargs):
-        old_plan = AcademicPlan.objects.filter(pk=getattr(self, "planCode", None))
-
-        # can they change plan code??? TODO
-        if old_plan.exists():
-            old_plan = old_plan.first()
-            self.handle_changed_fields(old_plan, self)
-
         if self._weight_in_correct_range() or not self._has_weights():
             if not self._has_duplicate_courses():
-                super(AcademicPlan, self).save(*args, **kwargs)
+                # Retrieve the old plan for comparison - to enforce FK constraint on courses
+                old_plan = AcademicPlan.objects.filter(pk=getattr(self, "planCode", None))
+                if old_plan.exists():
+                    old_plan = old_plan.first()
+
+                    # Save the new plan, then handle the changed fields (ie. FK constraints)
+                    super(AcademicPlan, self).save(*args, **kwargs)
+                    self.handle_changed_fields(old_plan, self)
+                else:
+                    # Couldn't find the plan code, it's a new plan so just save it
+                    super(AcademicPlan, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.planCode
 
     def handle_changed_fields(self, old_plan, new_plan):
-        courses = old_plan.get_courses()
-        if old_plan.course_1 != new_plan.course_1:
-            print("Change from {0} to {1}".format(old_plan.course_1, new_plan.course_1))
+        old_courses = old_plan.get_courses()
+        new_courses = new_plan.get_courses()
+
+        # For each course
+        for old_course, new_course in zip(old_courses, new_courses):
+            # If the course changes
+            if new_course != old_course and len(old_course) != 0:
+                # Get all the students on the plan
+                students_on_plan = Student.objects.filter(academicPlan=self)
+                for student in students_on_plan:
+                    # Get all grades belonging to a student on the plan
+                    student_grades = Grade.objects.filter(matricNo=student)
+                    for grade in student_grades:
+                        # If one of their grades was for that course, update the course name
+                        if grade.courseCode == old_course:
+                            grade.courseCode = new_course
+                            grade.save()
+                            # Print statement for debugging purposes
+                            print(str(student.matricNo) + " Changed from {0} to {1}".format(old_course, new_course))
 
 
 for i in range(2, 41):

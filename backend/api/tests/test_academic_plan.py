@@ -25,11 +25,12 @@ class AcademicPlanTestCase(APITestCase):
         Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=student, alphanum="A1")
 
         plan = AcademicPlan.objects.get(planCode="F100-2208")
-        plan.course_1 = "NewCourse"
+        plan.course_1 = "CHEM_9999"
         plan.save()
 
         grade = Grade.objects.get(matricNo=student, alphanum="A1")
-        self.assertEqual(grade.courseCode, "NewCourse")
+        self.assertNotEqual(grade.courseCode, "CHEM_3012")
+        self.assertEqual(grade.courseCode, "CHEM_9999")
 
     def test_weights_sum_correctly(self):
         AcademicPlan.objects.create(planCode="TEST_a", courseCode="Chemist", mcName="abcde",
