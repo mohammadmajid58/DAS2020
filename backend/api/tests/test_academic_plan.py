@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 
-from api.models import AcademicPlan, GraduationYear
+from api.models import AcademicPlan, GraduationYear, Student, Grade
+
 from .test_setup_function import setup
 from rest_framework.test import APITestCase
 
@@ -15,6 +16,20 @@ class AcademicPlanTestCase(APITestCase):
 
     def _assert_plan_with_code_does_not_exist(self, code):
         self.assertFalse(AcademicPlan.objects.filter(planCode=code).exists())
+
+    def test_changing_course_code_cascades_to_grades(self):
+        student = Student.objects.get_or_create(matricNo="1234567", givenNames="New", surname="Student",
+                                                academicPlan=AcademicPlan.objects.get(planCode="F100-2208"),
+                                                gradYear=GraduationYear.objects.get(gradYear="19-20"), finalAward1=0.0,
+                                                finalAward2=0.00, finalAward3=0.000)[0]
+        Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=student, alphanum="A1")
+
+        plan = AcademicPlan.objects.get(planCode="F100-2208")
+        plan.course_1 = "NewCourse"
+        plan.save()
+
+        grade = Grade.objects.get(matricNo=student, alphanum="A1")
+        self.assertEqual(grade.courseCode, "NewCourse")
 
     def test_weights_sum_correctly(self):
         AcademicPlan.objects.create(planCode="TEST_a", courseCode="Chemist", mcName="abcde",

@@ -88,12 +88,24 @@ class AcademicPlan(models.Model):
                 raise ValidationError("Weight %s has no corresponding course" % num)
 
     def save(self, *args, **kwargs):
+        old_plan = AcademicPlan.objects.filter(pk=getattr(self, "planCode", None))
+
+        # can they change plan code??? TODO
+        if old_plan.exists():
+            old_plan = old_plan.first()
+            self.handle_changed_fields(old_plan, self)
+
         if self._weight_in_correct_range() or not self._has_weights():
             if not self._has_duplicate_courses():
                 super(AcademicPlan, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.planCode
+
+    def handle_changed_fields(self, old_plan, new_plan):
+        courses = old_plan.get_courses()
+        if old_plan.course_1 != new_plan.course_1:
+            print("Change from {0} to {1}".format(old_plan.course_1, new_plan.course_1))
 
 
 for i in range(2, 41):
