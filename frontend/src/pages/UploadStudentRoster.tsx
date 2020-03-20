@@ -14,7 +14,7 @@ class UploadStudentRoster extends Component<Props> {
       <div className="d-flex-inline">
         <PageTitle title="Upload Student Roster" />
         <div className="d-flex justify-content-center">
-          <div className="center">
+          <div className="center w-75 mx-auto">
             <StudentRosterDropzone
               showOverlay={this.props.showOverlay}
               hideOverlay={this.props.hideOverlay}
