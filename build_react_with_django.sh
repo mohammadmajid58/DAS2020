@@ -1,13 +1,20 @@
 #!/bin/bash
 
-# clean previous builds
-rm -rf frontend/build
-rm -rf backend/react-frontend
-
 export running_in_dev=0
 if [[ "$1" = "DEV" ]]; then
     export running_in_dev=1
+else
+    printf "\033[1;33mTHIS SCRIPT IS FOR DEVELOPMENT ONLY\033[0m\n"
+    printf "\033[1;33mAre you sure you would like to continue? (Y/n)\033[0m\n"
+    read result
+    if [[ ${result} != "Y" ]]; then
+      exit 0;
+    fi
 fi
+
+# clean previous builds
+rm -rf frontend/build
+rm -rf backend/react-frontend
 
 if [[ "$running_in_dev" -ne 1 ]]; then
     # ensure debug setting is on false if not in DEV mode

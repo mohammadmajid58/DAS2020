@@ -1,3 +1,5 @@
+# DEVELOPMENT SCRIPT ONLY!
+
 import os
 import django
 
