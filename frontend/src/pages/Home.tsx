@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PageTitle from "../component/usability_components/PageTitle";
-import TempResetDatabase from "../component/temp_reset_database/TempResetDatabase";
 import HomepageContent from "../component/homepage/HomepageContent";
 import { getDate, getUsername } from "../abstract_functions";
 
@@ -27,7 +26,6 @@ class Home extends Component<{}, State> {
           date={this.state.date}
           username={this.state.username}
         />
-        <TempResetDatabase />
       </div>
     );
   }
