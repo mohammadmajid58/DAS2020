@@ -19,8 +19,14 @@ class HomepageContent extends React.Component<Props> {
           </p>
 
           <p>
-            For guidance on how to use the system, view the documentation{" "}
-            <u>here</u>.
+            For guidance on how to use the system, you can view and download the
+            documentation{" "}
+            <u>
+              <a href="https://github.com/mohammadmajid58/DAS2020/blob/master/DAS2020_User_Guide.pdf">
+                here
+              </a>
+            </u>
+            .
           </p>
 
           <p>
