@@ -29,9 +29,7 @@ class HomepageContent extends React.Component<Props> {
             .
           </p>
 
-          <p>
-            To report a problem, contact your <u>system administrator</u>.
-          </p>
+          <p>To report a problem, contact your system administrator.</p>
         </div>
       </div>
     );
