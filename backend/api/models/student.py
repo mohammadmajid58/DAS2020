@@ -3,7 +3,6 @@ from api.models.graduation_year import GraduationYear
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from api.models import AcademicPlan
 
 IsNumericValidator = RegexValidator(r'^[0-9]*$',
                                     message='Student Matric No must be a Number',
@@ -17,7 +16,7 @@ class Student(models.Model):
                                 help_text="Must be 7 digits and entirely numeric")
     givenNames = models.CharField('Given name(s)', max_length=64, help_text="Comma separated")
     surname = models.CharField('Surname', max_length=32)
-    academicPlan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, null=False, verbose_name="Academic plan")
+    academicPlan = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, null=False, verbose_name="Academic plan")
     gradYear = models.ForeignKey(GraduationYear, on_delete=models.CASCADE, db_column='gradYear',
                                  verbose_name="Graduation year")
     finalAward1 = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True,

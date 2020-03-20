@@ -1,6 +1,8 @@
+from django.core.exceptions import ValidationError
+
 from api.serializers import GradeSerializer
 import json
-from api.models import Grade, Student
+from api.models import Grade, Student, AcademicPlan, GraduationYear
 from .test_setup_function import setup, login
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -60,7 +62,6 @@ class GradeTestCase(APITestCase):
 
     def test_cannot_get_grades_when_logged_out(self):
         self.client.logout()
-        Grade.objects.get_or_create(courseCode="INORG", matricNo=Student.objects.get(matricNo="2894029"), alphanum="B2")
         response = self.client.get('/api/grades/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -71,3 +72,22 @@ class GradeTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         grade_exists = Grade.objects.filter(courseCode="ORGCHEM", matricNo="1234567", alphanum="C2").exists()
         self.assertFalse(grade_exists)
+
+    def test_cannot_update_grade_to_contain_invalid_course_code(self):
+        student = Student.objects.get_or_create(matricNo="1234567", givenNames="New", surname="Student",
+                                                academicPlan=AcademicPlan.objects.get(planCode="F100-2208"),
+                                                gradYear=GraduationYear.objects.get(gradYear="19-20"), finalAward1=0.0,
+                                                finalAward2=0.00, finalAward3=0.000)[0]
+
+        Grade.objects.get_or_create(courseCode="CHEM_3012", matricNo=student, alphanum="A1")
+
+        grade = Grade.objects.filter(courseCode="CHEM_3012", matricNo=student, alphanum="A1").first()
+        grade.courseCode = "Hello"
+        try:
+            grade.save()
+            self.fail("Course code does not exist in student's academic plan - exception was not thrown")
+        except ValidationError:
+            pass
+
+        grade = Grade.objects.filter(courseCode="CHEM_3012", matricNo=student, alphanum="A1").exists()
+        self.assertTrue(grade)

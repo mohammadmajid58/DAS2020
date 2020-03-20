@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from api.models import Student
 from api.grade_converter import convert_a
@@ -27,9 +28,20 @@ class Grade(models.Model):
     def is_grade_a_special_code(self):
         return self.alphanum in ["MV", "CW", "CR"]
 
+    def course_does_not_exist(self):
+        plan = self.matricNo.academicPlan
+        return self.courseCode not in plan.get_courses()
+
+    def clean(self):
+        if self.course_does_not_exist():
+            raise ValidationError("Course code does not exist in student's academic plan.")
+
     def save(self, *args, **kwargs):
-        self.matricNo.set_grade_data_updated()
-        super(Grade, self).save(*args, **kwargs)
+        if self.course_does_not_exist():
+            raise ValidationError("Course code does not exist in student's academic plan.")
+        else:
+            self.matricNo.set_grade_data_updated()
+            super(Grade, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.matricNo.set_grade_data_updated()
