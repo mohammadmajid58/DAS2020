@@ -192,4 +192,8 @@ We currently have an instance of DAS 2020 running and plan to keep it running, i
 
 Mohammad Majid @ mohammadmajid58@yahoo.com
 Mihnea Maldaianu @ maldaianumihnea@yahoo.com
+<<<<<<< HEAD
+=======
+Kevin Lynch @ kevin.e.lynch89@gmail.com
+>>>>>>>  #192 Create documentation/user guide
 
