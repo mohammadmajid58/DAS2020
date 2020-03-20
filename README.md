@@ -191,4 +191,5 @@ Learn more about Django Shell online.
 We currently have an instance of DAS 2020 running and plan to keep it running, it is accessible at http://teamdas123.pythonanywhere.com/. If you wish to have access to this site to ensure it is suitable for your needs, feel free to contact our development team. Furthermore, if you have any issues, questions, comments or feedback, feel free to contact our development team.
 
 Mohammad Majid @ mohammadmajid58@yahoo.com
+Mihnea Maldaianu @ maldaianumihnea@yahoo.com
 
