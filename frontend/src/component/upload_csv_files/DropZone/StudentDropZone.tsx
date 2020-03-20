@@ -34,18 +34,6 @@ const StudentDropZone: React.SFC<DropZoneProps> = ({
 }) => {
   return (
     <div>
-      {uploadStarted && !uploadComplete && (
-        <div>
-          Uploaded {fileUploaded} (file {numOfFilesUploaded} of{" "}
-          {totalNumOfFiles})
-        </div>
-      )}
-      {uploadStarted && uploadComplete && (
-        <div>
-          All files successfully uploaded
-          <Alert type="success" message="All files successfully uploaded" />
-        </div>
-      )}
       {!uploading && (
         <div>
           <DropZone filesHandler={filesHandler} validFileExtensions={["csv"]} />

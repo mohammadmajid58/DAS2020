@@ -1,6 +1,7 @@
 import Papa, { ParseResult } from "papaparse";
 import Axios from "axios";
 import API_URL from "../../../index";
+import { getErrorReason } from "./DropZoneErrorHandler";
 
 function stringArraysEqual(a: Array<String>, b: Array<String>) {
   if (a.length === b.length) {
@@ -41,7 +42,9 @@ export function handleFileUpload(
   files: any[],
   isModule: boolean,
   callbackFn: Function,
-  hideOverlay: Function
+  hideOverlay: Function,
+  storeSuccessfullyUploadedFile: Function,
+  storeFailedToUploadFile: Function
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     for (let i = 0; i < files.length; i++) {
@@ -50,6 +53,13 @@ export function handleFileUpload(
 
       const papaParseHandler = async (results: ParseResult) => {
         var csvData = results.data;
+
+        if (csvData.length === 0) {
+          hideOverlay();
+          storeFailedToUploadFile(filename, "It is empty");
+          return;
+        }
+
         // Removes any empty columns
         csvData = csvData.map((dataRow: []) => {
           return dataRow.filter((columnData: string) => {
@@ -62,10 +72,10 @@ export function handleFileUpload(
           return dataRow.length > 0;
         });
 
+        const actualFileHeader = csvData[0].map((header: string) =>
+          header.trim()
+        );
         if (!isModule) {
-          const actualFileHeader = csvData[0].map((header: string) =>
-            header.trim()
-          );
           const expectedFileHeader = [
             "EMPLID",
             "Name",
@@ -74,8 +84,19 @@ export function handleFileUpload(
           ];
           if (!stringArraysEqual(actualFileHeader, expectedFileHeader)) {
             hideOverlay();
-            alert(
-              "Error uploading file with invalid header, it must be:  EMPLID,  Name, AcademicPlan, GradYear"
+            storeFailedToUploadFile(
+              filename,
+              "It has an invalid header. The header must be: EMPLID, Name, AcademicPlan, GradYear"
+            );
+            return;
+          }
+        } else {
+          const expectedFileHeader = ["EMPLID", "Name", "Grade"];
+          if (!stringArraysEqual(actualFileHeader, expectedFileHeader)) {
+            hideOverlay();
+            storeFailedToUploadFile(
+              filename,
+              "It has an invalid header. The header must be: EMPLID, Name, Grade"
             );
             return;
           }
@@ -93,10 +114,7 @@ export function handleFileUpload(
         const matchesLength = isModule ? 3 : 1;
         if (matches === null || matches.length !== matchesLength) {
           hideOverlay();
-          alert(
-            "Error attempting to upload file with invalid file name. Received filename: " +
-              filename
-          );
+          storeFailedToUploadFile(filename, "It has an invalid file name");
         } else {
           // Construct array of Student objects
           const requestData = studentFile.map(dataRow => {
@@ -115,6 +133,14 @@ export function handleFileUpload(
               const [matricNo, fullName, academicPlan, gradYear] = dataRow; // eslint-disable-line @typescript-eslint/no-unused-vars
 
               // Parse and Split the full name into givenNames and surname
+              if (!fullName) {
+                hideOverlay();
+                storeFailedToUploadFile(
+                  filename,
+                  "It contains a row that does not have the name field"
+                );
+                return;
+              }
               const nameArray = fullName.split(",");
               const surname = nameArray[0];
               const givenNames = nameArray[1];
@@ -136,10 +162,12 @@ export function handleFileUpload(
           try {
             const result = await Axios.post(requestUrl, requestData);
             callbackFn({ i, result });
-
+            storeSuccessfullyUploadedFile(filename);
             if (i === files.length - 1) resolve(true);
           } catch (e) {
             reject(e);
+            const reason = getErrorReason(e);
+            storeFailedToUploadFile(filename, reason);
           }
         }
       };
