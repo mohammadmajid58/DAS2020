@@ -14,5 +14,5 @@ python-decouple==3.3
 pytz==2019.3
 six==1.14.0
 sqlparse==0.3.0
-numpy==1.16.1
+numpy==1.22.0
 psycopg2-binary==2.8.4
